@@ -6,10 +6,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.Decimal128;
 
 import org.bson.types.ObjectId;
 
-import java.math.BigDecimal;
+
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class Aviso {
     private ObjectId id;
     private String titulo;
     private String descripcion;
-    private BigDecimal precio;
+    private Decimal128 precio;
     private String estado;
     private Date fechaPublicacion;
     private String imagenes;
