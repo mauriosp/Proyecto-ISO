@@ -1,0 +1,185 @@
+{
+	"info": {
+		"_postman_id": "e4a8a977-9c04-449d-b512-ace6649ed26f",
+		"name": "Pruebas API REST Proyecto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43086793"
+	},
+	"item": [
+		{
+			"name": "CrearUsuario",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"65f3d2c4b9d5f6001a3b7892\",\r\n    \"nombre\": \"Juan Diego Busteros\",\r\n    \"email\": \"jdbust@example.com\",\r\n    \"contrasena\": \"123456\",\r\n    \"tipoUsuario\": \"interesado\",\r\n    \"calificacionUsuario\": [\r\n        {\r\n            \"idUsuario\": \"65f3d2c4b9d5f6001a3b7892\",\r\n            \"puntuacion\": \"5\",\r\n            \"fecha\": \"2025-03-16T14:30:00\",\r\n            \"comentario\": \"Excelente usuario\",\r\n            \"promCalificacion\": \"5\"\r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/UAO/apirest/Usuario/insertar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"UAO",
+						"apirest",
+						"Usuario",
+						"insertar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListarUsuario",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/UAO/apirest/Usuario/listar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"UAO",
+						"apirest",
+						"Usuario",
+						"listar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearAviso",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"titulo\": \"Casa en arriendo en el norte \",\r\n  \"descripcion\": \"Amplia casa de 4 habitaciones, 3 baños, cocina equipada \",\r\n  \"precio\": 2900000.00,\r\n  \"estado\": \"Disponible\",\r\n  \"fechaPublicacion\": \"2025-03-16T12:00:00Z\",\r\n  \"imagenes\": \"https://example.com/images/apartamento-centro.jpg\",\r\n  \"mensaje\": [\r\n    {\r\n      \"idAviso\": \"65123defab789c0123456789\",\r\n      \"contenido\": \"¿Aún está disponible?\",\r\n      \"fechaAviso\": \"2025-03-16T14:30:00Z\",\r\n      \"estadoMensaje\": true\r\n    },\r\n    {\r\n      \"idAviso\": \"65123defab789c0123456789\",\r\n      \"contenido\": \"¿Se puede negociar el precio?\",\r\n      \"fechaAviso\": \"2025-03-16T15:00:00Z\",\r\n      \"estadoMensaje\": false\r\n    }\r\n  ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/UAO/apirest/Aviso/insertar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"UAO",
+						"apirest",
+						"Aviso",
+						"insertar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListarAviso",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/UAO/apirest/Aviso/listar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"UAO",
+						"apirest",
+						"Aviso",
+						"listar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearEspacio",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"tipo\": \"Alquiler\",\r\n  \"direccion\": \"Calle 123, Cali, Colombia\",\r\n  \"area\": \"80.5\",\r\n  \"caracteristicas\": \"Amplio, bien iluminado, con balcón\",\r\n  \"tipoEspacio\": \"APARTAMENTO\",\r\n  \"calificacionEspacio\": [\r\n    {\r\n      \"idEspacio\": \"65f0b48f4d3a3c1a20c4d7e1\",\r\n      \"puntuacion\": \"5\",\r\n      \"fecha\": \"2024-03-16T12:00:00Z\",\r\n      \"comentario\": \"Muy buen lugar para vivir\"\r\n    }\r\n  ],\r\n  \"arrendamientos\": [\r\n    {\r\n      \"id\": \"65f0b48f4d3a3c1a20c4d7e2\",\r\n      \"fechaSalida\": \"2025-03-16T12:00:00Z\",\r\n      \"fechaInicio\": \"2024-03-16T12:00:00Z\",\r\n      \"estado\": \"Activo\",\r\n      \"terminos\": \"Contrato a 1 año con opción de renovación\"\r\n    }\r\n  ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/UAO/apirest/Espacio/insertar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"UAO",
+						"apirest",
+						"Espacio",
+						"insertar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListarEspacio",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/UAO/apirest/Espacio/listar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"UAO",
+						"apirest",
+						"Espacio",
+						"listar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EliminarEspacio",
+			"request": {
+				"method": "DELETE",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "BuscarEspacioById",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
