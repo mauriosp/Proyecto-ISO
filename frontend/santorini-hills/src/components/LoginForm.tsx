@@ -2,22 +2,21 @@ import { FormInput } from "./FormInput";
 import { FcGoogle as GoogleIcon } from "react-icons/fc";
 import Separator from "./Separator";
 import SocialLoginButton from "./SocialLoginButton";
-
+import { useForm } from "react-hook-form";
 
 const LoginForm = () => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const email = (
-      e.currentTarget.elements.namedItem("email-input") as HTMLInputElement
-    ).value;
-    const password = (
-      e.currentTarget.elements.namedItem("password-input") as HTMLInputElement
-    ).value;
-    console.log({ email, password });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ email: string; password: string }>();
+
+  const onSubmit = (data: { email: string; password: string }) => {
+    console.log({ email: data.email, password: data.password });
   };
-  
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col space-y-2">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-2">
       <div>
         <label className="form-label" htmlFor="email-input">
           Correo electrónico
@@ -26,7 +25,15 @@ const LoginForm = () => {
           id="email-input"
           placeholder="Escribe tu correo"
           type="email"
+          {...register("email", {
+            required: "El correo es obligatorio",
+            pattern: {
+              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+              message: "Formato de correo inválido",
+            },
+          })}
         />
+        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
       </div>
       <div>
         <label className="form-label" htmlFor="password-input">
