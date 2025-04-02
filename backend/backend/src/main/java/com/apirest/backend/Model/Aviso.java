@@ -25,6 +25,7 @@ import java.util.List;
 public class Aviso {
     @Id
     private ObjectId id;
+    private ObjectId idUsuario;
     private String titulo;
     private String descripcion;
     private Decimal128 precio;

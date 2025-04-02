@@ -14,8 +14,8 @@ import java.util.Date;
 @NoArgsConstructor
 
 public class CalificacionEspacio {
-    private ObjectId idEspacio;
-    private String puntacion;
+    private ObjectId idUsuarioCalifica;
+    private int puntacion;
     private Date fecha;
     private String comentario;
 }

@@ -12,9 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class CalificacionUsuario {
-    private ObjectId idUsuario;
+    private ObjectId idUsuarioCalifiaca;
     private String puntuacion;
     private Date fecha;
     private String comentario;
-    private String promCalificacion;
 }

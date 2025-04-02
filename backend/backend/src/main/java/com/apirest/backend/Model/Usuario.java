@@ -25,6 +25,7 @@ public class Usuario {
     private String email;
     private String contraseña;
     private String tipoUsuario;
+    private int promCalificacion;
     private List <CalificacionUsuario> CalificacionUsuario;
     @JsonProperty("id")
     public String getIdAsString(){

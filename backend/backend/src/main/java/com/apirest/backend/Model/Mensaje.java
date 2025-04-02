@@ -12,11 +12,8 @@ import java.util.Date;
 @NoArgsConstructor
 
 
-
-
-
 public class Mensaje {
-    private ObjectId idAviso;
+    private ObjectId idUsuario;
     private String contenido;
     private Date fechaAviso;
     private boolean estadoMensaje;

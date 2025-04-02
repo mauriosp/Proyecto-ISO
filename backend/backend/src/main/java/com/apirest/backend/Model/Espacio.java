@@ -18,11 +18,13 @@ import java.util.List;
 public class Espacio {
     @Id
     private ObjectId id;
+    private ObjectId idUsuario;
     private String tipo;
     private String direccion;
     private BigDecimal area;
     private String caracteristicas;
     private String tipoEspacio;
-    private List <CalificacionEspacio> calificacionEspacio;
+    private String estado;
     private List <Arrendamiento> arrendamiento;
-}
+    private List <CalificacionEspacio> calificacionEspacio;
+    }
