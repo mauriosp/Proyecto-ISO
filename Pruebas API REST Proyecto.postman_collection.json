@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"65f3d2c4b9d5f6001a3b7892\",\r\n    \"nombre\": \"Juan Diego Busteros\",\r\n    \"email\": \"jdbust@example.com\",\r\n    \"contrasena\": \"123456\",\r\n    \"tipoUsuario\": \"interesado\",\r\n    \"calificacionUsuario\": [\r\n        {\r\n            \"idUsuario\": \"65f3d2c4b9d5f6001a3b7892\",\r\n            \"puntuacion\": \"5\",\r\n            \"fecha\": \"2025-03-16T14:30:00\",\r\n            \"comentario\": \"Excelente usuario\",\r\n            \"promCalificacion\": \"5\"\r\n        }\r\n    ]\r\n}\r\n",
+					"raw": "{\r\n    \"_id\": { \"$oid\": \"65f3d2c4b9d5f6001a3b7895\" },\r\n    \"nombre\": \"Miguel Rivera\",\r\n    \"email\": \"mrivera@example.com\",\r\n    \"telefono\": 987654321,\r\n    \"contraseña\": \"abcdef\",\r\n    \"tipoUsuario\": \"Propietario\",\r\n    \"promCalificacion\": 5,\r\n    \"califiacionUsuario\": [\r\n        {\r\n            \"idusuarioCalifica\": { \"$oid\": \"65f3d2c4b9d5f6001a3b7896\" },\r\n            \"puntuacion\": 5,\r\n            \"fecha\": { \"$date\": \"2025-04-03T18:30:00Z\" },\r\n            \"comentario\": \"Servicio impecable\"\r\n        },\r\n        {\r\n            \"idusuarioCalifica\": { \"$oid\": \"65f3d2c4b9d5f6001a3b7897\" },\r\n            \"puntuacion\": 5,\r\n            \"fecha\": { \"$date\": \"2025-03-25T15:15:00Z\" },\r\n            \"comentario\": \"Muy recomendable\"\r\n        }\r\n    ]\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -66,7 +66,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"titulo\": \"Casa en arriendo en el norte \",\r\n  \"descripcion\": \"Amplia casa de 4 habitaciones, 3 baños, cocina equipada \",\r\n  \"precio\": 2900000.00,\r\n  \"estado\": \"Disponible\",\r\n  \"fechaPublicacion\": \"2025-03-16T12:00:00Z\",\r\n  \"imagenes\": \"https://example.com/images/apartamento-centro.jpg\",\r\n  \"mensaje\": [\r\n    {\r\n      \"idAviso\": \"65123defab789c0123456789\",\r\n      \"contenido\": \"¿Aún está disponible?\",\r\n      \"fechaAviso\": \"2025-03-16T14:30:00Z\",\r\n      \"estadoMensaje\": true\r\n    },\r\n    {\r\n      \"idAviso\": \"65123defab789c0123456789\",\r\n      \"contenido\": \"¿Se puede negociar el precio?\",\r\n      \"fechaAviso\": \"2025-03-16T15:00:00Z\",\r\n      \"estadoMensaje\": false\r\n    }\r\n  ]\r\n}\r\n",
+					"raw": "{\r\n    \"_id\": { \"$oid\": \"67eec4f8ab92352270171d01\" },\r\n    \"idUsuario\": { \"$oid\": \"67eec3d6cb92352270171c05\" },\r\n    \"titulo\": \"Apartamento en Venta - Norte de Cali\",\r\n    \"descripcion\": \"Apartamento moderno con 2 habitaciones, 2 baños, balcón y parqueadero privado. Cerca a centros comerciales y transporte público.\",\r\n    \"precio\": 320000000.00,\r\n    \"estado\": \"Activo\",\r\n    \"fechaPublicacion\": \"2025-04-03T19:45:00Z\",\r\n    \"imagenes\": \"https://example.com/imagenes/apartamento_norte.jpg\",\r\n    \"mensaje\": [\r\n        {\r\n            \"idUsuario\": { \"$oid\": \"67eec3d6cb92352270171c06\" },\r\n            \"contenido\": \"¿Incluye administración?\",\r\n            \"fechaAviso\": \"2025-04-03T20:15:00Z\",\r\n            \"estadoMensaje\": true\r\n        },\r\n        {\r\n            \"idUsuario\": { \"$oid\": \"67eec3d6cb92352270171c07\" },\r\n            \"contenido\": \"¿Se puede financiar con crédito hipotecario?\",\r\n            \"fechaAviso\": \"2025-04-03T20:30:00Z\",\r\n            \"estadoMensaje\": false\r\n        }\r\n    ]\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -119,7 +119,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"tipo\": \"Alquiler\",\r\n  \"direccion\": \"Calle 123, Cali, Colombia\",\r\n  \"area\": \"80.5\",\r\n  \"caracteristicas\": \"Amplio, bien iluminado, con balcón\",\r\n  \"tipoEspacio\": \"APARTAMENTO\",\r\n  \"calificacionEspacio\": [\r\n    {\r\n      \"idEspacio\": \"65f0b48f4d3a3c1a20c4d7e1\",\r\n      \"puntuacion\": \"5\",\r\n      \"fecha\": \"2024-03-16T12:00:00Z\",\r\n      \"comentario\": \"Muy buen lugar para vivir\"\r\n    }\r\n  ],\r\n  \"arrendamientos\": [\r\n    {\r\n      \"id\": \"65f0b48f4d3a3c1a20c4d7e2\",\r\n      \"fechaSalida\": \"2025-03-16T12:00:00Z\",\r\n      \"fechaInicio\": \"2024-03-16T12:00:00Z\",\r\n      \"estado\": \"Activo\",\r\n      \"terminos\": \"Contrato a 1 año con opción de renovación\"\r\n    }\r\n  ]\r\n}\r\n",
+					"raw": "{\r\n  \"_id\": \"65f3d2c4b9d5f6001a3b7910\",\r\n  \"idUsuario\": \"67eec3d6cb92352270171c05\",\r\n  \"tipo\": \"Residencial\",\r\n  \"direccion\": \"Calle 5 #10-20, Cali, Valle del Cauca\",\r\n  \"area\": \"120.5\",\r\n  \"caracteristicas\": \"Apartamento con 3 habitaciones, 2 baños, parqueadero privado y zona social.\",\r\n  \"tipoEspacio\": \"Apartamento\",\r\n  \"estado\": \"Disponible\",\r\n  \"arrendamiento\": [\r\n    {\r\n      \"_id\": \"65f3d2c4b9d5f6001a3b7911\",\r\n      \"idUsuario\": \"67eec3d6cb92352270171c07\",\r\n      \"idEspacio\": \"65f3d2c4b9d5f6001a3b7910\",\r\n      \"fechaInicio\": \"2025-05-01T10:00:00Z\",\r\n      \"fechaSalida\": \"2026-05-01T10:00:00Z\",\r\n      \"estado\": \"Activo\",\r\n      \"terminos\": \"Contrato de arrendamiento por un año, incluye servicios públicos.\",\r\n      \"calificacionEspacio\": [\r\n        {\r\n          \"idusuarioCalifica\": \"67eec3d6cb92352270171c07\",\r\n          \"puntuacion\": 5,\r\n          \"fecha\": \"2025-06-01T15:30:00Z\",\r\n          \"comentario\": \"Excelente ubicación y muy buen estado del apartamento.\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -177,7 +177,22 @@
 			"name": "BuscarEspacioById",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/UAO/apirest/Espacio/buscar/{id}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"UAO",
+						"apirest",
+						"Espacio",
+						"buscar",
+						"{id}"
+					]
+				}
 			},
 			"response": []
 		}

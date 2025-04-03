@@ -23,9 +23,11 @@ public class Usuario {
     private ObjectId id;
     private String nombre;
     private String email;
+    private int telefono;
     private String contraseña;
     private String tipoUsuario;
     private int promCalificacion;
+    
     private List <CalificacionUsuario> CalificacionUsuario;
     @JsonProperty("id")
     public String getIdAsString(){
