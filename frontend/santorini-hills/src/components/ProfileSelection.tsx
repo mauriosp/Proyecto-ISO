@@ -43,9 +43,9 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = () => {
 
   const { user, setUser } = useRegisterContext();
 
-  const handleContinue = (e : React.FormEvent<HTMLFormElement>) => {
+  const handleContinue = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setUser({ ...user, profile });
+    setUser({ ...user, profile, isVerified: false });
     register(user);
   };
 
@@ -69,10 +69,7 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = () => {
         </ProfileOption>
       ))}
       {profile && (
-        <button
-          className="form-button mt-4 hover:bg-slate-800 bg-accent text-white font-semibold"
-          
-        >
+        <button className="form-button mt-4 hover:bg-slate-800 bg-accent text-white font-semibold">
           Continuar
         </button>
       )}

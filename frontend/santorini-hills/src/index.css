@@ -20,3 +20,11 @@
 :root {
   font-family: "Poppins", system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
+
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}

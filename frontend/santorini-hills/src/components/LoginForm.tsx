@@ -3,6 +3,7 @@ import { FcGoogle as GoogleIcon } from "react-icons/fc";
 import Separator from "./Separator";
 import SocialLoginButton from "./SocialLoginButton";
 import { useForm } from "react-hook-form";
+import { login } from "../utils/APICalls";
 
 const LoginForm = () => {
   const {
@@ -12,6 +13,13 @@ const LoginForm = () => {
   } = useForm<{ email: string; password: string }>();
 
   const onSubmit = (data: { email: string; password: string }) => {
+    login(data.email, data.password)
+      .then((response) => {
+        console.log("Login successful", response);
+      })
+      .catch((error) => {
+        console.error("Login failed", error);
+      });
     console.log({ email: data.email, password: data.password });
   };
 
@@ -33,7 +41,9 @@ const LoginForm = () => {
             },
           })}
         />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email.message}</p>
+        )}
       </div>
       <div>
         <label className="form-label" htmlFor="password-input">
