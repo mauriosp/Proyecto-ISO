@@ -23,5 +23,15 @@ public class UsuarioServiceImpl implements IUsuarioService {
         return usuarioRepository.findAll();
     }
 
+    @Override
+    public String registrarUsuario(Usuario usuario) {
+        // Validar si el correo ya está registrado
+        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("El correo ya está registrado.");
+        }
 
+        // Guardar el usuario
+        usuarioRepository.save(usuario);
+        return "Usuario registrado con éxito: " + usuario.getNombre();
+    }
 }

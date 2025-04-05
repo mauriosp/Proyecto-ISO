@@ -21,6 +21,18 @@ public class UsuarioController {
         return new ResponseEntity<>("Usuario guardado correctamente", HttpStatus.CREATED);
     }
 
+    @PostMapping("/registro")
+    public ResponseEntity<String> registrarUsuario(@RequestBody Usuario usuario) {
+        try {
+            String mensaje = usuarioService.registrarUsuario(usuario);
+            return new ResponseEntity<>(mensaje, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al registrar el usuario: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/listar")
     public ResponseEntity<List<Usuario>> listarUsuarios() {
         return new ResponseEntity<>(usuarioService.listarUsuarios(), HttpStatus.OK);
