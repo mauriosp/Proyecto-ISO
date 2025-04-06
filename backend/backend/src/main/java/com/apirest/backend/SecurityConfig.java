@@ -27,15 +27,12 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(authorize -> authorize
-                // Rutas públicas
                 .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers("/api/auth/registro").permitAll()
                 .requestMatchers("/api/verificacion-email/**").permitAll()
                 
-                // Rutas que requieren autenticación
                 .requestMatchers("/api/**").authenticated()
                 
-                // Cualquier otra solicitud requiere autenticación
                 .anyRequest().authenticated()
             )
             .httpBasic(httpBasic -> {});

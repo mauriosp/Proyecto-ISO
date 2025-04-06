@@ -11,5 +11,6 @@ public interface IUsuarioService {
     public String registrarUsuario(Usuario usuario);
     void actualizarPerfil(String id, String nombre, String telefono, MultipartFile fotoPerfil) throws Exception;
     void eliminarCuenta(String id);
+    String loginUsuario(String email, String contraseña);
     
 }
