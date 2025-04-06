@@ -3,6 +3,7 @@ import ProfileOption from "./ProfileOption";
 import { FaHouseChimney, FaHouseChimneyUser } from "react-icons/fa6";
 import { useRegisterContext } from "../context/registerForm/RegisterContext";
 import { register } from "../utils/APICalls";
+import { User } from "../models/user";
 
 interface ProfileOptionData {
   value: "owner" | "renter";
@@ -45,8 +46,9 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = () => {
 
   const handleContinue = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setUser({ ...user, profile, isVerified: false });
-    register(user);
+    const updatedUser : User = { ...user, profile, isVerified: false };
+    setUser(updatedUser);
+    register(updatedUser);
   };
 
   return (
