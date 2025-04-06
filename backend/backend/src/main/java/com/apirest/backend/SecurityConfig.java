@@ -35,6 +35,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/verificacion-email/**").permitAll()
                 .requestMatchers("/public/**").permitAll()
                 
+                // Endpoints de moderación (solo para administradores)
+                .requestMatchers("/UAO/apirest/Aviso/moderacion/**").hasRole("ADMIN")
+                
                 // Endpoints que requieren autenticación
                 .requestMatchers("/api/**").authenticated()
                 

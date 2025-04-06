@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
 import org.bson.types.ObjectId;
+import java.util.stream.Collectors;
 
 @Service
 public class AvisoServiceImpl implements IAvisoService {
@@ -147,6 +148,47 @@ public class AvisoServiceImpl implements IAvisoService {
                 .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
 
         avisoRepository.delete(aviso);
+    }
+
+    @Override
+    public List<Aviso> listarAvisosParaModeracion() {
+        return avisoRepository.findAll().stream()
+                .filter(aviso -> aviso.getEstado().equalsIgnoreCase("Publicado"))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void desactivarAviso(String id, String motivo) throws Exception {
+        // Buscar el aviso por ID
+        Aviso aviso = avisoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
+
+        // Cambiar el estado del aviso a "Inactivo"
+        aviso.setEstado("Inactivo");
+        aviso.setMotivoDesactivacion(motivo);
+
+        // Guardar los cambios
+        avisoRepository.save(aviso);
+
+        // Notificar al propietario
+        notificationService.enviarNotificacionPropietario(
+                "Aviso desactivado",
+                "Tu aviso con el título '" + aviso.getTitulo() + "' ha sido desactivado. Motivo: " + motivo
+        );
+    }
+
+    @Override
+    public void reactivarAviso(String id) throws Exception {
+        // Buscar el aviso por ID
+        Aviso aviso = avisoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
+
+        // Cambiar el estado del aviso a "Publicado"
+        aviso.setEstado("Publicado");
+        aviso.setMotivoDesactivacion(null); // Limpiar el motivo de desactivación
+
+        // Guardar los cambios
+        avisoRepository.save(aviso);
     }
 
     private List<String> guardarImagenes(List<MultipartFile> imagenes) throws IOException {
