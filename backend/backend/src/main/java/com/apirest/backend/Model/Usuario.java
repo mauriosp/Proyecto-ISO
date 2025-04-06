@@ -31,6 +31,7 @@ public class Usuario {
     private int intentosFallidos;
     private boolean estado = false;
     private Date fechaBloqueo;   
+    private String fotoPerfil;
 
     private List <CalificacionUsuario> CalificacionUsuario;
     @JsonProperty("id")
@@ -38,4 +39,5 @@ public class Usuario {
         return id!=null ? id.toHexString():null;
     }
     private List <VerificacionEmail> verificacionEmail;
+    
 }
