@@ -17,7 +17,7 @@ const UserButtons = () => {
         <div className="flex flex-col gap-1">
           <h2 className="text-lg font-semibold">Notificaciones</h2>
           <Separator />
-          <div className="flex flex-col items-center justify-center gap-4 text-neutral-500 text-center p-20">
+          <div className="flex flex-col items-center justify-center gap-4 text-neutral-500 text-center py-20">
             <FaInbox size={32}/>
             <p className="text-sm">Nada por aquí...</p>
           </div>
