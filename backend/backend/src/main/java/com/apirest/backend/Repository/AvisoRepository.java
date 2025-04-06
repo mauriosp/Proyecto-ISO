@@ -5,8 +5,7 @@ import com.apirest.backend.Model.Aviso;
 import org.springframework.stereotype.Repository;
 
 @Repository
-
 public interface AvisoRepository extends MongoRepository<Aviso, String> {
-    
+    void deleteByUsuarioId(String usuarioId);
 }
-    
+

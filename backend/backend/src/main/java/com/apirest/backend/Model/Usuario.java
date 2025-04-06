@@ -40,4 +40,5 @@ public class Usuario {
     }
     
     private List <VerificacionEmail> verificacionEmail;
+    
 }
