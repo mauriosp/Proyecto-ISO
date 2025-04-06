@@ -1,4 +1,5 @@
 package com.apirest.backend.Repository;
+
 import com.apirest.backend.Model.Usuario;
 import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
