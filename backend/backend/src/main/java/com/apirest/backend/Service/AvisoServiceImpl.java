@@ -74,7 +74,7 @@ public class AvisoServiceImpl implements IAvisoService {
         nuevoEspacio.setDireccion(direccion);
         nuevoEspacio.setArea(area);
         nuevoEspacio.setEstado("Disponible");
-        Espacio espacio = espacioRepository.save(nuevoEspacio);
+        espacioRepository.save(nuevoEspacio);
 
         // Crear el aviso
         Aviso aviso = new Aviso();
@@ -83,7 +83,6 @@ public class AvisoServiceImpl implements IAvisoService {
         aviso.setImagenes(String.join(",", rutasImagenes));
         aviso.setTitulo(titulo);
         aviso.setEstado("Disponible");
-        aviso.setEspacioId(espacio.getId());
 
         // Guardar el aviso en la base de datos
         avisoRepository.save(aviso);
