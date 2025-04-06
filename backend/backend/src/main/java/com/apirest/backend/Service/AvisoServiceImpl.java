@@ -6,6 +6,8 @@ import org.bson.types.Decimal128;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import com.apirest.backend.Model.Espacio;
+import com.apirest.backend.Repository.EspacioRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
+import org.bson.types.ObjectId;
 
 @Service
 public class AvisoServiceImpl implements IAvisoService {
@@ -23,6 +26,9 @@ public class AvisoServiceImpl implements IAvisoService {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private EspacioRepository espacioRepository;
 
     @Override
     public String guardarAviso(Aviso aviso) {
@@ -45,7 +51,7 @@ public class AvisoServiceImpl implements IAvisoService {
     }
 
     @Override
-    public void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo) throws Exception {
+    public void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area, ObjectId idUsuario) throws Exception {
         // Validar el título
         if (titulo.length() > 100) {
             throw new IllegalArgumentException("El título no puede exceder los 100 caracteres.");
@@ -72,8 +78,18 @@ public class AvisoServiceImpl implements IAvisoService {
             }
         }
 
-        // Guardar las imágenes (puedes usar un servicio de almacenamiento como AWS S3 o guardarlas localmente)
+        // Guardar las imágenes
         List<String> rutasImagenes = guardarImagenes(imagenes);
+
+        // Crear un nuevo espacio
+        Espacio nuevoEspacio = new Espacio();
+        nuevoEspacio.setIdUsuario(idUsuario);
+        nuevoEspacio.setTipoEspacio(tipoEspacio);
+        nuevoEspacio.setCaracteristicas(caracteristicas);
+        nuevoEspacio.setDireccion(direccion);
+        nuevoEspacio.setArea(area);
+        nuevoEspacio.setEstado("Disponible");
+        Espacio espacio = espacioRepository.save(nuevoEspacio);
 
         // Crear el aviso
         Aviso aviso = new Aviso();
@@ -82,6 +98,7 @@ public class AvisoServiceImpl implements IAvisoService {
         aviso.setImagenes(String.join(",", rutasImagenes));
         aviso.setTitulo(titulo);
         aviso.setEstado("Disponible");
+        aviso.setEspacioId(espacio.getId());
 
         // Guardar el aviso en la base de datos
         avisoRepository.save(aviso);
@@ -89,7 +106,7 @@ public class AvisoServiceImpl implements IAvisoService {
         // Notificar al administrador
         notificationService.enviarNotificacionAdministrador("Nuevo aviso creado", "Se ha creado un nuevo aviso con el título: " + titulo);
 
-        // Notificar al propietario (puedes implementar un sistema de notificaciones internas)
+        // Notificar al propietario
         notificationService.enviarNotificacionPropietario("Aviso creado exitosamente", "Tu aviso con el título '" + titulo + "' ha sido creado y está disponible.");
     }
 

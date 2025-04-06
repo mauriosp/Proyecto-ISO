@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.math.BigDecimal;
+import org.bson.types.ObjectId;
 
 @RestController
 @RequestMapping("/UAO/apirest/Aviso") // Endpoint
@@ -32,9 +34,12 @@ public class AvisoController {
             @RequestParam double precioMensual,
             @RequestParam(required = false) String condicionesAdicionales,
             @RequestParam List<MultipartFile> imagenes,
-            @RequestParam String titulo) {
+            @RequestParam String titulo,
+            @RequestParam String direccion,
+            @RequestParam BigDecimal area,
+            @RequestParam ObjectId idUsuario) {
         try {
-            avisoService.crearAviso(descripcion, precioMensual, imagenes, titulo);
+            avisoService.crearAviso(descripcion, precioMensual, imagenes, titulo, tipoEspacio, condicionesAdicionales, direccion, area, idUsuario);
             return new ResponseEntity<>("Aviso creado exitosamente", HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
