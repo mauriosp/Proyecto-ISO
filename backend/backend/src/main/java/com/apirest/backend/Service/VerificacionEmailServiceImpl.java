@@ -9,12 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.List;
-import java.util.ArrayList;
-
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,11 +35,10 @@ public class VerificacionEmailServiceImpl implements IVerificacionEmailService {
         verificacion.setFechaExpiracion(expiracion);
         verificacion.setVerificado(false);
 
-        // Crear una lista y agregar la verificación
         List<VerificacionEmail> verificaciones = new ArrayList<>();
         verificaciones.add(verificacion);
-        usuario.setVerificacionEmail(verificaciones);
-        
+        usuario.setVerificacionEmail(verificaciones); // reemplaza la lista
+
         usuarioRepository.save(usuario);
 
         String link = "http://localhost:8080/UAO/apirest/verificar?token=" + token;
@@ -67,25 +61,21 @@ public class VerificacionEmailServiceImpl implements IVerificacionEmailService {
         if (usuarioOpt.isEmpty()) return false;
 
         Usuario usuario = usuarioOpt.get();
-        
-        // Buscar la verificación por token
-        List<VerificacionEmail> verificaciones = usuario.getVerificacionEmail();
-        VerificacionEmail ve = null;
-        
-        for (VerificacionEmail v : verificaciones) {
-            if (token.equals(v.getToken())) {
-                ve = v;
-                break;
-            }
-        }
-        
-        if (ve == null) return false;
+        List<VerificacionEmail> lista = usuario.getVerificacionEmail();
 
-        if (ve.getFechaExpiracion().after(new Date()) && !ve.getVerificado()) {
+        if (lista == null || lista.isEmpty()) return false;
+
+        VerificacionEmail ve = lista.get(lista.size() - 1); // el último
+
+        if (ve.getToken().equals(token)
+                && ve.getFechaExpiracion().after(new Date())
+                && !ve.getVerificado()) {
+
             ve.setVerificado(true);
             usuarioRepository.save(usuario);
             return true;
         }
+
         return false;
-    }
+}
 }

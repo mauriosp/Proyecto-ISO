@@ -7,6 +7,6 @@ public interface IUsuarioService {
     // Especificar las operaciones (CRUD)
     public String guardarUsuario(Usuario usuario);
     public List <Usuario> listarUsuarios();
-
+    String loginUsuario(String email, String contraseña);
     
 }
