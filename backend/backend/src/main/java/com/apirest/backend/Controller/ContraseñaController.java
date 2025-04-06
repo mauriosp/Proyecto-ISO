@@ -101,10 +101,6 @@ public class ContraseñaController {
             return ResponseEntity.badRequest().body("Token inválido");
         }
         
-        // Comenta o adapta estas líneas si tu VerificacionEmail no tiene tipoVerificacion
-        // if (!"RESET_PASSWORD".equals(ve.getTipoVerificacion())) {
-        //    return ResponseEntity.badRequest().body("Token inválido");
-        // }
 
         if (ve.getFechaExpiracion().before(new Date()) || ve.getVerificado()) {
             return ResponseEntity.badRequest().body("El enlace ha expirado o ya ha sido utilizado");
