@@ -33,4 +33,5 @@ public class Aviso {
     private Date fechaPublicacion;
     private String imagenes;
     private List <Mensaje> mensaje;
+    private ObjectId espacioId;
 }
