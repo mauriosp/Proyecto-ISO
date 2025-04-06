@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 
-public interface AvisoRepository extends MongoRepository<Aviso, String> {}
+public interface AvisoRepository extends MongoRepository<Aviso, String> {
+    
+}
     
