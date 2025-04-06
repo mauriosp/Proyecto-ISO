@@ -31,21 +31,6 @@ public class AvisoServiceImpl implements IAvisoService {
     private EspacioRepository espacioRepository;
 
     @Override
-    public String guardarAviso(Aviso aviso) {
-        // Convertir BigDecimal a Decimal128 si no es nulo
-        if (aviso.getPrecio() != null) {
-            aviso.setPrecio(new Decimal128(aviso.getPrecio().bigDecimalValue()));
-        }
-
-        avisoRepository.save(aviso);
-
-        // Validación para evitar NullPointerException
-        String titulo = (aviso.getTitulo() != null) ? aviso.getTitulo() : "sin título";
-
-        return "El aviso '" + titulo + "' fue creado con éxito";
-    }
-
-    @Override
     public List<Aviso> listarAvisos() {
         return avisoRepository.findAll();
     }

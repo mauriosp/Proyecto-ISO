@@ -10,8 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IAvisoService {
     // Especificar las operaciones (CRUD)
-    public String guardarAviso(Aviso aviso);
     public List <Aviso> listarAvisos();
     void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area, ObjectId idUsuario) throws Exception;
-    
+
 }
