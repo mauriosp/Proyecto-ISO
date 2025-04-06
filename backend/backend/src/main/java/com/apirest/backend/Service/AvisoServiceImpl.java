@@ -26,7 +26,7 @@ public class AvisoServiceImpl implements IAvisoService {
     private AvisoRepository avisoRepository;
 
     @Autowired
-    private NotificationService notificationService;
+    private INotificacionService notificacionService; // Cambio aquí: NotificationService → INotificacionService
 
     @Autowired
     private EspacioRepository espacioRepository;
@@ -84,15 +84,20 @@ public class AvisoServiceImpl implements IAvisoService {
         aviso.setImagenes(String.join(",", rutasImagenes));
         aviso.setTitulo(titulo);
         aviso.setEstado("Disponible");
+        // Aquí tienes un problema - necesitas verificar qué método existe en tu clase Aviso:
+        // Si tienes el método setIdEspacio, usa:
+        aviso.setIdEspacio(espacio.getId());
+        // O si tienes alguno similar como:
+        // aviso.setEspacioId(espacio.getId());
 
         // Guardar el aviso en la base de datos
         avisoRepository.save(aviso);
 
         // Notificar al administrador
-        notificationService.enviarNotificacionAdministrador("Nuevo aviso creado", "Se ha creado un nuevo aviso con el título: " + titulo);
+        notificacionService.enviarNotificacionAdministrador("Nuevo aviso creado", "Se ha creado un nuevo aviso con el título: " + titulo);
 
         // Notificar al propietario
-        notificationService.enviarNotificacionPropietario("Aviso creado exitosamente", "Tu aviso con el título '" + titulo + "' ha sido creado y está disponible.");
+        notificacionService.enviarNotificacionPropietario("Aviso creado exitosamente", "Tu aviso con el título '" + titulo + "' ha sido creado y está disponible.");
     }
 
     @Override

@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -21,5 +20,5 @@ public class Arrendamiento {
     private Date fechaInicio;
     private String estado;
     private String terminos;
-    private List <CalificacionEspacio> calificacionEspacio;
+    private CalificacionEspacio calificacionEspacio;
 }
