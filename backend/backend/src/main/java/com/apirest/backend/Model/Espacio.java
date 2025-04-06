@@ -26,5 +26,4 @@ public class Espacio {
     private String tipoEspacio;
     private String estado;
     private List <Arrendamiento> arrendamiento;
-    
-    }
+}

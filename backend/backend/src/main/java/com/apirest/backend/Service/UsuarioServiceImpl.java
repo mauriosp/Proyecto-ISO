@@ -1,5 +1,6 @@
 package com.apirest.backend.Service;
 
+import com.apirest.backend.Model.AuditoriaPerfil;
 import com.apirest.backend.Model.Usuario;
 import com.apirest.backend.Model.VerificacionEmail;
 import com.apirest.backend.Repository.UsuarioRepository;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Date;
@@ -35,7 +37,6 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Autowired
     private ReporteRepository reporteRepository;
     
-    // Añadir inyección de PasswordEncoder
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -132,17 +133,37 @@ public class UsuarioServiceImpl implements IUsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
+        // Inicializar la lista de auditoría si es null
+        if (usuario.getAuditoriaPerfil() == null) {
+            usuario.setAuditoriaPerfil(new ArrayList<>());
+        }
+
         // Validar y actualizar el nombre
-        if (nombre != null && !nombre.trim().isEmpty()) {
+        if (nombre != null && !nombre.trim().isEmpty() && !nombre.equals(usuario.getNombre())) {
+            String nombreAnterior = usuario.getNombre();
             usuario.setNombre(nombre);
+            
+            // Registro de auditoría para el cambio de nombre
+            registrarAuditoria(usuario, "nombre", nombreAnterior, nombre);
         }
 
         // Validar y actualizar el teléfono
         if (telefono != null && !telefono.trim().isEmpty()) {
-            if (!telefono.matches("\\d{10}")) { // Ejemplo: validar que el teléfono tenga 10 dígitos
+            if (!telefono.matches("\\d{10}")) {
                 throw new IllegalArgumentException("El número de teléfono debe tener 10 dígitos");
             }
+            
+            // Corrección: Usar Integer que puede ser null en lugar de int
+            String telefonoAnterior = "";
+            Integer telefonoActual = usuario.getTelefono();
+            if (telefonoActual != null) {
+                telefonoAnterior = telefonoActual.toString();
+            }
+            
             usuario.setTelefono(Integer.parseInt(telefono));
+            
+            // Registro de auditoría para el cambio de teléfono
+            registrarAuditoria(usuario, "telefono", telefonoAnterior, telefono);
         }
 
         // Validar y actualizar la foto de perfil
@@ -155,12 +176,31 @@ public class UsuarioServiceImpl implements IUsuarioService {
                 throw new IllegalArgumentException("El tamaño de la imagen no debe exceder los 5MB.");
             }
 
-            // Guardar la imagen (puedes usar un servicio de almacenamiento como AWS S3 o guardarla localmente)
+            String rutaAnterior = usuario.getFotoPerfil() != null ? usuario.getFotoPerfil() : "";
             String rutaImagen = guardarImagen(fotoPerfil);
             usuario.setFotoPerfil(rutaImagen);
+            
+            // Registro de auditoría para el cambio de foto de perfil
+            registrarAuditoria(usuario, "fotoPerfil", rutaAnterior, rutaImagen);
         }
 
         // Guardar los cambios en la base de datos
+        usuarioRepository.save(usuario);
+    }
+    
+    // Método para actualizar la contraseña con auditoría
+    @Override
+    public void actualizarContraseña(String id, String nuevaContraseña) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+        
+        // Encriptar la nueva contraseña
+        String contraseñaEncriptada = passwordEncoder.encode(nuevaContraseña);
+        usuario.setContraseña(contraseñaEncriptada);
+        
+        // Registrar en auditoría (sin mostrar las contraseñas reales)
+        registrarAuditoria(usuario, "contraseña", "********", "********");
+        
         usuarioRepository.save(usuario);
     }
 
@@ -192,5 +232,20 @@ public class UsuarioServiceImpl implements IUsuarioService {
         Files.createDirectories(path.getParent());
         Files.write(path, fotoPerfil.getBytes());
         return ruta;
+    }
+    
+    // Método privado para registrar cambios en la auditoría (sin el parámetro ejecutadoPor)
+    private void registrarAuditoria(Usuario usuario, String campo, String valorAnterior, 
+                                    String valorNuevo) {
+        AuditoriaPerfil auditoria = new AuditoriaPerfil();
+        auditoria.setFechaModificacion(new Date());
+        auditoria.setCampoModificado(campo);
+        auditoria.setValorAnterior(valorAnterior);
+        auditoria.setValorNuevo(valorNuevo);
+        
+        usuario.getAuditoriaPerfil().add(auditoria);
+        
+        logger.info("Registro de auditoría creado: usuario={}, campo={}", 
+                  usuario.getId(), campo);
     }
 }
