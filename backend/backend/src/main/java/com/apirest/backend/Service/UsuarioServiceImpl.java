@@ -2,6 +2,8 @@ package com.apirest.backend.Service;
 
 import com.apirest.backend.Model.Usuario;
 import com.apirest.backend.Repository.UsuarioRepository;
+import com.apirest.backend.Repository.AvisoRepository;
+import com.apirest.backend.Repository.ReporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +18,11 @@ import java.util.List;
 public class UsuarioServiceImpl implements IUsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private AvisoRepository avisoRepository;
+
+    @Autowired
+    private ReporteRepository reporteRepository;
 
     @Override
     public String guardarUsuario(Usuario usuario) {
