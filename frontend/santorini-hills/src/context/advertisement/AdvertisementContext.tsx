@@ -12,10 +12,7 @@ type AdvertisementContextType = {
         advertisement?: Partial<Advertisement>;
         property?: Partial<Property>;
     }) => void;
-    setPrevStage: (updates: {
-        advertisement?: Partial<Advertisement>;
-        property?: Partial<Property>;
-    }) => void;
+    setPrevStage: () => void;
 };
 
 export const AdvertisementContext = createContext<AdvertisementContextType>({

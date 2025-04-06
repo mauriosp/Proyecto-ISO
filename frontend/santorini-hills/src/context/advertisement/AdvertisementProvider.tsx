@@ -33,6 +33,7 @@ export const AdvertisementProvider = ({ children }: { children: React.ReactNode 
         advertisement?: Partial<Advertisement>;
         property?: Partial<Property>;
     }) => {
+        console.log("Updates:", updates);
         if (updates.advertisement) {
             setAdvertisementState((prev) => ({ ...prev, ...updates.advertisement }));
         }
@@ -42,16 +43,7 @@ export const AdvertisementProvider = ({ children }: { children: React.ReactNode 
         setStage((prevStage) => prevStage + 1);
     };
 
-    const setPrevStage = (updates: {
-        advertisement?: Partial<Advertisement>;
-        property?: Partial<Property>;
-    }) => {
-        if (updates.advertisement) {
-            setAdvertisementState((prev) => ({ ...prev, ...updates.advertisement }));
-        }
-        if (updates.property) {
-            setPropertyState((prev) => ({ ...prev, ...updates.property }));
-        }
+    const setPrevStage = () => {
         setStage((prevStage) => (prevStage > 0 ? prevStage - 1 : 0));
     };
 

@@ -1,11 +1,10 @@
-const ProfileOption: React.FC<React.PropsWithChildren<React.InputHTMLAttributes<HTMLInputElement>>> = (
+const FormRadioOption: React.FC<React.PropsWithChildren<React.InputHTMLAttributes<HTMLInputElement>>> = (
   { children, ...inputProps }
 ) => {
   return (
     <div>
       <input
         {...inputProps}
-        children={undefined}
         className="hidden peer"
         type="radio"
       />
@@ -16,4 +15,4 @@ const ProfileOption: React.FC<React.PropsWithChildren<React.InputHTMLAttributes<
   );
 };
 
-export default ProfileOption;
+export default FormRadioOption;

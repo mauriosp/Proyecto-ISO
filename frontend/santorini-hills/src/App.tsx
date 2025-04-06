@@ -5,6 +5,7 @@ import PostAdvertisement from "./pages/PostAdvertisement";
 function App() {
   return (
     <ModalProvider>
+      {/* <Home/> */}
       <PostAdvertisement />
     </ModalProvider>
   );
