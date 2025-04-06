@@ -28,11 +28,16 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    
     @Autowired
     private AvisoRepository avisoRepository;
 
     @Autowired
     private ReporteRepository reporteRepository;
+    
+    // Añadir inyección de PasswordEncoder
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public String guardarUsuario(Usuario usuario) {
@@ -102,13 +107,13 @@ public class UsuarioServiceImpl implements IUsuarioService {
             // Login exitoso
             usuario.setIntentosFallidos(0);
             usuarioRepository.save(usuario);
-            return "Contraseña incorrecta. Intento " + intentos + " de 5.";
+            return "Login exitoso. Bienvenido, " + usuario.getNombre();
+        } catch (Exception e) {
+            logger.error("Error en el proceso de login: ", e);
+            return "Error en el proceso de login: " + e.getMessage();
         }
-
-        usuario.setIntentosFallidos(0);
-        usuarioRepository.save(usuario);
-        return "Login exitoso. Bienvenido, " + usuario.getNombre();
     }
+    
     @Override
     public String registrarUsuario(Usuario usuario) {
         // Validar si el correo ya está registrado
