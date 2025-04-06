@@ -21,10 +21,10 @@ const NavbarModalSwitch = ({ Icon, children }: NavbarModalSwitchProps) => {
     }, []);
   
     return (
-      <div className="relative hover:bg-black/5 rounded-md transition-all" ref={wrapperRef}>
+      <div className="relative hover:bg-black/10 rounded-md transition-all" ref={wrapperRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center p-3 gap-2"
+          className="flex items-center hover:cursor-pointer p-3 gap-2"
         >
           <Icon size={20}/>
         </button>
