@@ -38,7 +38,6 @@ public class Usuario {
     public String getIdAsString(){
         return id!=null ? id.toHexString():null;
     }
-    
     private List <VerificacionEmail> verificacionEmail;
-    
+    private List <AuditoriaPerfil> auditoriaPerfil;
 }
