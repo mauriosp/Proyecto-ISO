@@ -74,7 +74,7 @@ public class AvisoServiceImpl implements IAvisoService {
         nuevoEspacio.setDireccion(direccion);
         nuevoEspacio.setArea(area);
         nuevoEspacio.setEstado("Disponible");
-        Espacio espacio = espacioRepository.save(nuevoEspacio);
+        espacioRepository.save(nuevoEspacio);
 
         // Crear el aviso
         Aviso aviso = new Aviso();
@@ -144,6 +144,14 @@ public class AvisoServiceImpl implements IAvisoService {
 
         // Guardar los cambios en la base de datos
         avisoRepository.save(aviso);
+    }
+
+    @Override
+    public void eliminarAviso(String id) throws Exception {
+        Aviso aviso = avisoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
+
+        avisoRepository.delete(aviso);
     }
 
     private List<String> guardarImagenes(List<MultipartFile> imagenes) throws IOException {
