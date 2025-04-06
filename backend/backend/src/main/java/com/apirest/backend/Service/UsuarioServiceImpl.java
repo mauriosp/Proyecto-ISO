@@ -78,6 +78,27 @@ public class UsuarioServiceImpl implements IUsuarioService {
         usuarioRepository.save(usuario);
     }
 
+    @Override
+    public void eliminarCuenta(String id) {
+        // Buscar el usuario por ID
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        // Eliminar datos relacionados
+        eliminarDatosRelacionados(id);
+
+        // Eliminar el usuario
+        usuarioRepository.delete(usuario);
+    }
+
+    private void eliminarDatosRelacionados(String usuarioId) {
+        // Eliminar avisos relacionados
+        avisoRepository.deleteByUsuarioId(usuarioId);
+
+        // Eliminar reportes relacionados
+        reporteRepository.deleteByUsuarioId(usuarioId);
+    }
+
     private String guardarImagen(MultipartFile fotoPerfil) throws IOException {
         // Ejemplo: Guardar la imagen en el sistema de archivos local
         String ruta = "uploads/" + fotoPerfil.getOriginalFilename();

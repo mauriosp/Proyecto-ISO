@@ -54,4 +54,16 @@ public class UsuarioController {
             return new ResponseEntity<>("Error al actualizar el perfil: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<String> eliminarCuenta(@PathVariable String id) {
+        try {
+            usuarioService.eliminarCuenta(id);
+            return new ResponseEntity<>("Cuenta eliminada correctamente", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al eliminar la cuenta: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -10,5 +10,6 @@ public interface IUsuarioService {
     public List <Usuario> listarUsuarios();
     public String registrarUsuario(Usuario usuario);
     void actualizarPerfil(String id, String nombre, String telefono, MultipartFile fotoPerfil) throws Exception;
+    void eliminarCuenta(String id);
     
 }
