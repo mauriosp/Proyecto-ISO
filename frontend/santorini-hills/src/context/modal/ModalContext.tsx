@@ -1,15 +1,18 @@
 import { createContext, useContext } from "react";
+export type ModalView = "login" | "register" 
 
 type ModalContextType = {
   isOpen: boolean;
   message: string;
+  view: ModalView | null;
   setMessage: (message: string) => void;
-  openModal: () => void;
+  openModal: (view: ModalView) => void;
   closeModal: () => void;
 };
 
 export const ModalContext = createContext<ModalContextType>({
   isOpen: false,
+  view: null,
   message: "",
   setMessage: () => {},
   openModal: () => {},

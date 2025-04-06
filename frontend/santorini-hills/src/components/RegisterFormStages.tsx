@@ -6,7 +6,7 @@ import ProfileSelection from "./ProfileSelection";
 import Separator from "./Separator";
 import SocialLoginButton from "./SocialLoginButton";
 import { useRegisterContext } from "../context/registerForm/RegisterContext";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 export const EmailStage = () => {
@@ -222,7 +222,7 @@ export const PersonalInfoStage = () => {
             {...register("phone", {
               required: "El número de teléfono es obligatorio",
               pattern: {
-                value: /^[0-9]{7,15}$/,
+                value: /^[0-9]{10}$/,
                 message: "Debe contener entre 7 y 15 dígitos numéricos",
               },
             })}
