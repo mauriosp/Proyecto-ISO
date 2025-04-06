@@ -33,4 +33,8 @@ public class Usuario {
     public String getIdAsString(){
         return id!=null ? id.toHexString():null;
     }
+    public void setFotoPerfil(String rutaImagen) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setFotoPerfil'");
+    }
 }
