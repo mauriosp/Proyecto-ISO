@@ -95,6 +95,53 @@ public class AvisoServiceImpl implements IAvisoService {
         notificationService.enviarNotificacionPropietario("Aviso creado exitosamente", "Tu aviso con el título '" + titulo + "' ha sido creado y está disponible.");
     }
 
+    @Override
+    public void editarAviso(String id, String titulo, String descripcion, Double precioMensual, List<MultipartFile> imagenes, String estado) throws Exception {
+        // Buscar el aviso por ID
+        Aviso aviso = avisoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
+
+        // Validar el título
+        if (titulo != null && titulo.length() > 100) {
+            throw new IllegalArgumentException("El título no puede exceder los 100 caracteres.");
+        }
+
+        // Validar la descripción
+        if (descripcion != null && descripcion.length() > 500) {
+            throw new IllegalArgumentException("La descripción no puede exceder los 500 caracteres.");
+        }
+
+        // Validar el precio mensual
+        if (precioMensual != null && precioMensual <= 0) {
+            throw new IllegalArgumentException("El precio mensual debe ser un valor numérico positivo.");
+        }
+
+        // Validar las imágenes
+        if (imagenes != null) {
+            for (MultipartFile imagen : imagenes) {
+                String contentType = imagen.getContentType();
+                if (!List.of("image/jpeg", "image/png").contains(contentType)) {
+                    throw new IllegalArgumentException("Formato de imagen no permitido. Solo se permiten PNG y JPG.");
+                }
+                if (imagen.getSize() > 5 * 1024 * 1024) { // 5MB
+                    throw new IllegalArgumentException("El tamaño de la imagen no debe exceder los 5MB.");
+                }
+            }
+            // Guardar las nuevas imágenes
+            List<String> rutasImagenes = guardarImagenes(imagenes);
+            aviso.setImagenes(String.join(",", rutasImagenes));
+        }
+
+        // Actualizar los campos del aviso
+        if (titulo != null) aviso.setTitulo(titulo);
+        if (descripcion != null) aviso.setDescripcion(descripcion);
+        if (precioMensual != null) aviso.setPrecio(new Decimal128(BigDecimal.valueOf(precioMensual)));
+        if (estado != null) aviso.setEstado(estado);
+
+        // Guardar los cambios en la base de datos
+        avisoRepository.save(aviso);
+    }
+
     private List<String> guardarImagenes(List<MultipartFile> imagenes) throws IOException {
         List<String> rutas = new ArrayList<>();
         for (MultipartFile imagen : imagenes) {
