@@ -142,6 +142,14 @@ public class AvisoServiceImpl implements IAvisoService {
         avisoRepository.save(aviso);
     }
 
+    @Override
+    public void eliminarAviso(String id) throws Exception {
+        Aviso aviso = avisoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
+
+        avisoRepository.delete(aviso);
+    }
+
     private List<String> guardarImagenes(List<MultipartFile> imagenes) throws IOException {
         List<String> rutas = new ArrayList<>();
         for (MultipartFile imagen : imagenes) {
