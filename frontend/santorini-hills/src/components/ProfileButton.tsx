@@ -2,9 +2,14 @@ import { FaHouseChimney, FaInbox, FaUser } from "react-icons/fa6";
 import { useUserContext } from "../context/user/UserContext";
 import NavbarModalSwitch from "./NavbarModalSwitch";
 import Separator from "./Separator";
+import { useModalContext, ModalView } from "../context/modal/ModalContext";
 
 const UserButtons = () => {
   const { user, logout } = useUserContext();
+  const { openModal } = useModalContext();
+    const handleClick = (view:ModalView) => {
+      openModal(view);
+    };
   return (
     <div className="flex items-center w-full text-accent gap-4">
       {user?.isVerified && (
@@ -35,7 +40,7 @@ const UserButtons = () => {
           </div>
         </div>
         <div className="flex flex-col gap-1 mt-4">
-          <a href="#" className="hover:bg-black/10 p-2 rounded-md transition-all">Editar perfil</a>
+          <a href="#" onClick={()=>handleClick("edit")} className="hover:bg-black/10 p-2 rounded-md transition-all">Editar perfil</a>
           <a href="#" onClick={logout} className="font-medium text-red-500 p-2 rounded-md hover:text-white hover:bg-red-500 transition-all">Cerrar sesión</a>
         </div>
       </NavbarModalSwitch>

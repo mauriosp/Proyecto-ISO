@@ -12,6 +12,16 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const storedUser = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (storedUser) {
             setUser(JSON.parse(storedUser));
+        } else {
+            // Usuario por defecto si no hay nada guardado (solo para pruebas)
+            setUser({
+                name: "Juan Pérez",
+                email: "juanperez@email.com",
+                password: "12345678",
+                phone: "+573001112233",
+                profile: "owner",
+                isVerified: true,
+            });
         }
     }, []);
 

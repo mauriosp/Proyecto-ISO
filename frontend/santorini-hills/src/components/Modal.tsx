@@ -1,4 +1,5 @@
 import { useModalContext } from "../context/modal/ModalContext";
+import EditProfile from "../pages/EditProfile";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 
@@ -22,6 +23,7 @@ const Modal = () => {
             </h3>
             {view === "login" && <Login />}
             {view === "register" && <Register />}
+            {view === "edit" && <EditProfile />}
             {/* <Verification/> */}
           </div>
         </div>
