@@ -2,8 +2,9 @@ package com.apirest.backend.Model;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import java.util.Date;
 
 @Document(collection = "reportes")
 @Data
@@ -13,10 +14,10 @@ public class Reporte {
 
     @Id
     private String id;
-
+    private ObjectId idAviso;
+    private ObjectId idUsuario;
     private String descripcion;
     private String motivo;
-
-    @DBRef
-    private Aviso aviso; // Referencia al aviso reportado
+    private String comentarios;
+    private Date fechaReporte;
 }
