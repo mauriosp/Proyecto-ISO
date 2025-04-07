@@ -9,8 +9,8 @@ export type PropertyType =
   | "";
 
 export interface Property {
-  type: PropertyType; // e.g., "Apartment", "House", etc.
-  address: string;
+  type: PropertyType;
+  location: string;
   area: number; // in square meters
   bathrooms: number;
   bedrooms: number;

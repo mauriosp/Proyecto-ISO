@@ -27,7 +27,7 @@ export const AdvertisementContext = createContext<AdvertisementContextType>({
     },
     property: {
         type: "",
-        address: "",
+        location: "",
         area: 0,
         bathrooms: 0,
         bedrooms: 0,

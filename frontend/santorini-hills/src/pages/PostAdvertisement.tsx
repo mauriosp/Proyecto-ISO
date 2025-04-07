@@ -1,11 +1,14 @@
-import AdvertisementForm from "../components/AdvertisementForm"
+import AdvertisementForm from "../components/AdvertisementForm";
+import { AdvertisementProvider } from "../context/advertisement/AdvertisementProvider";
 
 const PostAdvertisement = () => {
   return (
-    <div className="flex flex-col h-screen">
+    <AdvertisementProvider>
+      <div className="flex flex-col h-screen">
         <AdvertisementForm />
-    </div>
-  )
-}
+      </div>
+    </AdvertisementProvider>
+  );
+};
 
-export default PostAdvertisement
+export default PostAdvertisement;
