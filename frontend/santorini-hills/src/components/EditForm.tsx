@@ -90,10 +90,10 @@ const EditForm = () => {
           <img
             src={user.photo}
             alt="Foto de perfil"
-            className="w-20 h-20 rounded-full object-cover mb-2"
+            className="w-20 aspect-square rounded-full object-cover mb-2"
           />
         ) : (
-          <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center mb-2">
+          <div className="w-20 aspect-square rounded-full bg-gray-200 flex items-center justify-center mb-2">
             Sin foto
           </div>
         )}
