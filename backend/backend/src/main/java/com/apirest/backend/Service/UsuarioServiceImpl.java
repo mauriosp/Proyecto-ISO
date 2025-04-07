@@ -149,23 +149,24 @@ public class UsuarioServiceImpl implements IUsuarioService {
             registrarAuditoria(usuario, "nombre", nombreAnterior, nombre);
         }
 
-        // Validar y actualizar el teléfono
+       // Validar y actualizar el teléfono
         if (telefono != null && !telefono.trim().isEmpty()) {
-            if (!telefono.matches("\\d{10}")) {
-                throw new IllegalArgumentException("El número de teléfono debe tener 10 dígitos");
-            }
-            
-            // Corrección: Usar Integer que puede ser null en lugar de int
-            String telefonoAnterior = "";
-            Integer telefonoActual = usuario.getTelefono();
-            if (telefonoActual != null) {
-                telefonoAnterior = telefonoActual.toString();
-            }
-            
-            usuario.setTelefono(Integer.parseInt(telefono));
-            
-            // Registro de auditoría para el cambio de teléfono
-            registrarAuditoria(usuario, "telefono", telefonoAnterior, telefono);
+        if (!telefono.matches("\\d{10}")) {
+            throw new IllegalArgumentException("El número de teléfono debe tener 10 dígitos");
+        }
+        
+        // Guardar el valor anterior para auditoría
+        String telefonoAnterior = "";
+        Long telefonoActual = usuario.getTelefono();
+        if (telefonoActual != null) {
+            telefonoAnterior = telefonoActual.toString();
+        }
+        
+        // Convertir y asignar el nuevo valor
+        usuario.setTelefono(Long.parseLong(telefono));
+        
+        // Registro de auditoría para el cambio de teléfono
+        registrarAuditoria(usuario, "telefono", telefonoAnterior, telefono);
         }
 
         // Validar y actualizar la foto de perfil

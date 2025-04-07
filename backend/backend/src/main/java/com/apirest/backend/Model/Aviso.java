@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.Decimal128;
 
 import org.bson.types.ObjectId;
 
@@ -28,7 +27,7 @@ public class Aviso {
     private ObjectId idPropietario;
     private String titulo;
     private String descripcion;
-    private Decimal128 precio;
+    private Integer precio;
     private String estado;
     private Date fechaPublicacion;
     private String imagenes;

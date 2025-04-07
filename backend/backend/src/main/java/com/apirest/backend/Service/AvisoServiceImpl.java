@@ -2,7 +2,6 @@ package com.apirest.backend.Service;
 
 import com.apirest.backend.Model.Aviso;
 import com.apirest.backend.Repository.AvisoRepository;
-import org.bson.types.Decimal128;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.math.BigDecimal;
 import org.bson.types.ObjectId;
@@ -26,7 +26,7 @@ public class AvisoServiceImpl implements IAvisoService {
     private AvisoRepository avisoRepository;
 
     @Autowired
-    private INotificacionService notificacionService; // Cambio aquí: NotificationService → INotificacionService
+    private INotificacionService notificacionService;
 
     @Autowired
     private EspacioRepository espacioRepository;
@@ -70,25 +70,23 @@ public class AvisoServiceImpl implements IAvisoService {
         // Crear un nuevo espacio
         Espacio nuevoEspacio = new Espacio();
         nuevoEspacio.setIdPropietario(idUsuario);
+        nuevoEspacio.setTipo(tipoEspacio); // Establecer el campo tipo
         nuevoEspacio.setTipoEspacio(tipoEspacio);
         nuevoEspacio.setCaracteristicas(caracteristicas);
         nuevoEspacio.setDireccion(direccion);
-        nuevoEspacio.setArea(area);
+        nuevoEspacio.setArea(area.doubleValue());
         nuevoEspacio.setEstado("Disponible");
         espacioRepository.save(nuevoEspacio);
 
         // Crear el aviso
         Aviso aviso = new Aviso();
         aviso.setDescripcion(descripcion);
-        aviso.setPrecio(new Decimal128(BigDecimal.valueOf(precioMensual)));
+        aviso.setPrecio((int) precioMensual);
         aviso.setImagenes(String.join(",", rutasImagenes));
         aviso.setTitulo(titulo);
-        aviso.setEstado("Disponible");
-        // Aquí tienes un problema - necesitas verificar qué método existe en tu clase Aviso:
-        // Si tienes el método setIdEspacio, usa:
+        aviso.setEstado("Activo"); // Cambiar a "Activo"
+        aviso.setFechaPublicacion(new Date()); // Añadir fecha de publicación
         aviso.setIdPropietario(nuevoEspacio.getIdPropietario());
-        // O si tienes alguno similar como:
-        // aviso.setEspacioId(espacio.getId());
 
         // Guardar el aviso en la base de datos
         avisoRepository.save(aviso);
@@ -140,8 +138,16 @@ public class AvisoServiceImpl implements IAvisoService {
         // Actualizar los campos del aviso
         if (titulo != null) aviso.setTitulo(titulo);
         if (descripcion != null) aviso.setDescripcion(descripcion);
-        if (precioMensual != null) aviso.setPrecio(new Decimal128(BigDecimal.valueOf(precioMensual)));
-        if (estado != null) aviso.setEstado(estado);
+        if (precioMensual != null) {
+            aviso.setPrecio((int) precioMensual.doubleValue());
+        }
+        if (estado != null) {
+            // Asegurarse de que estado sea un valor válido
+            if (!List.of("Activo", "Inactivo").contains(estado)) {
+                throw new IllegalArgumentException("Estado no válido. Valores permitidos: Activo, Inactivo");
+            }
+            aviso.setEstado(estado);
+        }
 
         // Guardar los cambios en la base de datos
         avisoRepository.save(aviso);
@@ -158,7 +164,7 @@ public class AvisoServiceImpl implements IAvisoService {
     @Override
     public List<Aviso> listarAvisosParaModeracion() {
         return avisoRepository.findAll().stream()
-                .filter(aviso -> aviso.getEstado().equalsIgnoreCase("Publicado"))
+                .filter(aviso -> aviso.getEstado().equalsIgnoreCase("Activo"))
                 .collect(Collectors.toList());
     }
 
@@ -176,7 +182,6 @@ public class AvisoServiceImpl implements IAvisoService {
         avisoRepository.save(aviso);
 
         // Notificar al propietario
-
     }
 
     @Override
@@ -185,8 +190,8 @@ public class AvisoServiceImpl implements IAvisoService {
         Aviso aviso = avisoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
 
-        // Cambiar el estado del aviso a "Publicado"
-        aviso.setEstado("Publicado");
+        // Cambiar el estado del aviso a "Activo"
+        aviso.setEstado("Activo");  // Cambiar "Publicado" a "Activo"
         aviso.setMotivoDesactivacion(null); // Limpiar el motivo de desactivación
 
         // Guardar los cambios
@@ -207,7 +212,7 @@ public class AvisoServiceImpl implements IAvisoService {
 
     @Override
     public void eliminarAvisosPorPropietario(ObjectId idPropietario) {
-    List<Aviso> avisos = avisoRepository.findByIdPropietario(idPropietario);
-    avisoRepository.deleteAll(avisos);
-}
+        List<Aviso> avisos = avisoRepository.findByIdPropietario(idPropietario);
+        avisoRepository.deleteAll(avisos);
+    }
 }
