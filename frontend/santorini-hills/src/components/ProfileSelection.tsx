@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import ProfileOption from "./ProfileOption";
 import { FaHouseChimney, FaHouseChimneyUser } from "react-icons/fa6";
 import { useRegisterContext } from "../context/registerForm/RegisterContext";
 import { register } from "../utils/APICalls";
+import { User } from "../models/user";
+import FormRadioOption from "./FormRadioOption";
 
 interface ProfileOptionData {
   value: "owner" | "renter";
@@ -45,14 +46,15 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = () => {
 
   const handleContinue = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setUser({ ...user, profile, isVerified: false });
-    register(user);
+    const updatedUser : User = { ...user, profile, isVerified: false };
+    setUser(updatedUser);
+    register(updatedUser);
   };
 
   return (
     <form className="flex flex-col space-y-2" onSubmit={handleContinue}>
       {profileOptions.map((option) => (
-        <ProfileOption
+        <FormRadioOption
           key={option.id}
           name="profile"
           value={option.value}
@@ -66,7 +68,7 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = () => {
               <p className="text-sm">{option.description}</p>
             </div>
           </div>
-        </ProfileOption>
+        </FormRadioOption>
       ))}
       {profile && (
         <button className="form-button mt-4 hover:bg-slate-800 bg-accent text-white font-semibold">
