@@ -8,6 +8,8 @@ import java.util.List;
 
 @Repository
 public interface ReporteRepository extends MongoRepository<Reporte, String> {
-    void deleteByUsuarioId(String usuarioId);
-    List<Reporte> findByEstado(String estado); 
+    List<Reporte> findByIdAviso(String idAviso);
+    List<Reporte> findByIdUsuario(String idUsuario);
+    void deleteByIdUsuario(String idUsuario);
+    void deleteByIdAviso(String idAviso);
 }

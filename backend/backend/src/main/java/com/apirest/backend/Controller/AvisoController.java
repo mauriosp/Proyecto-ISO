@@ -128,4 +128,14 @@ public class AvisoController {
         }
     }
 
+    @DeleteMapping("/eliminar-por-propietario/{idPropietario}")
+    public ResponseEntity<String> eliminarAvisosPorPropietario(@PathVariable ObjectId idPropietario) {
+    try {
+        avisoService.eliminarAvisosPorPropietario(idPropietario);
+        return new ResponseEntity<>("Avisos eliminados correctamente", HttpStatus.OK);
+    } catch (Exception e) {
+        return new ResponseEntity<>("Error al eliminar avisos: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
 }
