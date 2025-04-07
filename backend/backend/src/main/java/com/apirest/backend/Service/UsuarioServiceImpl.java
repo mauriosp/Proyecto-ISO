@@ -6,6 +6,8 @@ import com.apirest.backend.Model.VerificacionEmail;
 import com.apirest.backend.Repository.UsuarioRepository;
 import com.apirest.backend.Repository.AvisoRepository;
 import com.apirest.backend.Repository.ReporteRepository;
+
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -218,11 +220,11 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     private void eliminarDatosRelacionados(String usuarioId) {
-        // Eliminar avisos relacionados
-        avisoRepository.deleteByUsuarioId(usuarioId);
+        ObjectId propietarioId = new ObjectId(usuarioId);
+        avisoRepository.deleteByIdPropietario(propietarioId);
 
         // Eliminar reportes relacionados
-        reporteRepository.deleteByUsuarioId(usuarioId);
+        reporteRepository.deleteByIdUsuario(usuarioId);
     }
 
     private String guardarImagen(MultipartFile fotoPerfil) throws IOException {

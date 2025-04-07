@@ -204,4 +204,10 @@ public class AvisoServiceImpl implements IAvisoService {
         }
         return rutas;
     }
+
+    @Override
+    public void eliminarAvisosPorPropietario(ObjectId idPropietario) {
+    List<Aviso> avisos = avisoRepository.findByIdPropietario(idPropietario);
+    avisoRepository.deleteAll(avisos);
+}
 }

@@ -23,4 +23,7 @@ public interface IAvisoService {
     void desactivarAviso(String id, String motivo) throws Exception;
 
     void reactivarAviso(String id) throws Exception;
+
+    void eliminarAvisosPorPropietario(ObjectId idPropietario) throws Exception;
+
 }

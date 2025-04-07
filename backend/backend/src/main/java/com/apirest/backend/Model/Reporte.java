@@ -1,22 +1,24 @@
 package com.apirest.backend.Model;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
-@Document(collection = "reportes")
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Date;
+
+@Document("Reporte")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Reporte {
-
-    @Id
-    private String id;
-
+    private ObjectId id;
     private String descripcion;
-    private String motivo;
+    private ObjectId idAviso;
+    private ObjectId idUsuario;
+    private String motivoEReporte;
+    private String comentarioAdicional;
+    private Date fechaReporte;
+    private String estado;
 
-    @DBRef
-    private Aviso aviso; // Referencia al aviso reportado
 }
