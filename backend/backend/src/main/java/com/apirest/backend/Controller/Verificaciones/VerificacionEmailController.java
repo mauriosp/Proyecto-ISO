@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/UAO/apirest")
+@RequestMapping("/UAO/apirest/VerificacionEmail")
 @RequiredArgsConstructor
 public class VerificacionEmailController {
 

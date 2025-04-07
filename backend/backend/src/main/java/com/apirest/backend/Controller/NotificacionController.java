@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/UAO/apirest/notificaciones")
+@RequestMapping("/UAO/apirest/Notificaciones")
 @RequiredArgsConstructor
 public class NotificacionController {
 
