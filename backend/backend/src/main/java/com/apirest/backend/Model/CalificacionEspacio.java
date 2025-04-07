@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class CalificacionEspacio {
     private ObjectId idUsuarioCalifica;
-    private int puntacion;
+    private int puntuacion;
     private Date fecha;
     private String comentario;
 }

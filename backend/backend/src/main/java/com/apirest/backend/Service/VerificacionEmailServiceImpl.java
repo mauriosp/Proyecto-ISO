@@ -5,6 +5,10 @@ import com.apirest.backend.Model.VerificacionEmail;
 import com.apirest.backend.Repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailPreparationException;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -44,15 +48,19 @@ public class VerificacionEmailServiceImpl implements IVerificacionEmailService {
         String link = "http://localhost:8080/UAO/apirest/verificar?token=" + token;
 
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(email);
-            message.setSubject("Verifica tu cuenta");
-            message.setText("Haz clic aquí para verificar tu cuenta: " + link);
-            mailSender.send(message);
-            log.info("Correo enviado a {}", email);
-        } catch (Exception e) {
-            log.error("Error al enviar correo: ", e);
-        }
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Verifica tu cuenta");
+        message.setText("Haz clic aquí para verificar tu cuenta: " + link);
+        mailSender.send(message);
+        log.info("Correo enviado a {}", email);
+    } catch (MailSendException e) {
+        log.error("Error al enviar el correo de verificación - Problema con el envío: ", e);
+    } catch (MailPreparationException e) {
+        log.error("Error al preparar el correo de verificación: ", e);
+    } catch (MailException e) {
+        log.error("Error general de correo al enviar verificación: ", e);
+    }
     }
 
     @Override

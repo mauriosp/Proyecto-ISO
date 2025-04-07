@@ -5,6 +5,10 @@ import com.apirest.backend.Model.VerificacionEmail;
 import com.apirest.backend.Repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailPreparationException;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,11 +65,15 @@ public class ContraseñaServiceImpl implements IContraseñaService {
             message.setTo(email);
             message.setSubject("Recuperación de Contraseña");
             message.setText("Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para crear una nueva contraseña: " + link + 
-                           "\n\nEste enlace expirará en 1 hora. Si no solicitaste este cambio, puedes ignorar este correo.");
+                        "\n\nEste enlace expirará en 1 hora. Si no solicitaste este cambio, puedes ignorar este correo.");
             mailSender.send(message);
             log.info("Correo de recuperación de contraseña enviado a {}", email);
-        } catch (Exception e) {
-            log.error("Error al enviar correo de recuperación: ", e);
+        } catch (MailSendException e) {
+            log.error("Error al enviar correo de recuperación - Problema con el envío: ", e);
+        } catch (MailPreparationException e) {
+            log.error("Error al preparar el correo de recuperación: ", e);
+        } catch (MailException e) {
+            log.error("Error general de correo al enviar recuperación de contraseña: ", e);
         }
     }
 

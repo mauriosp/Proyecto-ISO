@@ -68,7 +68,7 @@ public class AvisoServiceImpl implements IAvisoService {
 
         // Crear un nuevo espacio
         Espacio nuevoEspacio = new Espacio();
-        nuevoEspacio.setIdUsuario(idUsuario);
+        nuevoEspacio.setIdPropietario(idUsuario);
         nuevoEspacio.setTipoEspacio(tipoEspacio);
         nuevoEspacio.setCaracteristicas(caracteristicas);
         nuevoEspacio.setDireccion(direccion);
@@ -85,7 +85,7 @@ public class AvisoServiceImpl implements IAvisoService {
         aviso.setEstado("Disponible");
         // Aquí tienes un problema - necesitas verificar qué método existe en tu clase Aviso:
         // Si tienes el método setIdEspacio, usa:
-        aviso.setIdEspacio(espacio.getId());
+        aviso.setIdPropietario(nuevoEspacio.getIdPropietario());
         // O si tienes alguno similar como:
         // aviso.setEspacioId(espacio.getId());
 

@@ -18,7 +18,7 @@ import java.util.List;
 public class Espacio {
     @Id
     private ObjectId id;
-    private ObjectId idUsuario;
+    private ObjectId idPropietario;
     private String tipo;
     private String direccion;
     private BigDecimal area;

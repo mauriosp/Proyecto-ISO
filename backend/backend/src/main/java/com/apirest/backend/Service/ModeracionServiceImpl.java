@@ -23,21 +23,18 @@ public class ModeracionServiceImpl implements IModeracionService {
                 .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
         // Aplicar la acción de moderación
-        if ("suspender".equals(accion)) {
-            aviso.setEstado("Suspendido");
-        } else if ("aprobar".equals(accion)) {
-            aviso.setEstado("Aprobado");
-        } else if ("rechazar".equals(accion)) {
-            aviso.setEstado("Rechazado");
-        } else {
-            throw new IllegalArgumentException("Acción de moderación no válida");
+        switch (accion) {
+            case "suspender" -> aviso.setEstado("Suspendido");
+            case "aprobar" -> aviso.setEstado("Aprobado");
+            case "rechazar" -> aviso.setEstado("Rechazado");
+            default -> throw new IllegalArgumentException("Acción de moderación no válida");
         }
         
         // Guardar el aviso actualizado
         avisoRepository.save(aviso);
         
         // Notificar al propietario sobre la moderación
-        ObjectId propietarioId = aviso.getIdUsuario();
+        ObjectId propietarioId = aviso.getIdPropietario();
         notificacionService.notificarModeracionAviso(propietarioId, objAvisoId, motivo, accion);
         
         log.info("Aviso moderado: id={}, acción={}, motivo={}", avisoId, accion, motivo);
