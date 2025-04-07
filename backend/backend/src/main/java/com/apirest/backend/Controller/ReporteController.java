@@ -34,4 +34,17 @@ public class ReporteController {
             return new ResponseEntity<>("Error al enviar el reporte: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/resolver/{idReporte}")
+    public ResponseEntity<String> resolverReporte(
+            @PathVariable String idReporte,
+            @RequestParam String decision,
+            @RequestParam(required = false) String motivo) {
+        try {
+            reporteService.resolverReporte(idReporte, decision, motivo);
+            return new ResponseEntity<>("Reporte resuelto correctamente", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al resolver el reporte: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

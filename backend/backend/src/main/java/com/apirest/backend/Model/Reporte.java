@@ -16,8 +16,9 @@ public class Reporte {
     private String id;
     private ObjectId idAviso;
     private ObjectId idUsuario;
-    private String descripcion;
     private String motivo;
     private String comentarios;
     private Date fechaReporte;
+    private String estado;
+    private String decision;
 }

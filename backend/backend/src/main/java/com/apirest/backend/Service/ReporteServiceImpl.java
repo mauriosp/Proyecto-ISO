@@ -1,6 +1,8 @@
 package com.apirest.backend.Service;
 
+import com.apirest.backend.Model.Aviso;
 import com.apirest.backend.Model.Reporte;
+import com.apirest.backend.Repository.AvisoRepository;
 import com.apirest.backend.Repository.ReporteRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,10 @@ public class ReporteServiceImpl implements IReporteService {
     private ReporteRepository reporteRepository;
 
     @Autowired
-    private INotificacionService notificationService;
+    private AvisoRepository avisoRepository;
 
-    @Override
-    public void guardarReporte(Reporte reporte) {
-        reporteRepository.save(reporte);
-    }
+    @Autowired
+    private INotificacionService notificacionService;
 
     @Override
     public List<Reporte> listarReportes() {
@@ -42,9 +42,44 @@ public class ReporteServiceImpl implements IReporteService {
         reporteRepository.save(reporte);
 
         // Notificar al administrador
-        notificationService.enviarNotificacionAdministrador(
+        notificacionService.enviarNotificacionAdministrador(
                 "Nuevo reporte generado",
                 "Se ha generado un nuevo reporte para el aviso con ID: " + idAviso + ". Motivo: " + motivo
+        );
+    }
+
+    @Override
+    public void resolverReporte(String idReporte, String decision, String motivo) throws Exception {
+        // Buscar el reporte
+        Reporte reporte = reporteRepository.findById(idReporte)
+                .orElseThrow(() -> new IllegalArgumentException("Reporte no encontrado"));
+
+        // Actualizar el estado y la decisión del reporte
+        reporte.setEstado("Resuelto");
+        reporte.setDecision(decision);
+        reporteRepository.save(reporte);
+
+        // Si la decisión es excluir la publicación
+        if ("Excluir".equalsIgnoreCase(decision)) {
+            Aviso aviso = avisoRepository.findById(reporte.getIdAviso().toHexString())
+                    .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
+            aviso.setEstado("Inactivo");
+            aviso.setMotivoDesactivacion(motivo);
+            avisoRepository.save(aviso);
+
+            // Notificar al propietario del aviso
+            notificacionService.enviarNotificacion(
+                    aviso.getIdPropietario(),
+                    "Tu publicación con título '" + aviso.getTitulo() + "' ha sido eliminada. Motivo: " + motivo,
+                    aviso.getId()
+            );
+        }
+
+        // Notificar al usuario que reportó
+        notificacionService.enviarNotificacion(
+                reporte.getIdUsuario(),
+                "Resolución de tu reporte",
+                new ObjectId(avisoRepository.findById(reporte.getIdAviso().toHexString()).get().getTitulo())
         );
     }
 }
