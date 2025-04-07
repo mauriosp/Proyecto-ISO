@@ -1,4 +1,4 @@
-package com.apirest.backend.Service;
+package com.apirest.backend;
 
 import com.apirest.backend.Model.Aviso;
 import com.apirest.backend.Model.Mensaje;
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import com.apirest.backend.Service.NotificacionServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;

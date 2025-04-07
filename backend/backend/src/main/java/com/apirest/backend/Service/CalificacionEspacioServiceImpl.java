@@ -29,7 +29,7 @@ public class CalificacionEspacioServiceImpl implements ICalificacionEspacioServi
         // Verifica los métodos disponibles en la clase CalificacionEspacio
         // Si no existen estos setters, tendrás que ajustar tu clase CalificacionEspacio
         // o establecer los valores de otra manera
-        calificacion.setUsuarioId(objUsuarioId);
+        calificacion.setIdUsuarioCalifica(objUsuarioId);
         calificacion.setEspacioId(objEspacioId);
         calificacion.setPuntuacion(puntuacion);
         calificacion.setComentario(comentario);
@@ -42,7 +42,7 @@ public class CalificacionEspacioServiceImpl implements ICalificacionEspacioServi
         
         // Asegúrate de que el método getIdPropietario exista en tu clase Espacio
         // Si no existe, deberás ajustar esto para obtener el ID del propietario
-        ObjectId propietarioId = espacio.getIdPropietario();
+        ObjectId propietarioId = espacio.getIdUsuario();
         
         // Buscar el aviso asociado a este espacio
         ObjectId avisoId = obtenerAvisoIdPorEspacio(objEspacioId);
