@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -21,7 +20,7 @@ public class Espacio {
     private ObjectId idPropietario;
     private String tipo;
     private String direccion;
-    private BigDecimal area;
+    private Double area;
     private String caracteristicas;
     private String tipoEspacio;
     private String estado;
