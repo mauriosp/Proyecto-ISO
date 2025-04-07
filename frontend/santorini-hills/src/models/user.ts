@@ -5,4 +5,5 @@ export interface User {
     phone: string;
     profile?: "owner" | "renter";
     isVerified?: boolean;
+    photo?:string;
 }
