@@ -1,0 +1,1003 @@
+{
+	"info": {
+		"_postman_id": "51445a3c-29c6-4652-b057-ce99af0ce1e0",
+		"name": "Pruebas_Proyecto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43151331",
+		"_collection_link": "https://universal-shuttle-746402.postman.co/workspace/Team-Workspace~4e11b4ca-cf07-4487-8cdb-236bf475289d/collection/43151331-51445a3c-29c6-4652-b057-ce99af0ce1e0?action=share&source=collection_link&creator=43151331"
+	},
+	"item": [
+		{
+			"name": "Usuario",
+			"item": [
+				{
+					"name": "InsertarUsuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"Sandra Castillo\",\r\n  \"email\": \"sandrita@example.com\",\r\n  \"telefono\": \"3159876543\",\r\n  \"contraseña\": \"claveSegura123\",\r\n  \"tipoUsuario\": \"Propietario\",\r\n  \"promCalificacion\": 0,\r\n  \"intentosFallidos\": 0,\r\n  \"estado\": false,\r\n  \"fechaBloqueo\": null,\r\n  \"fotoPerfil\": \"https://miservidor.com/perfiles/sandra.jpg\",\r\n  \"verificacionEmail\": [\r\n    {\r\n      \"Token\": \"verif-token-123\",\r\n      \"fechaCreacion\": \"2025-04-06T22:00:00Z\",\r\n      \"fechaExpiracion\": \"2025-04-07T22:00:00Z\",\r\n      \"tipoVerificacion\": \"Registro\",\r\n      \"verificado\": false\r\n    }\r\n  ],\r\n  \"calificacionUsuario\": [],\r\n  \"auditoriaPerfil\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Usuario/registro",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Usuario",
+								"registro"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarUsuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Usuario/listar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Usuario",
+								"listar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ActualizarUsuario",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nombre",
+									"value": "Valeria Valencia",
+									"description": "Sandra Castillo ",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Usuario/actualizarPerfil/67f425cb8904ac5fc3a8e71c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Usuario",
+								"actualizarPerfil",
+								"67f425cb8904ac5fc3a8e71c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EliminarUsuario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Usuario/eliminar/67f41e2f8904ac5fc3a8e71a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Usuario",
+								"eliminar",
+								"67f41e2f8904ac5fc3a8e71a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Espacio",
+			"item": [
+				{
+					"name": "InseetarEspacio",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idPropietario\": \"643f8a2e5d7c1234abcd5678\",\r\n  \"tipo\": \"Apartamento\",\r\n  \"direccion\": \"Calle 25 #45-67\",\r\n  \"area\": 85.5,\r\n  \"caracteristicas\": \"2 habitaciones, 1 baño, cocina integral, sala-comedor\",\r\n  \"tipoEspacio\": \"Apartamento\",\r\n  \"estado\": \"Disponible\",\r\n  \"promCalificacion\": 0,\r\n  \"arrendamiento\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Espacio/insertar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Espacio",
+								"insertar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarEspacio",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Espacio/listar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Espacio",
+								"listar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BuscarEspacioId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Espacio/buscar/67f429348904ac5fc3a8e723",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Espacio",
+								"buscar",
+								"67f429348904ac5fc3a8e723"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EliminarEspacio",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Espacio/eliminar/67f429348904ac5fc3a8e723",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Espacio",
+								"eliminar",
+								"67f429348904ac5fc3a8e723"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Aviso",
+			"item": [
+				{
+					"name": "CrearAviso",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tipoEspacio",
+									"value": "Apartamento",
+									"type": "text"
+								},
+								{
+									"key": "descripcion",
+									"value": "Increible",
+									"type": "text"
+								},
+								{
+									"key": "precioMensual",
+									"value": "1500000",
+									"type": "text"
+								},
+								{
+									"key": "condicionesAdicionales",
+									"value": "No se permiten mascotas",
+									"type": "text"
+								},
+								{
+									"key": "imagenes",
+									"type": "file",
+									"src": "/C:/Users/samue/Downloads/OIP.jpg"
+								},
+								{
+									"key": "titulo",
+									"value": "Apartamento en alquiler",
+									"type": "text"
+								},
+								{
+									"key": "direccion ",
+									"value": "Calle 15 #45-67",
+									"type": "text"
+								},
+								{
+									"key": "area ",
+									"value": "75.5",
+									"type": "text"
+								},
+								{
+									"key": "idUsuario ",
+									"value": "67f425cb8904ac5fc3a8e71c",
+									"type": "text"
+								},
+								{
+									"key": "mensaje",
+									"value": "[{\"idUsuario\":\"abc123\", \"contenido\":\"Hola, ¿sigue disponible?\", \"fechaMensaje\":\"2025-04-07T15:00:00Z\", \"estadoMensaje\":false}]",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Aviso/crear",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Aviso",
+								"crear"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditarAviso",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "titulo",
+									"value": "Apartamento desocupado",
+									"description": "Apartamento en alquiler",
+									"type": "text"
+								},
+								{
+									"key": "descripcion",
+									"value": "Descripción actualizada del apartamento",
+									"description": "Hermoso apartamento con vista al parque",
+									"type": "text"
+								},
+								{
+									"key": "precioMensual\n",
+									"value": "1600000",
+									"description": "1500000",
+									"type": "text"
+								},
+								{
+									"key": "imagenes",
+									"type": "file",
+									"src": "/C:/Users/samue/Downloads/OIP2.jpg"
+								},
+								{
+									"key": "estado",
+									"value": "Inactivo",
+									"description": "Activo",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Aviso/editar/67f42ef18904ac5fc3a8e740",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Aviso",
+								"editar",
+								"67f42ef18904ac5fc3a8e740"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EliminarAviso",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Aviso/eliminar/67f42ef18904ac5fc3a8e740",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Aviso",
+								"eliminar",
+								"67f42ef18904ac5fc3a8e740"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarAviso",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Aviso/listar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Aviso",
+								"listar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarAvisoModeracion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Aviso/moderacion/listar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Aviso",
+								"moderacion",
+								"listar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DesactivarAviso",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "motivo",
+									"value": "Contenido Apropiado",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Aviso/moderacion/desactivar/67f42ef18904ac5fc3a8e740",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Aviso",
+								"moderacion",
+								"desactivar",
+								"67f42ef18904ac5fc3a8e740"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReactivarAviso",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Aviso/moderacion/reactivar/67f42ef18904ac5fc3a8e740",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Aviso",
+								"moderacion",
+								"reactivar",
+								"67f42ef18904ac5fc3a8e740"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EliminarAvisoPropietario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Aviso/eliminar-por-propietario/67f425cb8904ac5fc3a8e71c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Aviso",
+								"eliminar-por-propietario",
+								"67f425cb8904ac5fc3a8e71c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reportes",
+			"item": [
+				{
+					"name": "CrearReporte",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idAviso\": \"67f42ef18904ac5fc3a8e740\",\r\n  \"idUsuario\": \"67f42dc38904ac5fc3a8e738\",\r\n  \"descripcion\": \"Este aviso contiene información engañosa\",\r\n  \"motivoReporte\": \"INFORMACION_FALSA\",\r\n  \"comentarioAdicional\": \"Los detalles del apartamento no coinciden con las fotos\",\r\n  \"estado\": \"pendiente\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/UAO/api/reportes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"api",
+								"reportes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ObtenerReportes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/api/reportes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"api",
+								"reportes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ObtenerReportesById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/api/reportes/67f440d28904ac5fc3a8e745",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"api",
+								"reportes",
+								"67f440d28904ac5fc3a8e745"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ActualizarEstadoReporte",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/api/reportes/67f440d28904ac5fc3a8e745/estado?estado=revisado",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"api",
+								"reportes",
+								"67f440d28904ac5fc3a8e745",
+								"estado"
+							],
+							"query": [
+								{
+									"key": "estado",
+									"value": "revisado"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EliminarReportes",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/api/reportes/{id}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"api",
+								"reportes",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ObtenerReporteAviso",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/api/reportes/aviso/67f441da8904ac5fc3a8e747",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"api",
+								"reportes",
+								"aviso",
+								"67f441da8904ac5fc3a8e747"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ObtenerReporteUsuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/api/reportes/usuario/67f425cb8904ac5fc3a8e71c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"api",
+								"reportes",
+								"usuario",
+								"67f425cb8904ac5fc3a8e71c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EliminarReporteUsuario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/api/reportes/usuario/67f425cb8904ac5fc3a8e71c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"api",
+								"reportes",
+								"usuario",
+								"67f425cb8904ac5fc3a8e71c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EliminarReporteAviso",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/api/reportes/aviso/67f441da8904ac5fc3a8e747",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"api",
+								"reportes",
+								"aviso",
+								"67f441da8904ac5fc3a8e747"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notificaciones",
+			"item": [
+				{
+					"name": "ObtenerNotificacionUsuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Notificaciones/usuario/67f425cb8904ac5fc3a8e71c/aviso/67f441da8904ac5fc3a8e747",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Notificaciones",
+								"usuario",
+								"67f425cb8904ac5fc3a8e71c",
+								"aviso",
+								"67f441da8904ac5fc3a8e747"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ObtenerNotificacionesNoLeidas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Notificaciones/usuario/67f425cb8904ac5fc3a8e71c/aviso/67f441da8904ac5fc3a8e747",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Notificaciones",
+								"usuario",
+								"67f425cb8904ac5fc3a8e71c",
+								"aviso",
+								"67f441da8904ac5fc3a8e747"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MarcarMensajeLeido",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Notificaciones/aviso/67f441da8904ac5fc3a8e747/mensaje/0/leer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Notificaciones",
+								"aviso",
+								"67f441da8904ac5fc3a8e747",
+								"mensaje",
+								"0",
+								"leer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MarcarTodaslasNotificacionescomoLeídas",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Notificaciones/usuario/67f425cb8904ac5fc3a8e71c/aviso/67f441da8904ac5fc3a8e747/leer-todas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Notificaciones",
+								"usuario",
+								"67f425cb8904ac5fc3a8e71c",
+								"aviso",
+								"67f441da8904ac5fc3a8e747",
+								"leer-todas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ResponderNotificacion",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"contenido\": \"Su respuesta aquí\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Notificaciones/aviso/67f4473b8904ac5fc3a8e751/mensaje/0/responder",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Notificaciones",
+								"aviso",
+								"67f4473b8904ac5fc3a8e751",
+								"mensaje",
+								"0",
+								"responder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NotificarCalificacion",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"propietarioId\": \"67f425cb8904ac5fc3a8e71c\",\r\n    \"espacioId\": \"67f42cc98904ac5fc3a8e72d\",\r\n    \"avisoId\": \"67f441da8904ac5fc3a8e747\",\r\n    \"puntuacion\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Notificaciones/calificacion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Notificaciones",
+								"calificacion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ContadorNotificacionNoLeida",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Notificaciones/usuario/67f425cb8904ac5fc3a8e71c/aviso/67f444f78904ac5fc3a8e74f/contador",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Notificaciones",
+								"usuario",
+								"67f425cb8904ac5fc3a8e71c",
+								"aviso",
+								"67f444f78904ac5fc3a8e74f",
+								"contador"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NotificarComentario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"propietarioId\": \"67f425cb8904ac5fc3a8e71c\",\r\n    \"comentario\": \"Este es un comentario de ejemplo\",\r\n    \"avisoId\": \"67f441da8904ac5fc3a8e747\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Notificaciones/comentario",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Notificaciones",
+								"comentario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NotificarModeración",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"propietarioId\": \"67f444f78904ac5fc3a8e74f\",\r\n    \"avisoId\": \"67f425cb8904ac5fc3a8e71c\",\r\n    \"motivo\": \"inapropiado\",\r\n    \"accion\": \"Eliminación\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Notificaciones/moderacion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Notificaciones",
+								"moderacion"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
