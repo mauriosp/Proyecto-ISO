@@ -25,6 +25,7 @@ const TextInput = ({
             className="outline-none font-medium flex-1"
             value={value}
             placeholder={placeholder}
+            autoComplete="off"
         />
     </label>
 );

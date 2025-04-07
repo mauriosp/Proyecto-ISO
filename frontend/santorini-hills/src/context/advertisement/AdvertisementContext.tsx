@@ -21,10 +21,11 @@ export const AdvertisementContext = createContext<AdvertisementContextType>({
         title: "",
         description: "",
         price: 0,
-        status: "",
+        status: null,
         publicationDate: new Date(),
         property: null,
         images: [],
+        owner: undefined
     },
     property: {
         type: "",

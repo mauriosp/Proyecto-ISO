@@ -8,8 +8,9 @@ import FormRadioOption from "./FormRadioOption";
 import StageContainer from "./FormStageContainer";
 import NavigationButtons from "./NavigationButtons";
 import TextInput from "./TextInput";
-
-// Reusable form components
+import { useUserContext } from "../context/user/UserContext";
+import { User } from "../models/user";
+import NumberInputWithButtons from "./NumberInputWithButtons";
 
 export const AdvertisementTypeStage = () => {
   const { property, setNextStage } = useAdvertisementContext();
@@ -231,6 +232,108 @@ export const AdvertisementDescriptionStage = () => {
   );
 };
 
+export const AdvertismentInformationStage = () => {
+  const { property, setNextStage, setPrevStage } = useAdvertisementContext();
+  const [bedrooms, setBedrooms] = useState<string>(
+    property.bedrooms ? property.bedrooms.toString() : ""
+  );
+  const [bathrooms, setBathrooms] = useState<string>(
+    property.bathrooms ? property.bathrooms.toString() : ""
+  );
+  const [area, setArea] = useState<string>(
+    property.area ? property.area.toString() : ""
+  );
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setNextStage({
+      property: {
+        bedrooms: parseInt(bedrooms) || 0,
+        bathrooms: parseInt(bathrooms) || 0,
+        area: parseInt(area) || 0,
+      },
+    });
+  };
+
+  const processInput = (value: string) => {
+    // Elimina ceros a la izquierda si hay mas de un dígito
+    if (value.length > 1) {
+      return value.replace(/^0+/, "");
+    }
+    return value;
+  };
+
+  const handleBedroomsChange = (e: { target: { value: string } }) => {
+    const value = processInput(e.target.value);
+    setBedrooms(value);
+  };
+
+  const handleBathroomsChange = (e: { target: { value: string } }) => {
+    const value = processInput(e.target.value);
+    setBathrooms(value);
+  };
+
+  const handleAreaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = processInput(e.target.value);
+    setArea(value);
+  };
+
+  const canContinue = parseInt(area) > 0;
+
+  return (
+    <form className="flex flex-col w-10/12 gap-10" onSubmit={handleSubmit}>
+      <StageContainer
+        title="Información de la propiedad"
+        subtitle="Por favor indica los detalles básicos de tu propiedad"
+      >
+        <div className="flex flex-col gap-8 max-w-lg mx-auto w-full">
+          <div className="form-group flex items-center justify-between">
+            <label htmlFor="bedroomsInput" className="block text-lg font-medium">
+              Habitaciones
+            </label>
+            <div className="flex items-center gap-3">
+              <NumberInputWithButtons
+                id="bedroomsInput"
+                value={bedrooms === "" ? 0 : parseInt(bedrooms)}
+                onChange={handleBedroomsChange}
+              />
+            </div>
+          </div>
+
+          <div className="form-group flex items-center justify-between">
+            <label htmlFor="bathroomsInput" className="block text-lg font-medium">
+              Baños
+            </label>
+            <div className="flex items-center gap-3">
+              <NumberInputWithButtons
+                id="bathroomsInput"
+                value={bathrooms === "" ? 0 : parseInt(bathrooms)}
+                onChange={handleBathroomsChange}
+              />
+            </div>
+          </div>
+
+          <div className="form-group flex items-center justify-between">
+            <label htmlFor="areaInput" className="block text-lg font-medium">
+              Área en m²
+            </label>
+            <input
+              id="areaInput"
+              type="number"
+              min="0"
+              value={area}
+              onChange={handleAreaChange}
+              className="outline-none font-medium border-accent border-2 rounded-md p-2 w-36"
+              placeholder="Área en metros cuadrados"
+            />
+          </div>
+        </div>
+      </StageContainer>
+      <NavigationButtons onBack={setPrevStage} canContinue={canContinue} />
+    </form>
+  );
+};
+
 export const AdvertisementPriceStage = () => {
   const { advertisement, setNextStage, setPrevStage } =
     useAdvertisementContext();
@@ -276,47 +379,83 @@ export const AdvertisementPriceStage = () => {
 };
 
 export const AdvertisementPreviewStage = () => {
-  const { advertisement, setPrevStage } = useAdvertisementContext();
+  const { advertisement, setPrevStage, setNextStage } = useAdvertisementContext();
+  const { user } = useUserContext();
+
+  const handleConfirm = () => {
+    const advertisementWithOwner = {
+      ...advertisement,
+      owner: user
+    };
+    console.log('Advertisement to be published:', advertisementWithOwner);
+    setNextStage({ advertisement: { owner: user as User, status: "available" } });
+  };
 
   return (
     <div className="flex flex-col w-10/12 gap-10">
       <StageContainer title="Vista previa de tu anuncio">
-        <div className="flex flex-col items-center gap-10 h-full w-max m-auto">
-          <h2 className="text-2xl font-semibold">¡Todo listo!</h2>
-          <p>Revisa los detalles de tu anuncio antes de publicarlo.</p>
+        <div className="grid md:grid-cols-2 gap-8 w-full">
+          {/* Details Section */}
+          <div className="flex flex-col gap-6">
+            <h3 className="text-xl font-semibold border-b border-accent pb-2">Detalles del anuncio</h3>
+            <div className="space-y-4">
+              <div>
+                <strong className="text-accent">Título:</strong>
+                <p className="text-lg font-medium">{advertisement.title}</p>
+              </div>
+              <div>
+                <strong className="text-accent">Descripción:</strong>
+                <p className="text-base">{advertisement.description}</p>
+              </div>
+              <div>
+                <strong className="text-accent">Ubicación:</strong>
+                <p className="text-base">{advertisement.property?.location}</p>
+              </div>
+              <div>
+                <strong className="text-accent">Precio:</strong>
+                <p className="text-xl font-semibold">${advertisement.price.toLocaleString()}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Images Section */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-xl font-semibold">Detalles del anuncio</h3>
-            <p>
-              <strong>Título:</strong> {advertisement.title}
-            </p>
-            <p>
-              <strong>Descripción:</strong> {advertisement.description}
-            </p>
-            <p>
-              <strong>Ubicación:</strong> {advertisement.property?.location}
-            </p>
-            <p>
-              <strong>Precio:</strong> ${advertisement.price.toLocaleString()}
-            </p>
-        </div>
-          <div className="flex flex-col gap-4">
-            <h3 className="text-xl font-semibold">Imágenes</h3>
-            {advertisement.images?.length > 0 ? (
-              advertisement.images.map((image, index) => (
-                <img
-                  key={index}
-                  src={URL.createObjectURL(image)}
-                  alt={`Imagen ${index + 1}`}
-                  className="w-32 h-32 object-cover rounded-md"
-                />
-              ))
-            ) : (
-              <p>No hay imágenes disponibles.</p>
-            )}
+            <h3 className="text-xl font-semibold border-b border-accent pb-2">Imágenes</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {advertisement.images?.length > 0 ? (
+                advertisement.images.map((image, index) => (
+                  <div key={index} className="aspect-square rounded-md overflow-hidden">
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt={`Imagen ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))
+              ) : (
+                <p className="col-span-full text-center py-4">No hay imágenes disponibles.</p>
+              )}
+            </div>
           </div>
         </div>
       </StageContainer>
-      <NavigationButtons onBack={setPrevStage} canContinue/>
+
+      <div className="flex justify-between mt-6 w-full">
+        <button
+          type="button"
+          onClick={setPrevStage}
+          className="form-button w-min px-8 border-accent text-accent hover:bg-accent hover:text-white"
+        >
+          Atrás
+        </button>
+        <button
+          type="button"
+          onClick={handleConfirm}
+          className="form-button w-min px-8 bg-accent hover:bg-slate-800 text-white"
+        >
+          Confirmar
+        </button>
+      </div>
     </div>
   );
-}
+};

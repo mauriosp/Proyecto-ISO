@@ -3,6 +3,7 @@ import {
   AdvertisementTypeStage,
   AdvertisementPicturesStage,
   PropertyLocationStage,
+  AdvertismentInformationStage,
   AdvertisementTitleStage,
   AdvertisementDescriptionStage,
   AdvertisementPriceStage,
@@ -14,6 +15,7 @@ const AdvertisementForm = () => {
   // Ajusta las etapas a tu estructura real
   const formStages = [
     AdvertisementTypeStage,
+    AdvertismentInformationStage,
     PropertyLocationStage,
     AdvertisementPicturesStage,
     AdvertisementTitleStage,
