@@ -1,17 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import { User } from "../../models/user";
 
+const LOCAL_STORAGE_KEY = "loggedUser";
+
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const defaultUser : User = {
-        name: "John Doe",
-        email: "johndoe@email.com",
-        password: "password",
-        phone: "+571234567890",
-        profile: "owner",
-        isVerified: true,
-    }
-    const [user, setUser] = useState<User | null>(defaultUser);
+    const [user, setUser] = useState<User | null>(null);
+
+    
+    useEffect(() => {
+        const storedUser = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
+
+    
+    useEffect(() => {
+        if (user) {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(user));
+        } else {
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+        }
+    }, [user]);
+
     const logout = () => {
         setUser(null);
     };

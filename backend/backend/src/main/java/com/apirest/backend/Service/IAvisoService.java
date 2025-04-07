@@ -17,4 +17,10 @@ public interface IAvisoService {
     void editarAviso(String id, String titulo, String descripcion, Double precioMensual, List<MultipartFile> imagenes, String estado) throws Exception;
 
     void eliminarAviso(String id) throws Exception;
+
+    List<Aviso> listarAvisosParaModeracion();
+
+    void desactivarAviso(String id, String motivo) throws Exception;
+
+    void reactivarAviso(String id) throws Exception;
 }

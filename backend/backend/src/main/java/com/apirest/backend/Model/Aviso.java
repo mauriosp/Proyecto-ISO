@@ -32,5 +32,6 @@ public class Aviso {
     private String estado;
     private Date fechaPublicacion;
     private String imagenes;
+    private String motivoDesactivacion;
     private List <Mensaje> mensaje;
 }
