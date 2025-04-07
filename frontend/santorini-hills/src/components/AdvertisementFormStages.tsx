@@ -52,7 +52,9 @@ export const AdvertisementTypeStage = () => {
 
 export const PropertyLocationStage = () => {
   const { property, setNextStage, setPrevStage } = useAdvertisementContext();
-  const [propertyLocation, setPropertyLocation] = useState<Property["location"]>(property.location);
+  const [propertyLocation, setPropertyLocation] = useState<
+    Property["location"]
+  >(property.location);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,13 +78,17 @@ export const PropertyLocationStage = () => {
           />
         </div>
       </StageContainer>
-      <NavigationButtons onBack={setPrevStage} canContinue={!!propertyLocation} />
+      <NavigationButtons
+        onBack={setPrevStage}
+        canContinue={!!propertyLocation}
+      />
     </form>
   );
 };
 
 export const AdvertisementPicturesStage = () => {
-  const { advertisement, setNextStage, setPrevStage } = useAdvertisementContext();
+  const { advertisement, setNextStage, setPrevStage } =
+    useAdvertisementContext();
   const [advertisementPictures, setAdvertisementPictures] = useState<File[]>(
     advertisement.images || []
   );
@@ -107,7 +113,7 @@ export const AdvertisementPicturesStage = () => {
     <>
       <label
         htmlFor="advertisementPicturesInput"
-        className="form-button flex items-center justify-center gap-4 max-w-80 bg-accent hover:bg-slate-800 text-white border-2 font-semibold"
+        className="form-button px-6 flex items-center justify-center gap-4 max-w-80 bg-accent hover:bg-slate-800 text-white border-2 font-semibold"
       >
         <TbUpload size={20} />
         Cargar archivos
@@ -137,15 +143,21 @@ export const AdvertisementPicturesStage = () => {
             </p>
           </div>
         </StageContainer>
-        <NavigationButtons onBack={setPrevStage} canContinue={advertisementPictures.length > 0} />
+        <NavigationButtons
+          onBack={setPrevStage}
+          canContinue={advertisementPictures.length > 0}
+        />
       </form>
     </div>
   );
 };
 
 export const AdvertisementTitleStage = () => {
-  const { advertisement, setNextStage, setPrevStage } = useAdvertisementContext();
-  const [advertisementTitle, setAdvertisementTitle] = useState(advertisement.title || "");
+  const { advertisement, setNextStage, setPrevStage } =
+    useAdvertisementContext();
+  const [advertisementTitle, setAdvertisementTitle] = useState(
+    advertisement.title || ""
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,9 +169,12 @@ export const AdvertisementTitleStage = () => {
   };
 
   return (
-    <form className="flex flex-col items-center w-10/12 gap-10" onSubmit={handleSubmit}>
-      <StageContainer 
-        title="Ahora, ponle un título a tu propiedad" 
+    <form
+      className="flex flex-col items-center w-10/12 gap-10"
+      onSubmit={handleSubmit}
+    >
+      <StageContainer
+        title="Ahora, ponle un título a tu propiedad"
         subtitle="El título debe ser breve y directo. Resalta lo mejor de tu propiedad"
       >
         <input
@@ -171,13 +186,17 @@ export const AdvertisementTitleStage = () => {
           placeholder="Escribe el título de tu propiedad"
         />
       </StageContainer>
-      <NavigationButtons onBack={setPrevStage} canContinue={!!advertisementTitle} />
+      <NavigationButtons
+        onBack={setPrevStage}
+        canContinue={!!advertisementTitle}
+      />
     </form>
   );
 };
 
 export const AdvertisementDescriptionStage = () => {
-  const { advertisement, setNextStage, setPrevStage } = useAdvertisementContext();
+  const { advertisement, setNextStage, setPrevStage } =
+    useAdvertisementContext();
   const [advertisementDescription, setAdvertisementDescription] = useState(
     advertisement.description || ""
   );
@@ -191,43 +210,41 @@ export const AdvertisementDescriptionStage = () => {
     setAdvertisementDescription(e.target.value);
   };
 
-  const TextareaInput = () => (
-    <textarea
-      id="advertisementDescriptionInput"
-      onChange={handleChange}
-      className="outline-none font-medium resize-none border-2 border-accent w-full h-64 px-4 py-3 rounded-md"
-      value={advertisementDescription}
-      placeholder="Escribe una descripción detallada de tu propiedad"
-    />
-  );
-
   return (
     <form className="flex flex-col w-10/12 gap-10" onSubmit={handleSubmit}>
       <StageContainer title="¿Cómo describirías tu propiedad?">
         <div className="flex flex-col items-center gap-10 h-full w-full m-auto">
-          <TextareaInput />
+          <textarea
+            id="advertisementDescriptionInput"
+            onChange={handleChange}
+            className="outline-none font-medium resize-none border-2 border-accent w-full h-64 px-4 py-3 rounded-md"
+            value={advertisementDescription}
+            placeholder="Escribe una descripción detallada de tu propiedad"
+          />
         </div>
       </StageContainer>
-      <NavigationButtons onBack={setPrevStage} canContinue={!!advertisementDescription} />
+      <NavigationButtons
+        onBack={setPrevStage}
+        canContinue={!!advertisementDescription}
+      />
     </form>
   );
 };
 
 export const AdvertisementPriceStage = () => {
-  const { advertisement, setNextStage, setPrevStage } = useAdvertisementContext();
+  const { advertisement, setNextStage, setPrevStage } =
+    useAdvertisementContext();
   const [advertisementPrice, setAdvertisementPrice] = useState(
     advertisement.price || 0
   );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Advertisement:", advertisement);
-    console.log("Property:", advertisement.property);
     setNextStage({ advertisement: { price: advertisementPrice } });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\./g, ""); // Remove dots for parsing
+    const value = e.target.value.replace(/\./g, "");
     if (/^\d*$/.test(value)) {
       setAdvertisementPrice(Number(value));
     }
@@ -241,7 +258,7 @@ export const AdvertisementPriceStage = () => {
     <form className="flex flex-col w-10/12 gap-10" onSubmit={handleSubmit}>
       <StageContainer title="¿Cuál es el precio de tu propiedad?">
         <div className="flex flex-col items-center gap-10 h-full w-max m-auto">
-          <TextInput 
+          <TextInput
             id="advertisementPriceInput"
             value={formatNumber(advertisementPrice)}
             onChange={handleChange}
@@ -250,7 +267,56 @@ export const AdvertisementPriceStage = () => {
           />
         </div>
       </StageContainer>
-      <NavigationButtons onBack={setPrevStage} canContinue={advertisementPrice > 0} />
+      <NavigationButtons
+        onBack={setPrevStage}
+        canContinue={advertisementPrice > 0}
+      />
     </form>
   );
 };
+
+export const AdvertisementPreviewStage = () => {
+  const { advertisement, setPrevStage } = useAdvertisementContext();
+
+  return (
+    <div className="flex flex-col w-10/12 gap-10">
+      <StageContainer title="Vista previa de tu anuncio">
+        <div className="flex flex-col items-center gap-10 h-full w-max m-auto">
+          <h2 className="text-2xl font-semibold">¡Todo listo!</h2>
+          <p>Revisa los detalles de tu anuncio antes de publicarlo.</p>
+          <div className="flex flex-col gap-4">
+            <h3 className="text-xl font-semibold">Detalles del anuncio</h3>
+            <p>
+              <strong>Título:</strong> {advertisement.title}
+            </p>
+            <p>
+              <strong>Descripción:</strong> {advertisement.description}
+            </p>
+            <p>
+              <strong>Ubicación:</strong> {advertisement.property?.location}
+            </p>
+            <p>
+              <strong>Precio:</strong> ${advertisement.price.toLocaleString()}
+            </p>
+        </div>
+          <div className="flex flex-col gap-4">
+            <h3 className="text-xl font-semibold">Imágenes</h3>
+            {advertisement.images?.length > 0 ? (
+              advertisement.images.map((image, index) => (
+                <img
+                  key={index}
+                  src={URL.createObjectURL(image)}
+                  alt={`Imagen ${index + 1}`}
+                  className="w-32 h-32 object-cover rounded-md"
+                />
+              ))
+            ) : (
+              <p>No hay imágenes disponibles.</p>
+            )}
+          </div>
+        </div>
+      </StageContainer>
+      <NavigationButtons onBack={setPrevStage} canContinue/>
+    </div>
+  );
+}

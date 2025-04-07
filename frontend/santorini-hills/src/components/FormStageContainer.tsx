@@ -5,7 +5,7 @@ interface StageContainerProps {
 }
 
 const StageContainer = ({ children, title, subtitle }: StageContainerProps) => (
-  <div className="flex flex-col w-10/12 gap-10">
+  <div className="flex flex-col items-center w-10/12 m-auto gap-10">
     <div className="text-center">
       <h2 className="text-2xl font-semibold">{title}</h2>
       {subtitle && <p>{subtitle}</p>}

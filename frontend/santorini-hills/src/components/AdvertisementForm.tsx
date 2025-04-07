@@ -5,7 +5,8 @@ import {
   PropertyLocationStage,
   AdvertisementTitleStage,
   AdvertisementDescriptionStage,
-  AdvertisementPriceStage
+  AdvertisementPriceStage,
+  AdvertisementPreviewStage
 } from "./AdvertisementFormStages";
 
 const AdvertisementForm = () => {
@@ -18,6 +19,7 @@ const AdvertisementForm = () => {
     AdvertisementTitleStage,
     AdvertisementDescriptionStage,
     AdvertisementPriceStage,
+    AdvertisementPreviewStage,
   ];
 
   const CurrentStageComponent =

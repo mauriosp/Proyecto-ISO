@@ -7,7 +7,7 @@ const NavigationButtons = ({
   onBack, 
   canContinue 
 }: NavigationButtonsProps) => (
-  <div className="flex justify-between w-full absolute bottom-10 left-0 px-10">
+  <div className={`flex ${onBack ? "justify-between" : "justify-end"} w-full absolute bottom-10 left-0 px-10`}>
     {onBack && (
       <button
         onClick={onBack}

@@ -23,6 +23,7 @@ export const AdvertisementContext = createContext<AdvertisementContextType>({
         price: 0,
         status: "",
         publicationDate: new Date(),
+        property: null,
         images: [],
     },
     property: {
