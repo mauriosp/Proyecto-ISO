@@ -4,6 +4,7 @@ import NavbarModalSwitch from "./NavbarModalSwitch";
 import Separator from "./Separator";
 import { useModalContext, ModalView } from "../context/modal/ModalContext";
 import { FaExclamationCircle } from "react-icons/fa";
+import { Link } from "react-router";
 
 const UserButtons = () => {
   const { user, logout } = useUserContext();
@@ -20,10 +21,10 @@ const UserButtons = () => {
   return (
     <div className="flex items-center w-full text-accent gap-4">
       {user?.profile === "owner" && (
-        <button onClick={handlePostClick} className="flex items-center justify-center gap-3 hover:cursor-pointer rounded-md py-3 px-4 h-min w-max hover:bg-slate-800 bg-accent text-white font-semibold transition-all">
+        <Link to={"postAdvertisement"} onClick={handlePostClick} className="flex items-center justify-center gap-3 hover:cursor-pointer rounded-md py-3 px-4 h-min w-max hover:bg-slate-800 bg-accent text-white font-semibold transition-all">
           Publicar
           <FaHouseChimney size={18} />
-        </button>
+        </Link>
       )}
       <NavbarModalSwitch Icon={FaInbox}>
         <div className="flex flex-col gap-1">

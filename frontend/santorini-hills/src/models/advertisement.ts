@@ -1,13 +1,14 @@
 import { Property } from "./property";
+import { User } from "./user";
 
 export interface Advertisement {
     id?: number;
     title: string;
     description: string;
     price: number;
-    status: string;
+    status: "available" | "taken" | "pending" | null;
     publicationDate: Date;
     property: Property | null;
     images: File[];
-
+    owner?: User;
 }
