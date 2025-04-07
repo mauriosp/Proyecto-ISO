@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-export type ModalView = "login" | "register" 
+export type ModalView = "login" | "register" | "edit" | "verification";
 
 type ModalContextType = {
   isOpen: boolean;

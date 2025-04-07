@@ -1,9 +1,12 @@
+import { Property } from "./property";
+
 export interface Advertisement {
     title: string;
     description: string;
     price: number;
     status: string;
     publicationDate: Date;
-    images: string[];
+    property: Property | null;
+    images: File[];
 
 }

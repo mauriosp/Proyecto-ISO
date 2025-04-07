@@ -1,12 +1,12 @@
 import { ModalProvider } from "./context/modal/ModalProvider";
 import Home from "./pages/Home";
-import PostAdvertisement from "./pages/PostAdvertisement";
+// import PostAdvertisement from "./pages/PostAdvertisement";
 
 function App() {
   return (
     <ModalProvider>
-      <Home/>
-      {/*<PostAdvertisement />*/}
+      <Home/> 
+      {/* <PostAdvertisement /> */}
     </ModalProvider>
   );
 }
