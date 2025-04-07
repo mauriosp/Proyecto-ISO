@@ -23,7 +23,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 isVerified: true,
             });
         }
-    }, []);
+    }, []); 
+    /*
+    useEffect(() => {
+        const storedUser = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);*/
 
     
     useEffect(() => {

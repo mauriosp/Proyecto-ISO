@@ -1,20 +1,22 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FormInput } from "./FormInput";
 import { useUserContext } from "../context/user/UserContext";
-import { useEffect } from "react";
-import { countriesList } from "../assets/countries";
 import { useModalContext } from "../context/modal/ModalContext";
+import { countriesList } from "../assets/countries";
 
 type EditProfileForm = {
   name: string;
   surname: string;
   phone: string;
   dialCode: string;
+  profilePhoto: FileList;
 };
 
 const EditForm = () => {
   const { user, setUser } = useUserContext();
   const { closeModal } = useModalContext();
+
   const {
     register,
     handleSubmit,
@@ -26,24 +28,18 @@ const EditForm = () => {
     if (user) {
       const getName = () => {
         const nameArray = user.name.split(" ");
-
         let name, surname;
-
         if (nameArray.length > 2) {
-          // First two words as name, rest as surname
           name = nameArray.slice(0, 2).join(" ");
           surname = nameArray.slice(2).join(" ");
         } else {
-          // First word as name, second as surname
           name = nameArray[0] || "";
           surname = nameArray[1] || "";
         }
-
         return { name, surname };
       };
 
       const { name, surname } = getName();
-      getName();
       const dialCode = user.phone.slice(0, 3);
       const phone = user.phone.slice(3);
       reset({
@@ -51,6 +47,7 @@ const EditForm = () => {
         surname: surname || "",
         dialCode: dialCode || "+57",
         phone: phone || "",
+        profilePhoto: undefined,
       });
     }
   }, [user, reset]);
@@ -58,19 +55,83 @@ const EditForm = () => {
   const onSubmit = (data: EditProfileForm) => {
     if (!user?.email) return;
 
+    // Si se sube una nueva foto, se genera un URL de objeto para previsualización
+    let photoURL = user.photo;
+    if (data.profilePhoto && data.profilePhoto.length > 0) {
+      const file = data.profilePhoto[0];
+      photoURL = URL.createObjectURL(file);
+    }
+
     const updatedUser = {
       ...user,
       name: `${data.name} ${data.surname}`,
       phone: `${data.dialCode}${data.phone}`,
       email: user.email,
+      photo: photoURL,
     };
 
     setUser(updatedUser);
     closeModal();
   };
 
+  const handleDeleteAccount = () => {
+    const confirmed = window.confirm("¿Estás seguro que deseas eliminar tu cuenta?");
+    if (confirmed) {
+      setUser(null);
+      localStorage.removeItem("loggedUser");
+    }
+  };
+
   return (
     <form className="flex flex-col space-y-2" onSubmit={handleSubmit(onSubmit)}>
+      {/* Espacio para foto de perfil y subir nueva imagen */}
+      <div className="flex flex-col items-center">
+        {user && user.photo ? (
+          <img
+            src={user.photo}
+            alt="Foto de perfil"
+            className="w-20 h-20 rounded-full object-cover mb-2"
+          />
+        ) : (
+          <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center mb-2">
+            Sin foto
+          </div>
+        )}
+        <label className="form-label" htmlFor="profile-photo">
+          Subir foto de perfil
+        </label>
+        <input
+          id="profile-photo"
+          type="file"
+          accept="image/jpeg, image/jpg, image/png"
+          {...register("profilePhoto", {
+            validate: {
+              fileType: (value: FileList) => {
+                if (value.length === 0) return true;
+                const file = value[0];
+                const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+                return (
+                  allowedTypes.includes(file.type) ||
+                  "Formato inválido. Usa jpeg, jpg o png."
+                );
+              },
+              fileSize: (value: FileList) => {
+                if (value.length === 0) return true;
+                const file = value[0];
+                return (
+                  file.size <= 5 * 1024 * 1024 ||
+                  "El archivo debe ser menor a 5MB."
+                );
+              },
+            },
+          })}
+        />
+        {errors.profilePhoto && (
+          <p className="text-red-500 text-sm">{errors.profilePhoto.message}</p>
+        )}
+      </div>
+
+      {/* Nombre */}
       <div>
         <label className="form-label" htmlFor="name-input">
           Nombre
@@ -91,6 +152,7 @@ const EditForm = () => {
         )}
       </div>
 
+      {/* Apellido */}
       <div>
         <label className="form-label" htmlFor="surname-input">
           Apellido
@@ -111,6 +173,7 @@ const EditForm = () => {
         )}
       </div>
 
+      {/* Celular */}
       <div>
         <label className="form-label" htmlFor="phone-input">
           Celular
@@ -145,11 +208,21 @@ const EditForm = () => {
         )}
       </div>
 
+      {/* Botón de guardar cambios */}
       <button
         className="form-button mt-4 hover:bg-slate-800 bg-accent text-white font-semibold"
         type="submit"
       >
         Guardar cambios
+      </button>
+
+      {/* Botón para eliminar cuenta */}
+      <button
+        type="button"
+        onClick={handleDeleteAccount}
+        className="form-button hover:bg-red-800 bg-red-600 text-white font-semibold"
+      >
+        Eliminar cuenta
       </button>
     </form>
   );
