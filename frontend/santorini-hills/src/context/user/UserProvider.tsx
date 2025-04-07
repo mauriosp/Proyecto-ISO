@@ -20,7 +20,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 password: "12345678",
                 phone: "+573001112233",
                 profile: "owner",
-                isVerified: false,
+                isVerified: true,
             });
         }
     }, []);

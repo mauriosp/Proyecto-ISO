@@ -9,11 +9,11 @@ const Home = () => {
   const { isOpen, openModal } = useModalContext();
 
   useEffect(() => {
-    if (!user?.isVerified) {
+    if (user && !user?.isVerified) {
       openModal("verification");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
   
   return (
     <>

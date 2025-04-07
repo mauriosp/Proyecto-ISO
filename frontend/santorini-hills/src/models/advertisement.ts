@@ -1,6 +1,7 @@
 import { Property } from "./property";
 
 export interface Advertisement {
+    id?: number;
     title: string;
     description: string;
     price: number;
