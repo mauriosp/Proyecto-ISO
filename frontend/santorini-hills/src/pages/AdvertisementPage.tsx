@@ -18,7 +18,7 @@ const AdvertisementPage: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center w-10/12 mx-auto mt-10">
       {advertisement.title}
-      {isOwner && (<button className="form-button bg-accent text-white font-semibold hover:bg-slate-800">Editar</button>)}
+      {isOwner && (<button className="form-button bg-accent text-white font-semibold hover:bg-slate-800">Editar publicación</button>)}
     </div>
   );
 };
