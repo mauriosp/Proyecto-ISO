@@ -17,13 +17,14 @@ const testAdvertisements: Advertisement[] = [
         },
         images: [],
         owner: {
-            name: "Juan",
-            email: "juan@example.com",
-            password: "123456",
-            phone: "555-0101",
+            name: "Juan Pérez",
+            email: "juanperez@email.com",
+            password: "12345678",
+            phone: "+573001112233",
             profile: "owner",
             isVerified: true,
-        },
+        }
+    
     },
     {
         id: 2,
