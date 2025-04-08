@@ -28,3 +28,11 @@
     margin: 0;
   }
 }
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

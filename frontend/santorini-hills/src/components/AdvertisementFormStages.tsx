@@ -140,13 +140,13 @@ export const AdvertisementPicturesStage = () => {
             <p>
               {advertisementPictures.length > 0
                 ? `${advertisementPictures.length} fotos seleccionadas`
-                : "Puedes subir hasta 10 fotos"}
+                : "Selecciona al menos 5 fotos"}
             </p>
           </div>
         </StageContainer>
         <NavigationButtons
           onBack={setPrevStage}
-          canContinue={advertisementPictures.length > 0}
+          canContinue={advertisementPictures.length > 5}
         />
       </form>
     </div>

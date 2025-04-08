@@ -12,3 +12,16 @@ export interface Advertisement {
     images: File[];
     owner?: User;
 }
+
+export interface AdvertisementPost {
+    id?: number;
+    title: string;
+    description: string;
+    price: number;
+    status: "available" | "taken" | "pending" | null;
+    publicationDate: Date;
+    property: Property | null;
+    images: string[]; // Array of image URLs
+    owner?: User;
+}
+
