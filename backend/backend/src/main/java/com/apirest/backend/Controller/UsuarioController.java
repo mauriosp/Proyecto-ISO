@@ -66,4 +66,17 @@ public class UsuarioController {
             return new ResponseEntity<>("Error al eliminar la cuenta: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String contraseña) {
+        try {
+            // Llamar al servicio para autenticar al usuario
+            String mensaje = usuarioService.loginUsuario(email, contraseña);
+            return new ResponseEntity<>(mensaje, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al iniciar sesión: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
