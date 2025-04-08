@@ -9,6 +9,7 @@ import {
   AdvertisementPriceStage,
   AdvertisementPreviewStage
 } from "./AdvertisementFormStages";
+import name from "../assets/logo/Name.png";
 
 const AdvertisementForm = () => {
   const { stage } = useAdvertisementContext();
@@ -32,7 +33,7 @@ const AdvertisementForm = () => {
   return (
     <>
       <nav className="p-4 max-w-7xl text-accent">
-        <h1>Santorini Hills</h1>
+        <img src={name} alt="Name" className="h-8 object-contain" />
       </nav>
       <main className="flex-1 flex items-center justify-center p-4">
         <CurrentStageComponent />
