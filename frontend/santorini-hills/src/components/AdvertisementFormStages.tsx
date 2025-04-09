@@ -56,29 +56,53 @@ export const AdvertisementTypeStage = () => {
 
 export const PropertyLocationStage = () => {
   const { property, setNextStage, setPrevStage } = useAdvertisementContext();
-  const [propertyLocation, setPropertyLocation] = useState<
-    Property["location"]
-  >(property.location);
+  const [propertyLocation, setPropertyLocation] = useState<Property["location"]>(
+    property.location || { latitude: 0, longitude: 0 }
+  );
+  const [propertyAddress, setPropertyAddress] = useState<string>(
+    property.address || ""
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setNextStage({ property: { location: propertyLocation } });
+    setNextStage({
+      property: {
+        location: propertyLocation,
+        address: propertyAddress
+      }
+    });
   };
 
-  const handlePlaceSelected = (address: string) => {
-    setPropertyLocation(address);
+  const handlePlaceSelected = (locationData: {latitude: number; longitude: number; address: string}) => {
+    // Extraer solo las propiedades de ubicación requeridas para el tipo Property.location
+    setPropertyLocation({
+      latitude: locationData.latitude,
+      longitude: locationData.longitude
+    });
+    
+    // Establecer la dirección como propiedad separada
+    setPropertyAddress(locationData.address);
   };
 
   return (
     <form className="w-10/12" onSubmit={handleSubmit}>
       <StageContainer title="¿Dónde se encuentra tu propiedad?">
-        <div className="flex flex-col gap-10 h-full w-max m-auto">
-          <PlaceInput Icon={FaLocationDot} onPlaceSelected={handlePlaceSelected} />
+        <div className="flex flex-col gap-10 h-full w-full max-w-3xl m-auto">
+          <PlaceInput
+            Icon={FaLocationDot}
+            onPlaceSelected={handlePlaceSelected}
+          />
+          {propertyAddress && (
+            <div className="text-center">
+              <p className="text-sm text-gray-600">Dirección seleccionada</p>
+              <p className="font-medium">{propertyAddress}</p>
+            </div>
+          )}
         </div>
       </StageContainer>
       <NavigationButtons
         onBack={setPrevStage}
-        canContinue={!!propertyLocation}
+        canContinue={!!propertyLocation && propertyLocation.latitude !== 0}
       />
     </form>
   );
@@ -182,6 +206,7 @@ export const AdvertisementTitleStage = () => {
           className="outline-none font-medium border-accent border-2 rounded-md p-2 w-full max-w-lg mx-auto"
           value={advertisementTitle}
           placeholder="Escribe el título de tu propiedad"
+          autoComplete="off"
         />
       </StageContainer>
       <NavigationButtons
@@ -285,7 +310,10 @@ export const AdvertismentInformationStage = () => {
       >
         <div className="flex flex-col gap-8 max-w-lg mx-auto w-full">
           <div className="form-group flex items-center justify-between">
-            <label htmlFor="bedroomsInput" className="block text-lg font-medium">
+            <label
+              htmlFor="bedroomsInput"
+              className="block text-lg font-medium"
+            >
               Habitaciones
             </label>
             <div className="flex items-center gap-3">
@@ -298,7 +326,10 @@ export const AdvertismentInformationStage = () => {
           </div>
 
           <div className="form-group flex items-center justify-between">
-            <label htmlFor="bathroomsInput" className="block text-lg font-medium">
+            <label
+              htmlFor="bathroomsInput"
+              className="block text-lg font-medium"
+            >
               Baños
             </label>
             <div className="flex items-center gap-3">
@@ -376,23 +407,28 @@ export const AdvertisementPriceStage = () => {
 };
 
 export const AdvertisementPreviewStage = () => {
-  const { advertisement, setPrevStage, setNextStage } = useAdvertisementContext();
+  const { advertisement, setPrevStage, setNextStage } =
+    useAdvertisementContext();
   const { user } = useUserContext();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { property } = advertisement;
 
   const handleConfirm = () => {
-
     const advertisementWithOwner = {
       ...advertisement,
-      owner: user
+      owner: user,
     };
-    console.log('Advertisement to be published:', advertisementWithOwner);
-    setNextStage({ advertisement: { owner: user as User, status: "available" } });
+    console.log("Advertisement to be published:", advertisementWithOwner);
+    setNextStage({
+      advertisement: { owner: user as User, status: "available" },
+    });
   };
 
   const goToNextImage = () => {
-    if (advertisement.images && currentImageIndex < advertisement.images.length - 1) {
+    if (
+      advertisement.images &&
+      currentImageIndex < advertisement.images.length - 1
+    ) {
       setCurrentImageIndex(currentImageIndex + 1);
     }
   };
@@ -408,8 +444,10 @@ export const AdvertisementPreviewStage = () => {
   };
 
   // Obtener el tipo de propiedad en formato legible
-  const propertyTypeObj = tiposInmuebles.find(tipo => tipo.id === property?.type);
-  const propertyTypeName = propertyTypeObj ? propertyTypeObj.nombre : '';
+  const propertyTypeObj = tiposInmuebles.find(
+    (tipo) => tipo.id === property?.type
+  );
+  const propertyTypeName = propertyTypeObj ? propertyTypeObj.nombre : "";
 
   return (
     <div className="flex flex-col w-10/12 gap-6">
@@ -438,7 +476,9 @@ export const AdvertisementPreviewStage = () => {
                 </button>
                 <button
                   onClick={goToNextImage}
-                  disabled={currentImageIndex === advertisement.images.length - 1}
+                  disabled={
+                    currentImageIndex === advertisement.images.length - 1
+                  }
                   className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 disabled:opacity-30"
                 >
                   <BsCaretRight />
@@ -459,7 +499,11 @@ export const AdvertisementPreviewStage = () => {
               <div
                 key={index}
                 onClick={() => selectImage(index)}
-                className={`w-20 h-20 flex-shrink-0 cursor-pointer ${index === currentImageIndex ? 'border-2 border-accent' : 'opacity-70'}`}
+                className={`w-20 h-20 flex-shrink-0 cursor-pointer ${
+                  index === currentImageIndex
+                    ? "border-2 border-accent"
+                    : "opacity-70"
+                }`}
               >
                 <img
                   src={URL.createObjectURL(image)}
@@ -478,7 +522,7 @@ export const AdvertisementPreviewStage = () => {
         <div className="flex flex-col flex-1 gap-6">
           <section>
             <h1 className="text-3xl font-semibold">{advertisement.title}</h1>
-            <p className="text-gray-600">{advertisement.property?.location}</p>
+            <p className="text-gray-600">{advertisement.property?.address}</p>
 
             {/* Características de la propiedad */}
             <div className="flex gap-4 mt-2">
@@ -496,7 +540,9 @@ export const AdvertisementPreviewStage = () => {
               </div>
               {propertyTypeName && (
                 <div className="flex items-center gap-1">
-                  <span className="font-medium text-gray-600">{propertyTypeName}</span>
+                  <span className="font-medium text-gray-600">
+                    {propertyTypeName}
+                  </span>
                 </div>
               )}
             </div>
@@ -526,7 +572,8 @@ export const AdvertisementPreviewStage = () => {
                 </div>
               </div>
               <p className="mt-3 text-sm text-gray-500">
-                Esta previsualización muestra cómo verán los usuarios tu anuncio.
+                Esta previsualización muestra cómo verán los usuarios tu
+                anuncio.
               </p>
             </div>
           </div>
@@ -534,21 +581,25 @@ export const AdvertisementPreviewStage = () => {
       </div>
 
       {/* Botones de navegación */}
-      <div className="flex justify-between mt-8 w-full">
-        <button
-          type="button"
-          onClick={setPrevStage}
-          className="form-button px-8 border-accent text-accent hover:bg-accent hover:text-white"
-        >
-          Atrás
-        </button>
-        <button
-          type="button"
-          onClick={handleConfirm}
-          className="form-button px-8 bg-accent hover:bg-slate-800 text-white"
-        >
-          Publicar anuncio
-        </button>
+      <div className="flex items-center justify-between mt-8 w-full">
+        <div className="w-max">
+          <button
+            type="button"
+            onClick={setPrevStage}
+            className="form-button px-8 text-accent hover:bg-black/10 border-accent border-2 transition-all"
+          >
+            Atrás
+          </button>
+        </div>
+        <div className="w-max">
+          <button
+            type="button"
+            onClick={handleConfirm}
+            className="form-button w-40 px-8 bg-accent hover:bg-slate-800 text-white transition-all font-semibold border-2 border-accent"
+          >
+            Publicar anuncio
+          </button>
+        </div>
       </div>
     </div>
   );

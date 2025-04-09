@@ -1,11 +1,11 @@
 import { FaRegStar } from "react-icons/fa6";
 import { MdOutlineBed } from "react-icons/md";
 import { TbBath, TbMeterSquare } from "react-icons/tb";
-import { AdvertisementPost } from "../models/advertisement";
+import { AdvertisementResponse } from "../models/advertisement";
 import { formatNumber } from "../utils/parseNumbers";
 import { Link } from "react-router";
 
-const AdvertisementCard: React.FC<{ advertisement: AdvertisementPost }> = ({ advertisement }) => {
+const AdvertisementCard: React.FC<{ advertisement: AdvertisementResponse }> = ({ advertisement }) => {
   const { title, price, property, images } = advertisement;
 
   return (

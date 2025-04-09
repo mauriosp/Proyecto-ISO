@@ -10,10 +10,8 @@ const Navbar = () => {
   return (
     <nav className="w-full bg-white shadow">
       <div className="max-w-7xl mx-auto flex gap-10 justify-between items-center p-4">
-        <Link to={""} className="w-auto">
-          <div className="flex items-center -ml-45">
-            <img src={name} alt="Name" className="h-8 object-contain" />
-          </div>
+        <Link to={""} className="w-1/3">
+          <img src={name} alt="Name" className="w-full object-contain" />
         </Link>
         <div className="w-full">
           <SearchBar />

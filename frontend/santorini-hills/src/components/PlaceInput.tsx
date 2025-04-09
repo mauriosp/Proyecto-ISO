@@ -1,30 +1,36 @@
-import { LoadScript, Autocomplete } from "@react-google-maps/api";
+import { LoadScript, StandaloneSearchBox } from "@react-google-maps/api";
 import { useRef, useState } from "react";
 import { IconType } from "react-icons";
 
 interface PlaceInputProps {
     Icon: IconType;
-    onPlaceSelected: (address: string) => void;
+    onPlaceSelected: (locationData: {latitude: number; longitude: number; address: string}) => void;
 }
 
 const PlaceInput: React.FC<PlaceInputProps> = ({ Icon, onPlaceSelected }) => {
     const [inputValue, setInputValue] = useState("");
-    const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+    const searchBoxRef = useRef<google.maps.places.SearchBox | null>(null);
 
-    const onLoad = (autocomplete: google.maps.places.Autocomplete) => {
-        autocompleteRef.current = autocomplete;
+    const onLoad = (searchBox: google.maps.places.SearchBox) => {
+        searchBoxRef.current = searchBox;
     };
 
-    const onPlaceChange = () => {
-        if (autocompleteRef.current) {
-            const place = autocompleteRef.current.getPlace();
-            if (place && place.formatted_address) {
-                onPlaceSelected(place.formatted_address);
+    const onPlacesChanged = () => {
+        if (searchBoxRef.current) {
+            const places = searchBoxRef.current.getPlaces();
+            if (places && places.length > 0 && places[0].geometry && places[0].geometry.location && places[0].formatted_address) {
+                const location = places[0].geometry.location;
+                onPlaceSelected({
+                    latitude: location.lat(),
+                    longitude: location.lng(),
+                    address: places[0].formatted_address
+                });
+                setInputValue(places[0].formatted_address);
             } else {
-                console.error("No se encontró una dirección válida.");
+                console.error("No se encontró una dirección válida con coordenadas.");
             }
         } else {
-            console.error("El autocompleteRef no está inicializado.");
+            console.error("El searchBoxRef no está inicializado.");
         }
     };
 
@@ -33,10 +39,9 @@ const PlaceInput: React.FC<PlaceInputProps> = ({ Icon, onPlaceSelected }) => {
             googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}
             libraries={["places"]}
         >
-            <Autocomplete
+            <StandaloneSearchBox
                 onLoad={onLoad}
-                onPlaceChanged={onPlaceChange}
-                options={{ types: ['address'] }}
+                onPlacesChanged={onPlacesChanged}
             >
                 <label
                     htmlFor="placeInput"
@@ -52,7 +57,7 @@ const PlaceInput: React.FC<PlaceInputProps> = ({ Icon, onPlaceSelected }) => {
                         className="rounded p-2 w-full outline-none font-medium flex-1"
                     />
                 </label>
-            </Autocomplete>
+            </StandaloneSearchBox>
         </LoadScript>
     );
 };

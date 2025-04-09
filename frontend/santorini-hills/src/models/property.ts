@@ -10,7 +10,8 @@ export type PropertyType =
 
 export interface Property {
   type: PropertyType;
-  location: string;
+  location: {latitude: number; longitude: number};
+  address: string;
   area: number; // in square meters
   bathrooms: number;
   bedrooms: number;

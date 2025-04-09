@@ -39,16 +39,20 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
 
   // Navega a la imagen anterior (navegación circular)
   const prevSlide = () => {
-    slideNumber === 0
-      ? setSlideNumber(imageUrls.length - 1)
-      : setSlideNumber(slideNumber - 1);
+    if (slideNumber === 0) {
+      setSlideNumber(imageUrls.length - 1);
+    } else {
+      setSlideNumber(slideNumber - 1);
+    }
   };
 
   // Navega a la imagen siguiente (navegación circular)
   const nextSlide = () => {
-    slideNumber + 1 === imageUrls.length
-      ? setSlideNumber(0)
-      : setSlideNumber(slideNumber + 1);
+    if (slideNumber + 1 === imageUrls.length) {
+      setSlideNumber(0);
+    } else {
+      setSlideNumber(slideNumber + 1);
+    }
   };
 
   return (
@@ -56,7 +60,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
       {/* Galería de imágenes en grilla */}
       <div className="grid grid-cols-4 grid-rows-2 gap-2 h-[560px]">
         <div
-          className="col-span-2 row-span-2 flex items-center justify-center"
+          className="col-span-2 row-span-2 flex items-center justify-center hover:cursor-pointer"
           onClick={() => handleOpenModal(0)}
         >
           <img
@@ -65,28 +69,28 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
             className="h-full object-cover rounded-l-2xl"
           />
         </div>
-        <div onClick={() => handleOpenModal(1)}>
+        <div className="hover:cursor-pointer" onClick={() => handleOpenModal(1)}>
           <img
             src={imageUrls[1]}
             alt="Imagen 2"
             className="h-full object-cover"
           />
         </div>
-        <div onClick={() => handleOpenModal(2)}>
+        <div className="hover:cursor-pointer" onClick={() => handleOpenModal(2)}>
           <img
             src={imageUrls[2]}
             alt="Imagen 3"
             className="h-full object-cover rounded-tr-2xl"
           />
         </div>
-        <div onClick={() => handleOpenModal(3)}>
+        <div className="hover:cursor-pointer" onClick={() => handleOpenModal(3)}>
           <img
             src={imageUrls[3]}
             alt="Imagen 4"
             className="h-full object-cover"
           />
         </div>
-        <button
+        <div
           className="hover:cursor-pointer relative"
           onClick={() => handleOpenModal(4)}
         >
@@ -105,7 +109,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
             alt="Imagen 5"
             className="h-full object-cover rounded-br-2xl"
           />
-        </button>
+        </div>
       </div>
 
       {/* Modal de visualización */}
