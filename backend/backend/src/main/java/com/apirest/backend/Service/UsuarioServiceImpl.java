@@ -124,6 +124,41 @@ public class UsuarioServiceImpl implements IUsuarioService {
             throw new IllegalArgumentException("El correo ya está registrado.");
         }
 
+        // Validar el formato del correo electrónico
+        if (!usuario.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            throw new IllegalArgumentException("El correo electrónico no tiene un formato válido.");
+        }
+
+        // Validar la contraseña
+        if (usuario.getContraseña() == null || usuario.getContraseña().length() < 8) {
+            throw new IllegalArgumentException("La contraseña debe tener al menos 8 caracteres.");
+        }
+        if (!usuario.getContraseña().matches(".*[A-Z].*")) {
+            throw new IllegalArgumentException("La contraseña debe contener al menos una letra mayúscula.");
+        }
+        if (!usuario.getContraseña().matches(".*[a-z].*")) {
+            throw new IllegalArgumentException("La contraseña debe contener al menos una letra minúscula.");
+        }
+        if (!usuario.getContraseña().matches(".*\\d.*")) {
+            throw new IllegalArgumentException("La contraseña debe contener al menos un número.");
+        }
+        if (!usuario.getContraseña().matches(".*[@#$%^&+=].*")) {
+            throw new IllegalArgumentException("La contraseña debe contener al menos un carácter especial (@#$%^&+=).");
+        }
+
+        // Validar el nombre
+        if (usuario.getNombre() == null || usuario.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío.");
+        }
+        if (!usuario.getNombre().matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$")) {
+            throw new IllegalArgumentException("El nombre solo puede contener letras y espacios.");
+        }
+
+        String telefono = String.valueOf(usuario.getTelefono());
+        if (!telefono.matches("\\d{10}")) {
+            throw new IllegalArgumentException("El número de teléfono debe tener 10 dígitos.");
+        }
+
         // Guardar el usuario
         usuarioRepository.save(usuario);
         return "Usuario registrado con éxito: " + usuario.getNombre();

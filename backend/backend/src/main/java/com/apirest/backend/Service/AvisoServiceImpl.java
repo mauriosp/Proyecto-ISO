@@ -181,7 +181,6 @@ public class AvisoServiceImpl implements IAvisoService {
         // Guardar los cambios
         avisoRepository.save(aviso);
 
-        // Notificar al propietario
     }
 
     @Override
