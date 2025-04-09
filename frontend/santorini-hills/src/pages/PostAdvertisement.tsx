@@ -4,7 +4,7 @@ import { AdvertisementProvider } from "../context/advertisement/AdvertisementPro
 const PostAdvertisement = () => {
   return (
     <AdvertisementProvider>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col">
         <AdvertisementForm />
       </div>
     </AdvertisementProvider>

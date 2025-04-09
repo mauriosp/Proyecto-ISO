@@ -1,16 +1,19 @@
 import { useState } from "react";
+import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
 import { FaCamera, FaDollarSign, FaLocationDot } from "react-icons/fa6";
-import { TbUpload } from "react-icons/tb";
+import { MdOutlineBed } from "react-icons/md";
+import { TbBath, TbMeterSquare, TbUpload } from "react-icons/tb";
 import { tiposInmuebles } from "../assets/tiposInmuebles";
 import { useAdvertisementContext } from "../context/advertisement/AdvertisementContext";
+import { useUserContext } from "../context/user/UserContext";
 import { Property, PropertyType } from "../models/property";
+import { User } from "../models/user";
 import FormRadioOption from "./FormRadioOption";
 import StageContainer from "./FormStageContainer";
 import NavigationButtons from "./NavigationButtons";
-import TextInput from "./TextInput";
-import { useUserContext } from "../context/user/UserContext";
-import { User } from "../models/user";
 import NumberInputWithButtons from "./NumberInputWithButtons";
+import PlaceInput from "./PlaceInput";
+import TextInput from "./TextInput";
 
 export const AdvertisementTypeStage = () => {
   const { property, setNextStage } = useAdvertisementContext();
@@ -62,21 +65,15 @@ export const PropertyLocationStage = () => {
     setNextStage({ property: { location: propertyLocation } });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPropertyLocation(e.target.value as Property["location"]);
+  const handlePlaceSelected = (address: string) => {
+    setPropertyLocation(address);
   };
 
   return (
     <form className="w-10/12" onSubmit={handleSubmit}>
       <StageContainer title="¿Dónde se encuentra tu propiedad?">
         <div className="flex flex-col gap-10 h-full w-max m-auto">
-          <TextInput
-            id="locationInput"
-            value={propertyLocation}
-            onChange={handleChange}
-            placeholder="Escribe la dirección de tu propiedad"
-            icon={FaLocationDot}
-          />
+          <PlaceInput Icon={FaLocationDot} onPlaceSelected={handlePlaceSelected} />
         </div>
       </StageContainer>
       <NavigationButtons
@@ -146,7 +143,7 @@ export const AdvertisementPicturesStage = () => {
         </StageContainer>
         <NavigationButtons
           onBack={setPrevStage}
-          canContinue={advertisementPictures.length > 5}
+          canContinue={advertisementPictures.length >= 5}
         />
       </form>
     </div>
@@ -381,8 +378,11 @@ export const AdvertisementPriceStage = () => {
 export const AdvertisementPreviewStage = () => {
   const { advertisement, setPrevStage, setNextStage } = useAdvertisementContext();
   const { user } = useUserContext();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { property } = advertisement;
 
   const handleConfirm = () => {
+
     const advertisementWithOwner = {
       ...advertisement,
       owner: user
@@ -391,69 +391,163 @@ export const AdvertisementPreviewStage = () => {
     setNextStage({ advertisement: { owner: user as User, status: "available" } });
   };
 
-  return (
-    <div className="flex flex-col w-10/12 gap-10">
-      <StageContainer title="Vista previa de tu anuncio">
-        <div className="grid md:grid-cols-2 gap-8 w-full">
-          {/* Details Section */}
-          <div className="flex flex-col gap-6">
-            <h3 className="text-xl font-semibold border-b border-accent pb-2">Detalles del anuncio</h3>
-            <div className="space-y-4">
-              <div>
-                <strong className="text-accent">Título:</strong>
-                <p className="text-lg font-medium">{advertisement.title}</p>
-              </div>
-              <div>
-                <strong className="text-accent">Descripción:</strong>
-                <p className="text-base">{advertisement.description}</p>
-              </div>
-              <div>
-                <strong className="text-accent">Ubicación:</strong>
-                <p className="text-base">{advertisement.property?.location}</p>
-              </div>
-              <div>
-                <strong className="text-accent">Precio:</strong>
-                <p className="text-xl font-semibold">${advertisement.price.toLocaleString()}</p>
-              </div>
-            </div>
-          </div>
+  const goToNextImage = () => {
+    if (advertisement.images && currentImageIndex < advertisement.images.length - 1) {
+      setCurrentImageIndex(currentImageIndex + 1);
+    }
+  };
 
-          {/* Images Section */}
-          <div className="flex flex-col gap-4">
-            <h3 className="text-xl font-semibold border-b border-accent pb-2">Imágenes</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {advertisement.images?.length > 0 ? (
-                advertisement.images.map((image, index) => (
-                  <div key={index} className="aspect-square rounded-md overflow-hidden">
-                    <img
-                      src={URL.createObjectURL(image)}
-                      alt={`Imagen ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))
-              ) : (
-                <p className="col-span-full text-center py-4">No hay imágenes disponibles.</p>
+  const goToPrevImage = () => {
+    if (currentImageIndex > 0) {
+      setCurrentImageIndex(currentImageIndex - 1);
+    }
+  };
+
+  const selectImage = (index: number) => {
+    setCurrentImageIndex(index);
+  };
+
+  // Obtener el tipo de propiedad en formato legible
+  const propertyTypeObj = tiposInmuebles.find(tipo => tipo.id === property?.type);
+  const propertyTypeName = propertyTypeObj ? propertyTypeObj.nombre : '';
+
+  return (
+    <div className="flex flex-col w-10/12 gap-6">
+      <h2 className="text-2xl font-bold mb-4">Vista previa de tu anuncio</h2>
+
+      {/* Imagen principal y galería */}
+      <div className="w-full rounded-xl overflow-hidden bg-gray-100 relative">
+        {/* Imagen principal */}
+        {advertisement.images && advertisement.images.length > 0 ? (
+          <div className="w-full h-96 relative">
+            <img
+              src={URL.createObjectURL(advertisement.images[currentImageIndex])}
+              alt={advertisement.title}
+              className="w-full h-full object-cover"
+            />
+
+            {/* Botones de navegación de imágenes */}
+            {advertisement.images.length > 1 && (
+              <>
+                <button
+                  onClick={goToPrevImage}
+                  disabled={currentImageIndex === 0}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 disabled:opacity-30"
+                >
+                  <BsCaretLeft />
+                </button>
+                <button
+                  onClick={goToNextImage}
+                  disabled={currentImageIndex === advertisement.images.length - 1}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 disabled:opacity-30"
+                >
+                  <BsCaretRight />
+                </button>
+              </>
+            )}
+          </div>
+        ) : (
+          <div className="w-full h-96 bg-gray-200 flex items-center justify-center">
+            <p className="text-gray-500">No hay imágenes disponibles</p>
+          </div>
+        )}
+
+        {/* Miniaturas */}
+        {advertisement.images && advertisement.images.length > 0 && (
+          <div className="flex overflow-x-auto gap-2 p-2 bg-white">
+            {advertisement.images.map((image, index) => (
+              <div
+                key={index}
+                onClick={() => selectImage(index)}
+                className={`w-20 h-20 flex-shrink-0 cursor-pointer ${index === currentImageIndex ? 'border-2 border-accent' : 'opacity-70'}`}
+              >
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt={`Miniatura ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Contenido principal */}
+      <div className="flex flex-col md:flex-row gap-8 mt-4">
+        {/* Panel izquierdo: Detalles del anuncio */}
+        <div className="flex flex-col flex-1 gap-6">
+          <section>
+            <h1 className="text-3xl font-semibold">{advertisement.title}</h1>
+            <p className="text-gray-600">{advertisement.property?.location}</p>
+
+            {/* Características de la propiedad */}
+            <div className="flex gap-4 mt-2">
+              <div className="flex items-center gap-1 text-accent">
+                <MdOutlineBed size={20} />
+                <p className="font-medium">{property?.bedrooms || 0}</p>
+              </div>
+              <div className="flex items-center gap-1 text-accent">
+                <TbBath size={20} />
+                <p className="font-medium">{property?.bathrooms || 0}</p>
+              </div>
+              <div className="flex items-center gap-1 text-accent">
+                <TbMeterSquare size={20} />
+                <p className="font-medium">{property?.area || 0} m²</p>
+              </div>
+              {propertyTypeName && (
+                <div className="flex items-center gap-1">
+                  <span className="font-medium text-gray-600">{propertyTypeName}</span>
+                </div>
               )}
+            </div>
+
+            {/* Descripción */}
+            <div className="mt-6">
+              <h2 className="text-xl font-medium mb-2">Descripción</h2>
+              <p className="text-gray-700">{advertisement.description}</p>
+            </div>
+          </section>
+        </div>
+
+        {/* Panel derecho: Precio y contacto */}
+        <div className="w-full md:w-1/3">
+          <div className="bg-white shadow-md rounded-xl p-6">
+            <h2 className="text-2xl font-bold text-accent">
+              ${advertisement.price.toLocaleString()}
+            </h2>
+            <div className="mt-4 border-t pt-4">
+              <div className="flex items-center gap-2">
+                <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center text-white">
+                  {user?.name ? user.name.charAt(0).toUpperCase() : "?"}
+                </div>
+                <div>
+                  <p className="font-medium">{user?.name || "Usuario"}</p>
+                  <p className="text-sm text-gray-500">{user?.email}</p>
+                </div>
+              </div>
+              <p className="mt-3 text-sm text-gray-500">
+                Esta previsualización muestra cómo verán los usuarios tu anuncio.
+              </p>
             </div>
           </div>
         </div>
-      </StageContainer>
+      </div>
 
-      <div className="flex justify-between mt-6 w-full">
+      {/* Botones de navegación */}
+      <div className="flex justify-between mt-8 w-full">
         <button
           type="button"
           onClick={setPrevStage}
-          className="form-button w-min px-8 border-accent text-accent hover:bg-accent hover:text-white"
+          className="form-button px-8 border-accent text-accent hover:bg-accent hover:text-white"
         >
           Atrás
         </button>
         <button
           type="button"
           onClick={handleConfirm}
-          className="form-button w-min px-8 bg-accent hover:bg-slate-800 text-white"
+          className="form-button px-8 bg-accent hover:bg-slate-800 text-white"
         >
-          Confirmar
+          Publicar anuncio
         </button>
       </div>
     </div>
