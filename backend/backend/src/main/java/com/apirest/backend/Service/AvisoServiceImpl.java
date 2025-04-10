@@ -42,7 +42,7 @@ public class AvisoServiceImpl implements IAvisoService {
     }
 
     @Override
-    public void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area, ObjectId idUsuario) throws Exception {
+    public void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String condicionesAdicionales, String direccion, BigDecimal area, ObjectId idUsuario) throws Exception {
         // Validar que el usuario exista
         if (!usuarioService.existeUsuarioPorId(idUsuario)) {
             throw new IllegalArgumentException("El usuario con el ID proporcionado no existe.");
@@ -79,21 +79,22 @@ public class AvisoServiceImpl implements IAvisoService {
 
         // Verificar si el usuario ya tiene un espacio con la misma dirección
         Optional<Espacio> espacioExistente = espacioService.buscarEspacioPorDireccionYPropietario(direccion, idUsuario);
+        Espacio espacio;
         if (espacioExistente.isPresent()) {
-            Optional<Aviso> avisoExistente = avisoRepository.findByIdPropietarioAndEspacioId(idUsuario, espacioExistente.get().getId());
-            if (avisoExistente.isPresent()) {
-                throw new IllegalArgumentException("Ya existe un aviso para este espacio. No se puede crear un nuevo aviso.");
-            }
-            // Eliminar el espacio existente
-            espacioService.eliminarEspacio(espacioExistente.get().getId().toString());
+            // Actualizar el espacio existente con la nueva información
+            espacio = espacioExistente.get();
+            espacio.setTipo(tipoEspacio);
+            espacio.setCaracteristicas(condicionesAdicionales);
+            espacio.setArea(area.doubleValue());
+            espacioService.guardarEspacio(espacio);
+        } else {
+            // Crear un nuevo espacio si no existe
+            espacio = espacioService.crearEspacio(idUsuario, tipoEspacio, condicionesAdicionales, direccion, area);
         }
 
-        // Crear un nuevo espacio
-        Espacio nuevoEspacio = espacioService.crearEspacio(idUsuario, tipoEspacio, caracteristicas, direccion, area);
-
-        // Validar que el espacio haya sido creado correctamente
-        if (nuevoEspacio == null || nuevoEspacio.getId() == null) {
-            throw new IllegalStateException("No se pudo crear el espacio. Por favor, intente nuevamente.");
+        // Validar que el espacio haya sido creado o actualizado correctamente
+        if (espacio == null || espacio.getId() == null) {
+            throw new IllegalStateException("No se pudo crear o actualizar el espacio. Por favor, intente nuevamente.");
         }
 
         // Crear el aviso
@@ -104,7 +105,7 @@ public class AvisoServiceImpl implements IAvisoService {
         aviso.setTitulo(titulo);
         aviso.setEstado("Activo"); // Cambiar a "Activo"
         aviso.setFechaPublicacion(new Date()); // Añadir fecha de publicación
-        aviso.setIdPropietario(nuevoEspacio.getIdPropietario());
+        aviso.setIdPropietario(espacio.getIdPropietario());
 
         // Guardar el aviso en la base de datos
         avisoRepository.save(aviso);
