@@ -81,12 +81,15 @@ public class AvisoServiceImpl implements IAvisoService {
         Optional<Espacio> espacioExistente = espacioService.buscarEspacioPorDireccionYPropietario(direccion, idUsuario);
         Espacio espacio;
         if (espacioExistente.isPresent()) {
-            // Actualizar el espacio existente con la nueva información
+            // Verificar si ya existe un aviso para este espacio
+            if (espacioExistente.get().getIdAviso() != null) {
+                Optional<Aviso> avisoExistente = avisoRepository.findById(espacioExistente.get().getIdAviso().toHexString());
+                if (avisoExistente.isPresent()) {
+                    throw new IllegalArgumentException("Ya existe un aviso para este espacio. No se puede crear un nuevo aviso.");
+                }
+            }
             espacio = espacioExistente.get();
-            espacio.setTipo(tipoEspacio);
-            espacio.setCaracteristicas(condicionesAdicionales);
-            espacio.setArea(area.doubleValue());
-            espacioService.guardarEspacio(espacio);
+            espacio = espacioService.editarEspacio(espacio.getId().toHexString(), tipoEspacio, condicionesAdicionales, direccion, area);
         } else {
             // Crear un nuevo espacio si no existe
             espacio = espacioService.crearEspacio(idUsuario, tipoEspacio, condicionesAdicionales, direccion, area);
@@ -106,6 +109,10 @@ public class AvisoServiceImpl implements IAvisoService {
         aviso.setEstado("Activo"); // Cambiar a "Activo"
         aviso.setFechaPublicacion(new Date()); // Añadir fecha de publicación
         aviso.setIdPropietario(espacio.getIdPropietario());
+
+        // Asociar el aviso al espacio
+        espacio.setIdAviso(aviso.getId());
+        espacioService.guardarEspacio(espacio); // Guardar el espacio con el nuevo aviso
 
         // Guardar el aviso en la base de datos
         avisoRepository.save(aviso);
