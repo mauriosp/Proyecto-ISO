@@ -33,6 +33,9 @@ public class AvisoServiceImpl implements IAvisoService {
     @Autowired
     private IEspacioService espacioService;
 
+    @Autowired
+    private IUsuarioService usuarioService;
+
     @Override
     public List<Aviso> listarAvisos() {
         return avisoRepository.findAll();
@@ -40,6 +43,11 @@ public class AvisoServiceImpl implements IAvisoService {
 
     @Override
     public void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area, ObjectId idUsuario) throws Exception {
+        // Validar que el usuario exista
+        if (!usuarioService.existeUsuarioPorId(idUsuario)) {
+            throw new IllegalArgumentException("El usuario con el ID proporcionado no existe.");
+        }
+
         // Validar el título
         if (titulo.length() > 100) {
             throw new IllegalArgumentException("El título no puede exceder los 100 caracteres.");
