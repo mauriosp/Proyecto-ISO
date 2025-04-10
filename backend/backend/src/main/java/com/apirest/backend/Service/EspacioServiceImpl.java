@@ -89,4 +89,46 @@ public class EspacioServiceImpl implements IEspacioService {
         // Guardar el espacio en la base de datos
         return espacioRepository.save(nuevoEspacio);
     }
+
+    @Override
+    public Espacio editarEspacio(String idEspacio, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area) {
+        // Buscar el espacio por ID
+        Optional<Espacio> espacioExistente = espacioRepository.findById(idEspacio);
+        if (espacioExistente.isEmpty()) {
+            throw new IllegalArgumentException("El espacio con el ID proporcionado no existe.");
+        }
+
+        Espacio espacio = espacioExistente.get();
+
+        // Validar que el tipo de espacio no sea nulo o vacío
+        if (tipoEspacio == null || tipoEspacio.trim().isEmpty()) {
+            throw new IllegalArgumentException("El tipo de espacio no puede estar vacío.");
+        }
+
+        // Validar que las características no sean nulas o vacías
+        if (caracteristicas == null || caracteristicas.trim().isEmpty()) {
+            throw new IllegalArgumentException("Las características no pueden estar vacías.");
+        }
+
+        // Validar que la dirección no sea nula o vacía
+        if (direccion == null || direccion.trim().isEmpty()) {
+            throw new IllegalArgumentException("La dirección no puede estar vacía.");
+        }
+
+        // Validar que el área sea mayor a 0
+        if (area == null || area.doubleValue() <= 0) {
+            throw new IllegalArgumentException("El área debe ser mayor a 0.");
+        }
+
+        // Actualizar los datos del espacio
+        espacio.setTipo(tipoEspacio);
+        espacio.setTipoEspacio(tipoEspacio);
+        espacio.setCaracteristicas(caracteristicas);
+        espacio.setDireccion(direccion);
+        espacio.setArea(area.doubleValue());
+
+        // Guardar los cambios en la base de datos
+        espacioRepository.save(espacio);
+        return espacio;
+    }
 }
