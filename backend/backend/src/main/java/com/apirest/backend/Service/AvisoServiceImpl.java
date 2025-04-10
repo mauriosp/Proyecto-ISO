@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.apirest.backend.Model.Espacio;
 import com.apirest.backend.Repository.EspacioRepository;
+import com.apirest.backend.Service.IEspacioService;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.math.BigDecimal;
 import org.bson.types.ObjectId;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +31,7 @@ public class AvisoServiceImpl implements IAvisoService {
     private INotificacionService notificacionService;
 
     @Autowired
-    private EspacioRepository espacioRepository;
+    private IEspacioService espacioService;
 
     @Override
     public List<Aviso> listarAvisos() {
@@ -67,16 +69,20 @@ public class AvisoServiceImpl implements IAvisoService {
         // Guardar las imágenes
         List<String> rutasImagenes = guardarImagenes(imagenes);
 
+        // Verificar si el usuario ya tiene un espacio con la misma dirección
+        Optional<Espacio> espacioExistente = espacioService.buscarEspacioPorDireccionYPropietario(direccion, idUsuario);
+        if (espacioExistente.isPresent()) {
+            // Eliminar el espacio existente
+            espacioService.eliminarEspacio(espacioExistente.get().getId().toString());
+        }
+
         // Crear un nuevo espacio
-        Espacio nuevoEspacio = new Espacio();
-        nuevoEspacio.setIdPropietario(idUsuario);
-        nuevoEspacio.setTipo(tipoEspacio); // Establecer el campo tipo
-        nuevoEspacio.setTipoEspacio(tipoEspacio);
-        nuevoEspacio.setCaracteristicas(caracteristicas);
-        nuevoEspacio.setDireccion(direccion);
-        nuevoEspacio.setArea(area.doubleValue());
-        nuevoEspacio.setEstado("Disponible");
-        espacioRepository.save(nuevoEspacio);
+        Espacio nuevoEspacio = espacioService.crearEspacio(idUsuario, tipoEspacio, caracteristicas, direccion, area);
+
+        // Validar que el espacio haya sido creado correctamente
+        if (nuevoEspacio == null || nuevoEspacio.getId() == null) {
+            throw new IllegalStateException("No se pudo crear el espacio. Por favor, intente nuevamente.");
+        }
 
         // Crear el aviso
         Aviso aviso = new Aviso();

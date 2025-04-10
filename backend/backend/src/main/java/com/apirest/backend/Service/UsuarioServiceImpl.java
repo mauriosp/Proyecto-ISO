@@ -255,6 +255,11 @@ public class UsuarioServiceImpl implements IUsuarioService {
         usuarioRepository.delete(usuario);
     }
 
+    @Override
+    public boolean existeUsuarioPorId(ObjectId idUsuario) {
+        return usuarioRepository.existsById(idUsuario);
+    }
+
     private void eliminarDatosRelacionados(String usuarioId) {
         ObjectId propietarioId = new ObjectId(usuarioId);
         avisoRepository.deleteByIdPropietario(propietarioId);
