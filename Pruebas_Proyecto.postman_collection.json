@@ -17,7 +17,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"nombre\": \"Sandra Castillo\",\r\n  \"email\": \"sandrita@example.com\",\r\n  \"telefono\": \"3159876543\",\r\n  \"contraseña\": \"claveSegura123\",\r\n  \"tipoUsuario\": \"Propietario\",\r\n  \"promCalificacion\": 0,\r\n  \"intentosFallidos\": 0,\r\n  \"estado\": false,\r\n  \"fechaBloqueo\": null,\r\n  \"fotoPerfil\": \"https://miservidor.com/perfiles/sandra.jpg\",\r\n  \"verificacionEmail\": [\r\n    {\r\n      \"Token\": \"verif-token-123\",\r\n      \"fechaCreacion\": \"2025-04-06T22:00:00Z\",\r\n      \"fechaExpiracion\": \"2025-04-07T22:00:00Z\",\r\n      \"tipoVerificacion\": \"Registro\",\r\n      \"verificado\": false\r\n    }\r\n  ],\r\n  \"calificacionUsuario\": [],\r\n  \"auditoriaPerfil\": []\r\n}",
+							"raw": "{\r\n  \"nombre\": \"Miguelito\",\r\n  \"email\": \"Miguelito@example.com\",\r\n  \"telefono\": \"3159876543\",\r\n  \"contraseña\": \"claveInsegura12@\",\r\n  \"tipoUsuario\": \"Interesado\",\r\n  \"promCalificacion\": 0,\r\n  \"intentosFallidos\": 0,\r\n  \"estado\": false,\r\n  \"fechaBloqueo\": null,\r\n  \"fotoPerfil\": \"https://miservidor.com/perfiles/sandra.jpg\",\r\n  \"verificacionEmail\": [\r\n    {\r\n      \"Token\": \"verif-token-123\",\r\n      \"fechaCreacion\": \"2025-04-06T22:00:00Z\",\r\n      \"fechaExpiracion\": \"2025-04-07T22:00:00Z\",\r\n      \"tipoVerificacion\": \"Registro\",\r\n      \"verificado\": false\r\n    }\r\n  ],\r\n  \"calificacionUsuario\": [],\r\n  \"auditoriaPerfil\": []\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -76,14 +76,24 @@
 							"formdata": [
 								{
 									"key": "nombre",
-									"value": "Valeria Valencia",
-									"description": "Sandra Castillo ",
+									"value": "(nuevo)",
+									"description": "(viejo)",
+									"type": "text"
+								},
+								{
+									"key": "telefono",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "fotoPerfil",
+									"value": "",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/UAO/apirest/Usuario/actualizarPerfil/67f425cb8904ac5fc3a8e71c",
+							"raw": "http://localhost:8080/UAO/apirest/Usuario/actualizarPerfil/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -94,7 +104,7 @@
 								"apirest",
 								"Usuario",
 								"actualizarPerfil",
-								"67f425cb8904ac5fc3a8e71c"
+								""
 							]
 						}
 					},
@@ -106,7 +116,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/UAO/apirest/Usuario/eliminar/67f41e2f8904ac5fc3a8e71a",
+							"raw": "http://localhost:8080/UAO/apirest/Usuario/eliminar/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -117,7 +127,114 @@
 								"apirest",
 								"Usuario",
 								"eliminar",
-								"67f41e2f8904ac5fc3a8e71a"
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LoginUsuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "contraseña",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/Usuario/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"Usuario",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "VerificacionEmail",
+			"item": [
+				{
+					"name": "VerificarEmail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/VerificacionEmail/verificar?token=",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"VerificacionEmail",
+								"verificar"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EnviarVerificacion",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "userId",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/UAO/apirest/VerificacionEmail/enviar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"UAO",
+								"apirest",
+								"VerificacionEmail",
+								"enviar"
 							]
 						}
 					},
@@ -187,7 +304,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/UAO/apirest/Espacio/buscar/67f429348904ac5fc3a8e723",
+							"raw": "http://localhost:8080/UAO/apirest/Espacio/buscar/67f444f78904ac5fc3a8e74e",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -198,7 +315,7 @@
 								"apirest",
 								"Espacio",
 								"buscar",
-								"67f429348904ac5fc3a8e723"
+								"67f444f78904ac5fc3a8e74e"
 							]
 						}
 					},
@@ -210,7 +327,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/UAO/apirest/Espacio/eliminar/67f429348904ac5fc3a8e723",
+							"raw": "http://localhost:8080/UAO/apirest/Espacio/eliminar/67f444f78904ac5fc3a8e74e",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -221,7 +338,7 @@
 								"apirest",
 								"Espacio",
 								"eliminar",
-								"67f429348904ac5fc3a8e723"
+								"67f444f78904ac5fc3a8e74e"
 							]
 						}
 					},
