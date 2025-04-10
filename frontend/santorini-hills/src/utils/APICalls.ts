@@ -1,10 +1,12 @@
 import axios from "axios";
 import { User } from "../models/user";
+import { userAdapter } from "../presenters/presenters";
 
 export const register = async (user: User) => {
   try {
-    console.log({user});
-    const response = await axios.post("/auth/register", user);
+    const userPost = userAdapter(user);
+    console.log(userPost);
+    const response = await axios.post("/auth/register", userPost);
     return response.data;
   } catch (error) {
     return error;
