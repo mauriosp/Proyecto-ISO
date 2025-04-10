@@ -24,5 +24,6 @@ public class Espacio {
     private String caracteristicas;
     private String tipoEspacio;
     private String estado;
+    private ObjectId idAviso;
     private List <Arrendamiento> arrendamiento;
 }
