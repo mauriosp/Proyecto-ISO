@@ -8,12 +8,15 @@ import { useAdvertisementContext } from "../context/advertisement/AdvertisementC
 import { useUserContext } from "../context/user/UserContext";
 import { Property, PropertyType } from "../models/property";
 import { User } from "../models/user";
+import { uploadFileToFirebase } from "../utils/UploadFileToFirebase";
 import FormRadioOption from "./FormRadioOption";
 import StageContainer from "./FormStageContainer";
 import NavigationButtons from "./NavigationButtons";
 import NumberInputWithButtons from "./NumberInputWithButtons";
 import PlaceInput from "./PlaceInput";
 import TextInput from "./TextInput";
+import { motion, AnimatePresence } from "framer-motion";
+
 
 export const AdvertisementTypeStage = () => {
   const { property, setNextStage } = useAdvertisementContext();
@@ -109,33 +112,64 @@ export const PropertyLocationStage = () => {
 };
 
 export const AdvertisementPicturesStage = () => {
-  const { advertisement, setNextStage, setPrevStage } =
-    useAdvertisementContext();
-  const [advertisementPictures, setAdvertisementPictures] = useState<File[]>(
-    advertisement.images || []
-  );
+  const { advertisement, setNextStage, setPrevStage } = useAdvertisementContext();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [advertisementPictures, setAdvertisementPictures] = useState<File[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>(advertisement.images || []);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [selectedImageIsUploaded, setSelectedImageIsUploaded] = useState<boolean>(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setNextStage({ advertisement: { images: advertisementPictures } });
+    setIsUploading(true);
+
+    try {
+      const urls = await Promise.all(
+        advertisementPictures.map((file) => uploadFileToFirebase(file))
+      );
+      const allUrls = [...imageUrls, ...urls];
+      setNextStage({ advertisement: { images: allUrls } });
+    } catch (error) {
+      console.error("Error uploading images:", error);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const filesArray = Array.from(e.target.files);
       setAdvertisementPictures((prevFilesArray) => {
-        const availableSlots = 10 - prevFilesArray.length;
+        const availableSlots = 10 - (prevFilesArray.length + imageUrls.length);
         const filesToAdd = filesArray.slice(0, availableSlots);
         return [...prevFilesArray, ...filesToAdd];
       });
     }
   };
 
+  const confirmRemoveImage = () => {
+    if (selectedImageIndex === null) return;
+
+    if (selectedImageIsUploaded) {
+      setImageUrls((prev) => prev.filter((_, i) => i !== selectedImageIndex));
+    } else {
+      setAdvertisementPictures((prev) => prev.filter((_, i) => i !== selectedImageIndex));
+    }
+
+    // Reset confirm state
+    setSelectedImageIndex(null);
+    setSelectedImageIsUploaded(false);
+    setShowConfirmDelete(false);
+  };
+
   const FileUploadComponent = () => (
     <>
       <label
         htmlFor="advertisementPicturesInput"
-        className="form-button px-6 flex items-center justify-center gap-4 max-w-80 bg-accent hover:bg-slate-800 text-white border-2 font-semibold"
+        className="form-button px-6 flex items-center justify-center gap-4 max-w-80 bg-accent hover:bg-slate-800 text-white border-2 font-semibold cursor-pointer"
       >
         <TbUpload size={20} />
         Cargar archivos
@@ -151,28 +185,129 @@ export const AdvertisementPicturesStage = () => {
     </>
   );
 
+  const handleImageClick = (index: number, isUploaded: boolean) => {
+    setSelectedImageIndex(index);
+    setSelectedImageIsUploaded(isUploaded);
+    setShowConfirmDelete(true);
+  };
+
   return (
     <div className="flex flex-col space-y-4">
       <form className="w-10/12" onSubmit={handleSubmit}>
         <StageContainer title="Agrega algunas fotos de tu propiedad">
-          <div className="flex flex-col items-center gap-10 h-full w-max m-auto">
+          <div className="flex flex-col items-center gap-6 h-full w-max m-auto">
             <FaCamera size={100} className="text-accent" />
-            {advertisementPictures.length < 10 && <FileUploadComponent />}
+            {(advertisementPictures.length + imageUrls.length) < 10 && <FileUploadComponent />}
+
             <p>
-              {advertisementPictures.length > 0
-                ? `${advertisementPictures.length} fotos seleccionadas`
+              {(advertisementPictures.length + imageUrls.length) > 0
+                ? `${advertisementPictures.length + imageUrls.length} fotos seleccionadas`
                 : "Selecciona al menos 5 fotos"}
             </p>
+
+            {isUploading && <p className="text-accent">Subiendo imágenes...</p>}
+
+            {(advertisementPictures.length > 0 || imageUrls.length > 0) && (
+              <div className="grid grid-cols-3 gap-4 mt-4">
+                {/* Previews de imágenes nuevas */}
+                <AnimatePresence>
+                  {advertisementPictures.map((file, idx) => (
+                    <motion.div
+                      key={`new-${idx}`}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.2 }}
+                      className="relative group w-32 h-32 cursor-pointer"
+                      onClick={() => handleImageClick(idx, false)}
+                    >
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={`Nueva imagen ${idx + 1}`}
+                        className="w-full h-full object-cover rounded"
+                      />
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded flex items-center justify-center text-white text-sm font-semibold">
+                        Eliminar
+                      </div>
+                    </motion.div>
+                  ))}
+
+                  {imageUrls.map((url, idx) => (
+                    <motion.div
+                      key={`saved-${idx}`}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.2 }}
+                      className="relative group w-32 h-32 cursor-pointer"
+                      onClick={() => handleImageClick(idx, true)}
+                    >
+                      <img
+                        src={url}
+                        alt={`Imagen guardada ${idx + 1}`}
+                        className="w-full h-full object-cover rounded"
+                      />
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded flex items-center justify-center text-white text-sm font-semibold">
+                        Eliminar
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+
+              </div>
+            )}
           </div>
         </StageContainer>
+
         <NavigationButtons
           onBack={setPrevStage}
-          canContinue={advertisementPictures.length >= 5}
+          canContinue={(advertisementPictures.length + imageUrls.length) >= 5 && !isUploading}
         />
       </form>
+
+      <AnimatePresence>
+        {showConfirmDelete && (
+          <motion.div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center space-y-4"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+            >
+              <h3 className="text-lg font-semibold">¿Eliminar esta imagen?</h3>
+              <p className="text-gray-600 text-sm">Esta acción no se puede deshacer.</p>
+              <div className="flex justify-center gap-4 mt-4">
+                <button
+                  onClick={() => setShowConfirmDelete(false)}
+                  className="form-button border-2 border-gray-400 text-gray-600 hover:bg-gray-100"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={confirmRemoveImage}
+                  className="form-button bg-red-600 text-white hover:bg-red-700"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 };
+
+
 
 export const AdvertisementTitleStage = () => {
   const { advertisement, setNextStage, setPrevStage } =
@@ -459,10 +594,11 @@ export const AdvertisementPreviewStage = () => {
         {advertisement.images && advertisement.images.length > 0 ? (
           <div className="w-full h-96 relative">
             <img
-              src={URL.createObjectURL(advertisement.images[currentImageIndex])}
+              src={advertisement.images[currentImageIndex]}
               alt={advertisement.title}
               className="w-full h-full object-cover"
             />
+            
 
             {/* Botones de navegación de imágenes */}
             {advertisement.images.length > 1 && (
@@ -506,7 +642,7 @@ export const AdvertisementPreviewStage = () => {
                 }`}
               >
                 <img
-                  src={URL.createObjectURL(image)}
+                  src={image}
                   alt={`Miniatura ${index + 1}`}
                   className="w-full h-full object-cover"
                 />

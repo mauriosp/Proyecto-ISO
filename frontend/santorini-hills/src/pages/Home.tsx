@@ -1,5 +1,5 @@
 import AdvertisementCard from "../components/AdvertisementCard";
-import testAdvertisements from "../testAdvertisements";
+import {testAdvertisements} from "../testAdvertisements";
 
 const Home = () => {
   return (

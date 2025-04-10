@@ -9,10 +9,11 @@ export interface Advertisement {
     publicationDate: Date;
     property: Property | null;
     owner?: User;
+    images: string[];
 }
 
 export interface AdvertisementPost extends Advertisement{
-    images: File[];
+    images: string[];
 }
 
 export interface AdvertisementResponse extends Advertisement {
