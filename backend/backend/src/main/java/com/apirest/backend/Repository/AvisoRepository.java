@@ -15,5 +15,4 @@ public interface AvisoRepository extends MongoRepository<Aviso, String> {
     // Opcional: Método para eliminar avisos de un propietario
     void deleteByIdPropietario(ObjectId idPropietario);
 
-    Optional<Aviso> findByIdPropietarioAndEspacioId(ObjectId idPropietario, ObjectId espacioId);
 }
