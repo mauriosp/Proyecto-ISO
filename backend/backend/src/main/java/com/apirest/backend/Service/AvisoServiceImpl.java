@@ -80,6 +80,10 @@ public class AvisoServiceImpl implements IAvisoService {
         // Verificar si el usuario ya tiene un espacio con la misma dirección
         Optional<Espacio> espacioExistente = espacioService.buscarEspacioPorDireccionYPropietario(direccion, idUsuario);
         if (espacioExistente.isPresent()) {
+            Optional<Aviso> avisoExistente = avisoRepository.findByIdPropietarioAndEspacioId(idUsuario, espacioExistente.get().getId());
+            if (avisoExistente.isPresent()) {
+                throw new IllegalArgumentException("Ya existe un aviso para este espacio. No se puede crear un nuevo aviso.");
+            }
             // Eliminar el espacio existente
             espacioService.eliminarEspacio(espacioExistente.get().getId().toString());
         }

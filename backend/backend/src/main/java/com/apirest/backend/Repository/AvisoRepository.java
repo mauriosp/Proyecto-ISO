@@ -5,6 +5,7 @@ import com.apirest.backend.Model.Aviso;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
 
 @Repository 
 public interface AvisoRepository extends MongoRepository<Aviso, String> {
@@ -13,4 +14,6 @@ public interface AvisoRepository extends MongoRepository<Aviso, String> {
     
     // Opcional: Método para eliminar avisos de un propietario
     void deleteByIdPropietario(ObjectId idPropietario);
+
+    Optional<Aviso> findByIdPropietarioAndEspacioId(ObjectId idPropietario, ObjectId espacioId);
 }
