@@ -4,6 +4,7 @@ import { useRegisterContext } from "../context/registerForm/RegisterContext";
 import { register } from "../utils/APICalls";
 import { User } from "../models/user";
 import FormRadioOption from "./FormRadioOption";
+import { useModalContext } from "../context/modal/ModalContext";
 
 interface ProfileOptionData {
   value: "owner" | "renter";
@@ -37,6 +38,8 @@ interface ProfileSelectionProps {
 }
 
 const ProfileSelection: React.FC<ProfileSelectionProps> = () => {
+  const {openModal} = useModalContext();
+
   const [profile, setProfile] = useState<"owner" | "renter">();
 
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -49,6 +52,7 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = () => {
     const updatedUser : User = { ...user, profile, isVerified: false };
     setUser(updatedUser);
     register(updatedUser);
+    openModal("login");
   };
 
   return (

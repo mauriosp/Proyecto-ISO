@@ -1,10 +1,10 @@
 import axios from "axios";
 import { User } from "../models/user";
-import { userAdapter } from "../presenters/presenters";
+import { userPresenter } from "../presenters/presenters";
 
 export const register = async (user: User) => {
   try {
-    const userPost = userAdapter(user);
+    const userPost = userPresenter(user);
     console.log(userPost);
     const response = await axios.post("/auth/register", userPost);
     return response.data;

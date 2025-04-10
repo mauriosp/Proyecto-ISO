@@ -9,7 +9,7 @@ export const userPresenter = (user: User): UserPost => {
         tipoUsuario: user.profile || "renter",
         promCalificacion: 0,
         intentosFallidos: 0,
-        estado: true,
+        estado: user.isVerified || false,
         fechaBloqueo: null,
         fotoPerfil: user.photo || "",
         verificacionEmail: [],
