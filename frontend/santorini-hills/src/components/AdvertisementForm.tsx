@@ -7,9 +7,10 @@ import {
   AdvertisementTitleStage,
   AdvertisementDescriptionStage,
   AdvertisementPriceStage,
-  AdvertisementPreviewStage
+  AdvertisementPreviewStage,
 } from "./AdvertisementFormStages";
 import name from "../assets/logo/Name.png";
+import { Link } from "react-router";
 
 const AdvertisementForm = () => {
   const { stage } = useAdvertisementContext();
@@ -33,7 +34,11 @@ const AdvertisementForm = () => {
   return (
     <>
       <nav className="p-4 max-w-7xl text-accent">
-        <img src={name} alt="Name" className="h-8 object-contain" />
+        <div className="w-1/5">
+          <Link className="w-min" to={"/"}>
+            <img src={name} alt="Santorini Hills" className="h-8 object-contain" />
+          </Link>
+        </div>
       </nav>
       <main className="flex-1 flex items-center justify-center p-4">
         <CurrentStageComponent />

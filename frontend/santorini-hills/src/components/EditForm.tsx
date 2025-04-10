@@ -97,7 +97,7 @@ const EditForm = () => {
             Sin foto
           </div>
         )}
-        <label className="form-label" htmlFor="profile-photo">
+        <label className="font-medium cursor-pointer text-accent" htmlFor="profile-photo">
           Subir foto de perfil
         </label>
         <input
