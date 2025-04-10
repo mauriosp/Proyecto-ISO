@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 
 public class VerificacionEmail {
-    private String Token;
+    private String token;
     private Date fechaCreacion;
     private Date fechaExpiracion;
     private Boolean verificado;

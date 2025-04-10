@@ -44,6 +44,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Override
     public String guardarUsuario(Usuario usuario) {
+        usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
         usuarioRepository.save(usuario);
         return "El Usuario " + usuario.getNombre() + ", fue creado con éxito";
     }
@@ -56,7 +57,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Override
     public String loginUsuario(String email, String contraseña) {
         try {
-            Optional<Usuario> usuarioOpt = usuarioRepository.findByVerificacionEmail_Token(email);
+            Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
             if (usuarioOpt.isEmpty()) {
                 logger.warn("Intento de login con email no registrado: {}", email);
@@ -160,6 +161,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
         }
 
         // Guardar el usuario
+        usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
         usuarioRepository.save(usuario);
         return "Usuario registrado con éxito: " + usuario.getNombre();
     }

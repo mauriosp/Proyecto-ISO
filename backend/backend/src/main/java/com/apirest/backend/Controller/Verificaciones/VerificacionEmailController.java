@@ -20,5 +20,17 @@ public class VerificacionEmailController {
         } else {
             return ResponseEntity.badRequest().body("Token inválido o expirado.");
         }
-}
+    }   
+
+    @PostMapping("/enviar")
+    public ResponseEntity<String> enviarVerificacion(
+            @RequestParam("userId") String userId, 
+            @RequestParam("email") String email) {
+        try {
+            verificacionEmailService.enviarCorreoVerificacion(userId, email);
+            return ResponseEntity.ok("Correo de verificación enviado con éxito.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al enviar correo: " + e.getMessage());
+        }
+    }
 }

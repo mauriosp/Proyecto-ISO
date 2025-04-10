@@ -5,7 +5,6 @@ import com.apirest.backend.Repository.EspacioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.bson.types.ObjectId;
-import com.apirest.backend.Service.IUsuarioService;
 
 import java.math.BigDecimal;
 import java.util.List;

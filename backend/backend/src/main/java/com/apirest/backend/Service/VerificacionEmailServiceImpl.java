@@ -45,7 +45,7 @@ public class VerificacionEmailServiceImpl implements IVerificacionEmailService {
 
         usuarioRepository.save(usuario);
 
-        String link = "http://localhost:8080/UAO/apirest/verificar?token=" + token;
+        String link = "http://localhost:8080/UAO/apirest/VerificacionEmail/verificar?token=" + token;
 
         try {
         SimpleMailMessage message = new SimpleMailMessage();

@@ -5,7 +5,6 @@ import com.apirest.backend.Model.Aviso;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 import java.util.List;
-import java.util.Optional;
 
 @Repository 
 public interface AvisoRepository extends MongoRepository<Aviso, String> {
