@@ -45,22 +45,22 @@ public class AvisoServiceImpl implements IAvisoService {
         if (!usuarioService.existeUsuarioPorId(idUsuario)) {
             throw new IllegalArgumentException("El usuario con el ID proporcionado no existe.");
         }
-
+    
         // Validar el título
         if (titulo.length() > 100) {
             throw new IllegalArgumentException("El título no puede exceder los 100 caracteres.");
         }
-
+    
         // Validar la descripción
         if (descripcion.length() > 500) {
             throw new IllegalArgumentException("La descripción no puede exceder los 500 caracteres.");
         }
-
+    
         // Validar el precio mensual
         if (precioMensual <= 0) {
             throw new IllegalArgumentException("El precio mensual debe ser un valor numérico positivo.");
         }
-
+    
         // Validar las imágenes
         for (MultipartFile imagen : imagenes) {
             String contentType = imagen.getContentType();
@@ -71,10 +71,10 @@ public class AvisoServiceImpl implements IAvisoService {
                 throw new IllegalArgumentException("El tamaño de la imagen no debe exceder los 5MB.");
             }
         }
-
+    
         // Guardar las imágenes
         List<String> rutasImagenes = guardarImagenes(imagenes);
-
+    
         // Verificar si el usuario ya tiene un espacio con la misma dirección
         Optional<Espacio> espacioExistente = espacioService.buscarEspacioPorDireccionYPropietario(direccion, idUsuario);
         Espacio espacio;
@@ -92,32 +92,35 @@ public class AvisoServiceImpl implements IAvisoService {
             // Crear un nuevo espacio si no existe
             espacio = espacioService.crearEspacio(idUsuario, tipoEspacio, condicionesAdicionales, direccion, area);
         }
-
+    
         // Validar que el espacio haya sido creado o actualizado correctamente
         if (espacio == null || espacio.getId() == null) {
             throw new IllegalStateException("No se pudo crear o actualizar el espacio. Por favor, intente nuevamente.");
         }
-
+    
         // Crear el aviso
         Aviso aviso = new Aviso();
         aviso.setDescripcion(descripcion);
         aviso.setPrecio((int) precioMensual);
         aviso.setImagenes(String.join(",", rutasImagenes));
         aviso.setTitulo(titulo);
-        aviso.setEstado("Activo"); // Cambiar a "Activo"
-        aviso.setFechaPublicacion(new Date()); // Añadir fecha de publicación
+        aviso.setEstado("Activo");
+        aviso.setFechaPublicacion(new Date());
         aviso.setIdPropietario(espacio.getIdPropietario());
-
-        // Asociar el aviso al espacio
+    
+        // Guardar el aviso en la base de datos PRIMERO
+        Aviso avisoGuardado = avisoRepository.save(aviso); 
+        
+        if (avisoGuardado.getId() == null) {
+            throw new IllegalStateException("No se pudo generar el ID del aviso");
+        }
+        // Asociar el aviso al espacio DESPUÉS de guardar
         espacio.setIdAviso(aviso.getId());
-        espacioService.guardarEspacio(espacio); // Guardar el espacio con el nuevo aviso
-
-        // Guardar el aviso en la base de datos
-        avisoRepository.save(aviso);
-
+        espacioService.guardarEspacio(espacio);
+    
         // Notificar al administrador
         notificacionService.enviarNotificacionAdministrador("Nuevo aviso creado", "Se ha creado un nuevo aviso con el título: " + titulo);
-
+    
         // Notificar al propietario
         notificacionService.enviarNotificacionPropietario("Aviso creado exitosamente", "Tu aviso con el título '" + titulo + "' ha sido creado y está disponible.");
     }
