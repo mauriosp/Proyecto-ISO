@@ -1,0 +1,437 @@
+use Proyecto;
+
+db.createCollection("Usuario", {
+    "capped": false,
+    "validator": {
+        "$jsonSchema": {
+            "bsonType": "object",
+            "title": "Usuario",
+            "properties": {
+                "_id": {
+                    "bsonType": "objectId"
+                },
+                "nombre": {
+                    "bsonType": "string"
+                },
+                "email": {
+                    "bsonType": "string"
+                },
+                "telefono": {
+                    "bsonType": "long"
+                },
+                "contraseña": {
+                    "bsonType": "string"
+                },
+                "tipoUsuario": {
+                    "bsonType": "string",
+                    "enum": [
+                        "Propietario",
+                        "Interesado"
+                    ]
+                },
+                "promCalificacion": {
+                    "bsonType": "int",
+                    "maximum": 5,
+                    "minimum": 0
+                },
+                "intentosFallidos": {
+                    "bsonType": "int"
+                },
+                "estado": {
+                    "bsonType": "bool"
+                },
+                "fechaBloqueo": {
+                    "bsonType": "date"
+                },
+                "fotoPerfil": {
+                    "bsonType": "string"
+                },
+                "verificacionEmail": {
+                    "bsonType": "array",
+                    "additionalItems": true,
+                    "items": {
+                        "bsonType": "object",
+                        "properties": {
+                            "token": {
+                                "bsonType": "string"
+                            },
+                            "fechaCreacion": {
+                                "bsonType": "date"
+                            },
+                            "fechaExpiracion": {
+                                "bsonType": "date"
+                            },
+                            "tipoVerificacion": {
+                                "bsonType": "string",
+                                "enum": [
+                                    "Registro",
+                                    "Bloqueo"
+                                ]
+                            },
+                            "verificado": {
+                                "bsonType": "bool"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "califiacionUsuario": {
+                    "bsonType": "array",
+                    "additionalItems": true,
+                    "items": {
+                        "bsonType": "object",
+                        "properties": {
+                            "idusuarioCalifica": {
+                                "bsonType": "objectId"
+                            },
+                            "puntuacion": {
+                                "bsonType": "int",
+                                "maximum": 5,
+                                "minimum": 1
+                            },
+                            "fecha": {
+                                "bsonType": "date"
+                            },
+                            "comentario": {
+                                "bsonType": "string"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "idusuarioCalifica",
+                            "puntuacion",
+                            "fecha"
+                        ]
+                    }
+                },
+                "auditoriaPerfil": {
+                    "bsonType": "array",
+                    "additionalItems": true,
+                    "items": {
+                        "bsonType": "object",
+                        "properties": {
+                            "fechaModificacion": {
+                                "bsonType": "date"
+                            },
+                            "campoModificado": {
+                                "bsonType": "string",
+                                "enum": [
+                                    "nombre",
+                                    "email",
+                                    "telefono",
+                                    "contraseña",
+                                    "fotoPerfil"
+                                ]
+                            },
+                            "valorAnterior": {
+                                "bsonType": "string"
+                            },
+                            "valorNuevo": {
+                                "bsonType": "string"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "fechaModificacion"
+                        ]
+                    }
+                }
+            },
+            "additionalProperties": true,
+            "required": [
+                "_id",
+                "nombre",
+                "email",
+                "telefono",
+                "contraseña",
+                "tipoUsuario"
+            ]
+        }
+    },
+    "validationLevel": "moderate",
+    "validationAction": "error"
+});
+
+
+
+
+db.createCollection("Aviso", {
+    "capped": false,
+    "validator": {
+        "$jsonSchema": {
+            "bsonType": "object",
+            "title": "Aviso",
+            "properties": {
+                "_id": {
+                    "bsonType": "objectId"
+                },
+                "idPropietario": {
+                    "bsonType": "objectId"
+                },
+                "titulo": {
+                    "bsonType": "string"
+                },
+                "descripcion": {
+                    "bsonType": "string"
+                },
+                "precio": {
+                    "bsonType": "int"
+                },
+                "estado": {
+                    "bsonType": "string",
+                    "enum": [
+                        "Activo",
+                        "Inactivo"
+                    ]
+                },
+                "fechaPublicacion": {
+                    "bsonType": "date"
+                },
+                "imagenes": {
+                    "bsonType": "string"
+                },
+                "mensaje": {
+                    "bsonType": "array",
+                    "additionalItems": true,
+                    "items": {
+                        "bsonType": "object",
+                        "properties": {
+                            "idUsuario": {
+                                "bsonType": "objectId"
+                            },
+                            "contenido": {
+                                "bsonType": "string"
+                            },
+                            "fechaMensaje": {
+                                "bsonType": "date"
+                            },
+                            "estadoMensaje": {
+                                "bsonType": "bool"
+                            },
+                            "respuestaMensaje": {
+                                "bsonType": "object",
+                                "properties": {
+                                    "fechaRespuesta": {
+                                        "bsonType": "date"
+                                    }
+                                },
+                                "additionalProperties": false
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "idUsuario",
+                            "contenido",
+                            "fechaMensaje",
+                            "respuestaMensaje"
+                        ]
+                    }
+                }
+            },
+            "additionalProperties": true,
+            "required": [
+                "_id",
+                "idPropietario",
+                "titulo",
+                "descripcion",
+                "precio",
+                "estado",
+                "fechaPublicacion"
+            ]
+        }
+    },
+    "validationLevel": "moderate",
+    "validationAction": "error"
+});
+
+
+
+
+db.createCollection("Espacio", {
+    "capped": false,
+    "validator": {
+        "$jsonSchema": {
+            "bsonType": "object",
+            "title": "Espacio",
+            "properties": {
+                "_id": {
+                    "bsonType": "objectId"
+                },
+                "idPropietario": {
+                    "bsonType": "objectId"
+                },
+                "idAviso": {
+                    "bsonType": "objectId"
+                },
+                "tipo": {
+                    "bsonType": "string"
+                },
+                "direccion": {
+                    "bsonType": "string"
+                },
+                "area": {
+                    "bsonType": "double"
+                },
+                "caracteristicas": {
+                    "bsonType": "string"
+                },
+                "tipoEspacio": {
+                    "bsonType": "string",
+                    "enum": [
+                        "Apartamento",
+                        "Casa",
+                        "Habitación",
+                        "Parqueo",
+                        "Bodega"
+                    ]
+                },
+                "estado": {
+                    "bsonType": "string",
+                    "enum": [
+                        "Disponible",
+                        "Ocupado",
+                        "Mantenimiento",
+                        "Reservado"
+                    ]
+                },
+                "promCalificacion": {
+                    "bsonType": "int",
+                    "maximum": 5,
+                    "minimum": 0
+                },
+                "Arrendamiento": {
+                    "bsonType": "array",
+                    "additionalItems": true,
+                    "items": {
+                        "bsonType": "object",
+                        "properties": {
+                            "idUsuario": {
+                                "bsonType": "objectId"
+                            },
+                            "fechaSalida": {
+                                "bsonType": "date"
+                            },
+                            "fechaInicio": {
+                                "bsonType": "date"
+                            },
+                            "estado": {
+                                "bsonType": "string",
+                                "enum": [
+                                    "Activo",
+                                    "Completado",
+                                    "Cancelado",
+                                    "Pendiente"
+                                ]
+                            },
+                            "terminos": {
+                                "bsonType": "string"
+                            },
+                            "calificacionEspacio": {
+                                "bsonType": "object",
+                                "properties": {
+                                    "puntuacion": {
+                                        "bsonType": "int",
+                                        "maximum": 5,
+                                        "minimum": 1
+                                    },
+                                    "fecha": {
+                                        "bsonType": "date"
+                                    },
+                                    "comentario": {
+                                        "bsonType": "string"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [
+                                    "puntuacion",
+                                    "fecha"
+                                ]
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "idUsuario",
+                            "fechaSalida",
+                            "fechaInicio",
+                            "estado"
+                        ]
+                    }
+                }
+            },
+            "additionalProperties": true,
+            "required": [
+                "_id",
+                "idPropietario",
+                "idAviso",
+                "tipo",
+                "direccion",
+                "area",
+                "estado"
+            ]
+        }
+    },
+    "validationLevel": "moderate",
+    "validationAction": "error"
+});
+
+
+
+
+db.createCollection("Reporte", {
+    "capped": false,
+    "validator": {
+        "$jsonSchema": {
+            "bsonType": "object",
+            "title": "Reporte",
+            "properties": {
+                "_id": {
+                    "bsonType": "objectId"
+                },
+                "idAviso": {
+                    "bsonType": "objectId"
+                },
+                "idUsuario": {
+                    "bsonType": "objectId"
+                },
+                "descripcion": {
+                    "bsonType": "string"
+                },
+                "motivoReporte": {
+                    "bsonType": "string",
+                    "enum": [
+                        "inapropiado",
+                        "spam",
+                        "falsa informacion",
+                        "fraude",
+                        "contenido ofensivo",
+                        "otro"
+                    ]
+                },
+                "comentarioAdicional": {
+                    "bsonType": "string"
+                },
+                "fechaReporte": {
+                    "bsonType": "date"
+                },
+                "estado": {
+                    "bsonType": "string",
+                    "enum": [
+                        "pendiente",
+                        "valido",
+                        "invalido"
+                    ]
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "_id",
+                "idAviso",
+                "idUsuario",
+                "motivoReporte",
+                "estado"
+            ]
+        }
+    },
+    "validationLevel": "off",
+    "validationAction": "warn"
+});

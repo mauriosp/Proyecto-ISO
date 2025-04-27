@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  --color-accent: #2C3E50;
+}
+
+.form-label {
+  @apply text-xs text-neutral-700 font-medium;
+
+}
+
+.form-button {
+  @apply w-full py-3 rounded-md text-base hover:cursor-pointer transition-all
+}
+
+.radius-button {
+  @apply peer-checked:bg-accent peer-checked:text-white peer-checked:border-accent transition-all cursor-pointer block border border-neutral-700 rounded-xl py-7 px-6
+}
+
+:root {
+  font-family: "Poppins", system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
