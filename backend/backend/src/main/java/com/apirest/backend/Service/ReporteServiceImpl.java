@@ -1,6 +1,8 @@
 package com.apirest.backend.Service;
+
 import com.apirest.backend.Model.Reporte;
 import com.apirest.backend.Repository.ReporteRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +28,12 @@ public class ReporteServiceImpl implements IReporteService {
     }
 
     @Override
-    public Reporte obtenerReportePorId(String id) {
+    public Reporte obtenerReportePorId(ObjectId id) {
         return reporteRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Reporte actualizarEstadoReporte(String id, String nuevoEstado) {
+    public Reporte actualizarEstadoReporte(ObjectId id, String nuevoEstado) {
         Reporte reporte = reporteRepository.findById(id).orElse(null);
         if (reporte != null) {
             reporte.setEstado(nuevoEstado);
@@ -41,27 +43,27 @@ public class ReporteServiceImpl implements IReporteService {
     }
 
     @Override
-    public void eliminarReporte(String id) {
+    public void eliminarReporte(ObjectId id) {
         reporteRepository.deleteById(id);
     }
 
     @Override
-    public List<Reporte> obtenerReportesPorAviso(String idAviso) {
+    public List<Reporte> obtenerReportesPorAviso(ObjectId idAviso) {
         return reporteRepository.findByIdAviso(idAviso);
     }
 
     @Override
-    public List<Reporte> obtenerReportesPorUsuario(String idUsuario) {
+    public List<Reporte> obtenerReportesPorUsuario(ObjectId idUsuario) {
         return reporteRepository.findByIdUsuario(idUsuario);
     }
 
     @Override
-    public void eliminarReportesPorUsuario(String idUsuario) {
+    public void eliminarReportesPorUsuario(ObjectId idUsuario) {
         reporteRepository.deleteByIdUsuario(idUsuario);
     }
 
     @Override
-    public void eliminarReportesPorAviso(String idAviso) {
+    public void eliminarReportesPorAviso(ObjectId idAviso) {
         reporteRepository.deleteByIdAviso(idAviso);
     }
 }

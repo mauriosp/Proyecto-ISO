@@ -3,6 +3,7 @@ package com.apirest.backend.Service;
 import com.apirest.backend.Model.Aviso;
 import com.apirest.backend.Repository.AvisoRepository;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,7 +38,7 @@ public class ImagenAvisoServiceImpl implements IImagenAvisoService {
     private static final long TAMANO_MAXIMO = 5 * 1024 * 1024;
 
     @Override
-    public Aviso agregarImagenAAviso(String avisoId, MultipartFile archivo) {
+    public Aviso agregarImagenAAviso(ObjectId avisoId, MultipartFile archivo) {
         // Validar tipo de archivo
         validarTipoArchivo(archivo);
 
@@ -75,7 +76,7 @@ public class ImagenAvisoServiceImpl implements IImagenAvisoService {
     }
 
     @Override
-    public Aviso eliminarImagenDeAviso(String avisoId, String nombreImagen) {
+    public Aviso eliminarImagenDeAviso(ObjectId avisoId, String nombreImagen) {
         // Buscar aviso
         Aviso aviso = avisoRepository.findById(avisoId)
             .orElseThrow(() -> new RuntimeException("Aviso no encontrado"));

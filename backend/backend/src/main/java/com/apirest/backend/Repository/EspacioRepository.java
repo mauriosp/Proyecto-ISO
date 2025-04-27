@@ -7,7 +7,7 @@ import org.bson.types.ObjectId;
 import java.util.Optional;
 
 @Repository
-public interface EspacioRepository extends MongoRepository<Espacio, String> {
+public interface EspacioRepository extends MongoRepository<Espacio, ObjectId> {
     boolean existsByDireccion(String direccion);
     Optional<Espacio> findByDireccionAndIdPropietario(String direccion, ObjectId idPropietario);
 }

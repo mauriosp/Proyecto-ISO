@@ -16,12 +16,11 @@ public class ModeracionServiceImpl implements IModeracionService {
     private final INotificacionService notificacionService;
 
     @Override
-    public void moderarAviso(String avisoId, String accion, String motivo) {
-        ObjectId objAvisoId = new ObjectId(avisoId);
-        
+    public void moderarAviso(ObjectId avisoId, String accion, String motivo) {
+        // Buscar el aviso por ID
         Aviso aviso = avisoRepository.findById(avisoId)
                 .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
-        
+
         // Aplicar la acción de moderación
         switch (accion) {
             case "suspender" -> aviso.setEstado("Suspendido");
@@ -29,14 +28,14 @@ public class ModeracionServiceImpl implements IModeracionService {
             case "rechazar" -> aviso.setEstado("Rechazado");
             default -> throw new IllegalArgumentException("Acción de moderación no válida");
         }
-        
+
         // Guardar el aviso actualizado
         avisoRepository.save(aviso);
-        
+
         // Notificar al propietario sobre la moderación
         ObjectId propietarioId = aviso.getIdPropietario();
-        notificacionService.notificarModeracionAviso(propietarioId, objAvisoId, motivo, accion);
-        
+        notificacionService.notificarModeracionAviso(propietarioId, avisoId, motivo, accion);
+
         log.info("Aviso moderado: id={}, acción={}, motivo={}", avisoId, accion, motivo);
     }
 }

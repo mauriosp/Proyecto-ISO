@@ -23,7 +23,7 @@ public class NotificacionServiceImpl implements INotificacionService {
     @Override
     public void enviarNotificacion(ObjectId usuarioId, String contenido, ObjectId avisoId) {
         // Convertir ObjectId a String para el findById
-        Aviso aviso = avisoRepository.findById(avisoId.toString())
+        Aviso aviso = avisoRepository.findById(avisoId)
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado: " + avisoId));
         
         // Crear nuevo mensaje (notificación)
@@ -67,7 +67,7 @@ public class NotificacionServiceImpl implements INotificacionService {
     
     @Override
     public List<Mensaje> obtenerNotificacionesUsuario(ObjectId usuarioId, ObjectId avisoId) {
-        Aviso aviso = avisoRepository.findById(avisoId.toString())
+        Aviso aviso = avisoRepository.findById(avisoId)
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
         if (aviso.getMensaje() == null) {
@@ -101,7 +101,7 @@ public class NotificacionServiceImpl implements INotificacionService {
     
     @Override
     public void marcarComoLeida(ObjectId avisoId, int indiceMensaje) {
-        Aviso aviso = avisoRepository.findById(avisoId.toString())
+        Aviso aviso = avisoRepository.findById(avisoId)
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
         if (aviso.getMensaje() != null && indiceMensaje >= 0 && indiceMensaje < aviso.getMensaje().size()) {
@@ -117,7 +117,7 @@ public class NotificacionServiceImpl implements INotificacionService {
     
     @Override
     public void marcarTodasComoLeidas(ObjectId usuarioId, ObjectId avisoId) {
-        Aviso aviso = avisoRepository.findById(avisoId.toString())
+        Aviso aviso = avisoRepository.findById(avisoId)
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
         if (aviso.getMensaje() != null) {
@@ -145,7 +145,7 @@ public class NotificacionServiceImpl implements INotificacionService {
     
     @Override
     public void responderNotificacion(ObjectId avisoId, int indiceMensaje, String contenidoRespuesta) {
-        Aviso aviso = avisoRepository.findById(avisoId.toString())
+        Aviso aviso = avisoRepository.findById(avisoId)
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
         if (aviso.getMensaje() != null && indiceMensaje >= 0 && indiceMensaje < aviso.getMensaje().size()) {

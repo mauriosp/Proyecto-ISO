@@ -2,6 +2,7 @@ package com.apirest.backend.Controller;
 
 import com.apirest.backend.Model.Espacio;
 import com.apirest.backend.Service.IEspacioService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,12 @@ public class EspacioController {
 
     @GetMapping("/buscar/{id}")
     public ResponseEntity<Optional<Espacio>> buscarEspacio(@PathVariable String id) {
-        return ResponseEntity.ok(espacioService.buscarEspacioPorId(id));
+        try {
+            ObjectId objectId = new ObjectId(id); // Convertir String a ObjectId
+            return ResponseEntity.ok(espacioService.buscarEspacioPorId(objectId));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Optional.empty());
+        }
     }
 
     @PostMapping("/insertar")
@@ -33,8 +39,13 @@ public class EspacioController {
 
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminarEspacio(@PathVariable String id) {
-        espacioService.eliminarEspacio(id);
-        return ResponseEntity.ok("Espacio eliminado correctamente");
+        try {
+            ObjectId objectId = new ObjectId(id); // Convertir String a ObjectId
+            espacioService.eliminarEspacio(objectId);
+            return ResponseEntity.ok("Espacio eliminado correctamente");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("ID inválido");
+        }
     }
 }
 

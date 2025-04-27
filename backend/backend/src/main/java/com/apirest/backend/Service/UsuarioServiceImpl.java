@@ -167,7 +167,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    public void actualizarPerfil(String id, String nombre, String telefono, MultipartFile fotoPerfil) throws Exception {
+    public void actualizarPerfil(ObjectId id, String nombre, String telefono, MultipartFile fotoPerfil) throws Exception {
         // Buscar el usuario por ID
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
@@ -230,7 +230,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
     
     // Método para actualizar la contraseña con auditoría
     @Override
-    public void actualizarContraseña(String id, String nuevaContraseña) {
+    public void actualizarContraseña(ObjectId id, String nuevaContraseña) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
         
@@ -245,7 +245,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    public void eliminarCuenta(String id) {
+    public void eliminarCuenta(ObjectId id) {
         // Buscar el usuario por ID
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
@@ -262,11 +262,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
         return usuarioRepository.existsById(idUsuario);
     }
 
-    private void eliminarDatosRelacionados(String usuarioId) {
-        ObjectId propietarioId = new ObjectId(usuarioId);
-        avisoRepository.deleteByIdPropietario(propietarioId);
-
-        // Eliminar reportes relacionados
+    private void eliminarDatosRelacionados(ObjectId usuarioId) {
+        avisoRepository.deleteByIdPropietario(usuarioId);
         reporteRepository.deleteByIdUsuario(usuarioId);
     }
 

@@ -4,6 +4,8 @@ import com.apirest.backend.Exception.ImagenException;
 import com.apirest.backend.Model.Usuario;
 import com.apirest.backend.Repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,7 +39,7 @@ public class FotoPerfilServiceImpl implements IFotoPerfilService {
     private static final long TAMANO_MAXIMO = 2 * 1024 * 1024;
 
     @Override
-    public Usuario actualizarFotoPerfil(String usuarioId, MultipartFile archivo) {
+    public Usuario actualizarFotoPerfil(ObjectId usuarioId, MultipartFile archivo) {
         // Validar tipo de archivo
         validarTipoArchivo(archivo);
 
@@ -75,7 +77,7 @@ public class FotoPerfilServiceImpl implements IFotoPerfilService {
     }
 
     @Override
-    public Usuario eliminarFotoPerfil(String usuarioId) {
+    public Usuario eliminarFotoPerfil(ObjectId usuarioId) {
         // Buscar usuario
         Usuario usuario = usuarioRepository.findById(usuarioId)
             .orElseThrow(() -> new ImagenException("Usuario no encontrado"));

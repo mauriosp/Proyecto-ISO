@@ -5,16 +5,8 @@ import com.apirest.backend.Service.IAvisoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -24,7 +16,6 @@ import org.bson.types.ObjectId;
 
 @RestController
 @RequestMapping("/UAO/apirest/Aviso") // Endpoint
-
 public class AvisoController {
     
     @Autowired
@@ -40,9 +31,12 @@ public class AvisoController {
             @RequestParam String titulo,
             @RequestParam String direccion,
             @RequestParam BigDecimal area,
-            @RequestParam ObjectId idUsuario) {
+            @RequestParam String idUsuario) {
         try {
-            avisoService.crearAviso(descripcion, precioMensual, imagenes, titulo, tipoEspacio, condicionesAdicionales, direccion, area, idUsuario);
+            // Convertir idUsuario de String a ObjectId
+            ObjectId objectIdUsuario = new ObjectId(idUsuario);
+
+            avisoService.crearAviso(descripcion, precioMensual, imagenes, titulo, tipoEspacio, condicionesAdicionales, direccion, area, objectIdUsuario);
             return new ResponseEntity<>("Aviso creado exitosamente", HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -60,7 +54,10 @@ public class AvisoController {
             @RequestParam(required = false) List<MultipartFile> imagenes,
             @RequestParam(required = false) String estado) {
         try {
-            avisoService.editarAviso(id, titulo, descripcion, precioMensual, imagenes, estado);
+            // Convertir id de String a ObjectId
+            ObjectId objectId = new ObjectId(id);
+
+            avisoService.editarAviso(objectId, titulo, descripcion, precioMensual, imagenes, estado);
             return new ResponseEntity<>("Aviso actualizado correctamente", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -72,7 +69,10 @@ public class AvisoController {
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminarAviso(@PathVariable String id) {
         try {
-            avisoService.eliminarAviso(id);
+            // Convertir id de String a ObjectId
+            ObjectId objectId = new ObjectId(id);
+
+            avisoService.eliminarAviso(objectId);
             return new ResponseEntity<>("Aviso eliminado correctamente", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -105,7 +105,10 @@ public class AvisoController {
             @PathVariable String id,
             @RequestParam String motivo) {
         try {
-            avisoService.desactivarAviso(id, motivo);
+            // Convertir id de String a ObjectId
+            ObjectId objectId = new ObjectId(id);
+
+            avisoService.desactivarAviso(objectId, motivo);
             return new ResponseEntity<>("Aviso desactivado correctamente", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -119,7 +122,10 @@ public class AvisoController {
     @PutMapping("/moderacion/reactivar/{id}")
     public ResponseEntity<String> reactivarAviso(@PathVariable String id) {
         try {
-            avisoService.reactivarAviso(id);
+            // Convertir id de String a ObjectId
+            ObjectId objectId = new ObjectId(id);
+
+            avisoService.reactivarAviso(objectId);
             return new ResponseEntity<>("Aviso reactivado correctamente", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -129,13 +135,15 @@ public class AvisoController {
     }
 
     @DeleteMapping("/eliminar-por-propietario/{idPropietario}")
-    public ResponseEntity<String> eliminarAvisosPorPropietario(@PathVariable ObjectId idPropietario) {
-    try {
-        avisoService.eliminarAvisosPorPropietario(idPropietario);
-        return new ResponseEntity<>("Avisos eliminados correctamente", HttpStatus.OK);
-    } catch (Exception e) {
-        return new ResponseEntity<>("Error al eliminar avisos: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-}
+    public ResponseEntity<String> eliminarAvisosPorPropietario(@PathVariable String idPropietario) {
+        try {
+            // Convertir idPropietario de String a ObjectId
+            ObjectId objectIdPropietario = new ObjectId(idPropietario);
 
+            avisoService.eliminarAvisosPorPropietario(objectIdPropietario);
+            return new ResponseEntity<>("Avisos eliminados correctamente", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al eliminar avisos: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

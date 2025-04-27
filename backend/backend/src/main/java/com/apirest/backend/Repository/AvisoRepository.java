@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository 
-public interface AvisoRepository extends MongoRepository<Aviso, String> {
+public interface AvisoRepository extends MongoRepository<Aviso, ObjectId> {
     // Método para buscar avisos por ID de propietario
     List<Aviso> findByIdPropietario(ObjectId idPropietario);
     

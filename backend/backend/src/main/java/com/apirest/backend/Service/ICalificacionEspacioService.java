@@ -1,5 +1,7 @@
 package com.apirest.backend.Service;
 
+import org.bson.types.ObjectId;
+
 public interface ICalificacionEspacioService {
-    void calificarEspacio(String usuarioId, String espacioId, int puntuacion, String comentario);
+    void calificarEspacio(ObjectId usuarioId, ObjectId espacioId, int puntuacion, String comentario);
 }

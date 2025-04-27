@@ -4,6 +4,7 @@ import com.apirest.backend.Exception.ImagenException;
 import com.apirest.backend.Model.Usuario;
 import com.apirest.backend.Service.IFotoPerfilService;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +25,21 @@ public class FotoPerfilController {
         @RequestParam("archivo") MultipartFile archivo
     ) {
         try {
-            Usuario usuarioActualizado = fotoPerfilService.actualizarFotoPerfil(usuarioId, archivo);
+            // Convertir usuarioId de String a ObjectId
+            ObjectId objectId = new ObjectId(usuarioId);
+
+            // Actualizar la foto de perfil
+            Usuario usuarioActualizado = fotoPerfilService.actualizarFotoPerfil(objectId, archivo);
 
             Map<String, Object> respuesta = new HashMap<>();
             respuesta.put("mensaje", "Foto de perfil actualizada exitosamente");
             respuesta.put("usuario", usuarioActualizado);
 
             return ResponseEntity.ok(respuesta);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", "ID de usuario inválido"));
         } catch (ImagenException.TipoInvalidoException | ImagenException.TamanoExcedidoException e) {
             return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -47,13 +56,22 @@ public class FotoPerfilController {
         @PathVariable String usuarioId
     ) {
         try {
-            Usuario usuarioActualizado = fotoPerfilService.eliminarFotoPerfil(usuarioId);
+            // Convertir usuarioId de String a ObjectId
+            ObjectId objectId = new ObjectId(usuarioId);
+
+            // Eliminar la foto de perfil
+            Usuario usuarioActualizado = fotoPerfilService.eliminarFotoPerfil(objectId);
+
             return ResponseEntity.ok(
                 Map.of(
                     "mensaje", "Foto de perfil eliminada exitosamente",
                     "usuario", usuarioActualizado
                 )
             );
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", "ID de usuario inválido"));
         } catch (ImagenException e) {
             return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)

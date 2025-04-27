@@ -9,11 +9,10 @@ import org.bson.types.ObjectId;
 
 public interface IEspacioService {
     List<Espacio> listarEspacios();
-    Optional<Espacio> buscarEspacioPorId(String id);
+    Optional<Espacio> buscarEspacioPorId(ObjectId id);
     Espacio guardarEspacio(Espacio espacio);
-    void eliminarEspacio(String id);
+    void eliminarEspacio(ObjectId id);
     Espacio crearEspacio(ObjectId idUsuario, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area);
     Optional<Espacio> buscarEspacioPorDireccionYPropietario(String direccion, ObjectId idPropietario);
-    Espacio editarEspacio(String idEspacio, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area);
-
+    Espacio editarEspacio(ObjectId idEspacio, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area);
 }

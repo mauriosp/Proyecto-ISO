@@ -38,8 +38,6 @@ public class AvisoServiceImpl implements IAvisoService {
 
     @Override
     public void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String condicionesAdicionales, String direccion, BigDecimal area, ObjectId idUsuario) throws Exception {
-
-
         // Validar el título
         if (titulo.length() > 100) {
             throw new IllegalArgumentException("El título no puede exceder los 100 caracteres.");
@@ -78,7 +76,7 @@ public class AvisoServiceImpl implements IAvisoService {
                 throw new IllegalArgumentException("Ya existe un aviso para este espacio. No se puede crear un nuevo aviso.");
             }
             espacio = espacioExistente.get();
-            espacio = espacioService.editarEspacio(espacio.getId().toHexString(), tipoEspacio, condicionesAdicionales, direccion, area);
+            espacio = espacioService.editarEspacio(espacio.getId(), tipoEspacio, condicionesAdicionales, direccion, area);
         } else {
             // Crear un nuevo espacio si no existe
             espacio = espacioService.crearEspacio(idUsuario, tipoEspacio, condicionesAdicionales, direccion, area);
@@ -114,7 +112,7 @@ public class AvisoServiceImpl implements IAvisoService {
     }
 
     @Override
-    public void editarAviso(String id, String titulo, String descripcion, Double precioMensual, List<MultipartFile> imagenes, String estado) throws Exception {
+    public void editarAviso(ObjectId id, String titulo, String descripcion, Double precioMensual, List<MultipartFile> imagenes, String estado) throws Exception {
         // Buscar el aviso por ID
         Aviso aviso = avisoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
@@ -169,7 +167,7 @@ public class AvisoServiceImpl implements IAvisoService {
     }
 
     @Override
-    public void eliminarAviso(String id) throws Exception {
+    public void eliminarAviso(ObjectId id) throws Exception {
         Aviso aviso = avisoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
 
@@ -184,7 +182,7 @@ public class AvisoServiceImpl implements IAvisoService {
     }
 
     @Override
-    public void desactivarAviso(String id, String motivo) throws Exception {
+    public void desactivarAviso(ObjectId id, String motivo) throws Exception {
         // Buscar el aviso por ID
         Aviso aviso = avisoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
@@ -199,7 +197,7 @@ public class AvisoServiceImpl implements IAvisoService {
     }
 
     @Override
-    public void reactivarAviso(String id) throws Exception {
+    public void reactivarAviso(ObjectId id) throws Exception {
         // Buscar el aviso por ID
         Aviso aviso = avisoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));

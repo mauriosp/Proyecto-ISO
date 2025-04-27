@@ -25,7 +25,7 @@ public class EspacioServiceImpl implements IEspacioService {
     }
 
     @Override
-    public Optional<Espacio> buscarEspacioPorId(String id) {
+    public Optional<Espacio> buscarEspacioPorId(ObjectId id) {
         return espacioRepository.findById(id);
     }
 
@@ -40,7 +40,7 @@ public class EspacioServiceImpl implements IEspacioService {
     }
 
     @Override
-    public void eliminarEspacio(String id) {
+    public void eliminarEspacio(ObjectId id) {
         espacioRepository.deleteById(id);
     }
 
@@ -91,7 +91,7 @@ public class EspacioServiceImpl implements IEspacioService {
     }
 
     @Override
-    public Espacio editarEspacio(String idEspacio, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area) {
+    public Espacio editarEspacio(ObjectId idEspacio, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area) {
         // Buscar el espacio por ID
         Optional<Espacio> espacioExistente = espacioRepository.findById(idEspacio);
         if (espacioExistente.isEmpty()) {

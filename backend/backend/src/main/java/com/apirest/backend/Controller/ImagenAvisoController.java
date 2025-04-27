@@ -3,6 +3,7 @@ package com.apirest.backend.Controller;
 import com.apirest.backend.Model.Aviso;
 import com.apirest.backend.Service.IImagenAvisoService;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +24,21 @@ public class ImagenAvisoController {
         @RequestParam("archivo") MultipartFile archivo
     ) {
         try {
-            Aviso avisoActualizado = imagenAvisoService.agregarImagenAAviso(avisoId, archivo);
+            // Convertir avisoId de String a ObjectId
+            ObjectId objectId = new ObjectId(avisoId);
+
+            // Subir la imagen al aviso
+            Aviso avisoActualizado = imagenAvisoService.agregarImagenAAviso(objectId, archivo);
 
             Map<String, Object> respuesta = new HashMap<>();
             respuesta.put("mensaje", "Imagen subida exitosamente");
             respuesta.put("aviso", avisoActualizado);
 
             return ResponseEntity.ok(respuesta);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", "ID de aviso inválido"));
         } catch (RuntimeException e) {
             return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -43,13 +52,22 @@ public class ImagenAvisoController {
         @RequestParam("nombreImagen") String nombreImagen
     ) {
         try {
-            Aviso avisoActualizado = imagenAvisoService.eliminarImagenDeAviso(avisoId, nombreImagen);
+            // Convertir avisoId de String a ObjectId
+            ObjectId objectId = new ObjectId(avisoId);
+
+            // Eliminar la imagen del aviso
+            Aviso avisoActualizado = imagenAvisoService.eliminarImagenDeAviso(objectId, nombreImagen);
+
             return ResponseEntity.ok(
                 Map.of(
                     "mensaje", "Imagen eliminada exitosamente",
                     "aviso", avisoActualizado
                 )
             );
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", "ID de aviso inválido"));
         } catch (RuntimeException e) {
             return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)

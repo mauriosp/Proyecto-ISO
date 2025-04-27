@@ -1,6 +1,8 @@
 package com.apirest.backend.Controller;
+
 import com.apirest.backend.Model.Usuario;
 import com.apirest.backend.Service.IUsuarioService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +48,9 @@ public class UsuarioController {
             @RequestParam(required = false) String telefono,
             @RequestParam(required = false) MultipartFile fotoPerfil) {
         try {
-            usuarioService.actualizarPerfil(id, nombre, telefono, fotoPerfil);
+            // Convertir el ID de String a ObjectId
+            ObjectId objectId = new ObjectId(id);
+            usuarioService.actualizarPerfil(objectId, nombre, telefono, fotoPerfil);
             return new ResponseEntity<>("Perfil actualizado correctamente", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -58,7 +62,9 @@ public class UsuarioController {
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminarCuenta(@PathVariable String id) {
         try {
-            usuarioService.eliminarCuenta(id);
+            // Convertir el ID de String a ObjectId
+            ObjectId objectId = new ObjectId(id);
+            usuarioService.eliminarCuenta(objectId);
             return new ResponseEntity<>("Cuenta eliminada correctamente", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
