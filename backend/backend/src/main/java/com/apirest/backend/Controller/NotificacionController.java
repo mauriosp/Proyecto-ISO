@@ -21,8 +21,7 @@ public class NotificacionController {
     public ResponseEntity<List<Mensaje>> obtenerNotificacionesUsuario(
             @PathVariable String usuarioId,
             @PathVariable String avisoId) {
-        List<Mensaje> notificaciones = notificacionService.obtenerNotificacionesUsuario(
-                new ObjectId(usuarioId), new ObjectId(avisoId));
+        List<Mensaje> notificaciones = notificacionService.obtenerNotificacionesUsuario(usuarioId, avisoId);
         return ResponseEntity.ok(notificaciones);
     }
 
@@ -30,8 +29,7 @@ public class NotificacionController {
     public ResponseEntity<List<Mensaje>> obtenerNotificacionesNoLeidas(
             @PathVariable String usuarioId,
             @PathVariable String avisoId) {
-        List<Mensaje> notificaciones = notificacionService.obtenerNotificacionesNoLeidas(
-                new ObjectId(usuarioId), new ObjectId(avisoId));
+        List<Mensaje> notificaciones = notificacionService.obtenerNotificacionesNoLeidas(usuarioId, avisoId);
         return ResponseEntity.ok(notificaciones);
     }
 
@@ -39,8 +37,7 @@ public class NotificacionController {
     public ResponseEntity<Long> contarNotificacionesNoLeidas(
             @PathVariable String usuarioId,
             @PathVariable String avisoId) {
-        long cantidad = notificacionService.contarNotificacionesNoLeidas(
-                new ObjectId(usuarioId), new ObjectId(avisoId));
+        long cantidad = notificacionService.contarNotificacionesNoLeidas(usuarioId, avisoId);
         return ResponseEntity.ok(cantidad);
     }
 
@@ -48,7 +45,7 @@ public class NotificacionController {
     public ResponseEntity<?> marcarComoLeida(
             @PathVariable String avisoId,
             @PathVariable int indiceMensaje) {
-        notificacionService.marcarComoLeida(new ObjectId(avisoId), indiceMensaje);
+        notificacionService.marcarComoLeida(avisoId, indiceMensaje);
         return ResponseEntity.ok().build();
     }
 
@@ -56,8 +53,7 @@ public class NotificacionController {
     public ResponseEntity<?> marcarTodasComoLeidas(
             @PathVariable String usuarioId,
             @PathVariable String avisoId) {
-        notificacionService.marcarTodasComoLeidas(
-                new ObjectId(usuarioId), new ObjectId(avisoId));
+        notificacionService.marcarTodasComoLeidas(usuarioId, avisoId);
         return ResponseEntity.ok().build();
     }
     
@@ -67,8 +63,7 @@ public class NotificacionController {
             @PathVariable int indiceMensaje,
             @RequestBody Map<String, String> payload) {
         String contenidoRespuesta = payload.get("contenido");
-        notificacionService.responderNotificacion(
-                new ObjectId(avisoId), indiceMensaje, contenidoRespuesta);
+        notificacionService.responderNotificacion(avisoId, indiceMensaje, contenidoRespuesta);
         return ResponseEntity.ok().build();
     }
     
@@ -79,11 +74,7 @@ public class NotificacionController {
         String avisoId = (String) payload.get("avisoId");
         int puntuacion = Integer.parseInt(payload.get("puntuacion").toString());
         
-        notificacionService.notificarNuevaCalificacion(
-                new ObjectId(propietarioId), 
-                new ObjectId(espacioId), 
-                puntuacion, 
-                new ObjectId(avisoId));
+        notificacionService.notificarNuevaCalificacion(propietarioId, espacioId, puntuacion, avisoId);
         return ResponseEntity.ok().build();
     }
     
@@ -93,10 +84,7 @@ public class NotificacionController {
         String comentario = payload.get("comentario");
         String avisoId = payload.get("avisoId");
         
-        notificacionService.notificarNuevoComentario(
-                new ObjectId(propietarioId), 
-                comentario, 
-                new ObjectId(avisoId));
+        notificacionService.notificarNuevoComentario(propietarioId, comentario, avisoId);
         return ResponseEntity.ok().build();
     }
     
@@ -107,11 +95,7 @@ public class NotificacionController {
         String motivo = payload.get("motivo");
         String accion = payload.get("accion");
         
-        notificacionService.notificarModeracionAviso(
-                new ObjectId(propietarioId), 
-                new ObjectId(avisoId), 
-                motivo, 
-                accion);
+        notificacionService.notificarModeracionAviso(propietarioId, avisoId, motivo, accion);
         return ResponseEntity.ok().build();
     }
 }

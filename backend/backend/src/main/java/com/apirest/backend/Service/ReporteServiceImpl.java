@@ -3,6 +3,7 @@ import com.apirest.backend.Model.Reporte;
 import com.apirest.backend.Repository.ReporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.bson.types.ObjectId;
 
 import java.util.Date;
 import java.util.List;
@@ -15,8 +16,7 @@ public class ReporteServiceImpl implements IReporteService {
 
     @Override
     public Reporte crearReporte(Reporte reporte) {
-        reporte.setFechaReporte(new Date());
-        reporte.setEstado("pendiente");
+        reporte.setFechaReporte(new Date()); // Establecer la fecha actual como fecha del reporte
         return reporteRepository.save(reporte);
     }
 

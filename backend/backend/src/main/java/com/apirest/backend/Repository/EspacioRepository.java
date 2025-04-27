@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface EspacioRepository extends MongoRepository<Espacio, String> {
     boolean existsByDireccion(String direccion);
-    Optional<Espacio> findByDireccionAndIdPropietario(String direccion, ObjectId idPropietario);
+    Optional<Espacio> findByDireccionAndIdPropietario(String direccion, String idPropietario);
 }

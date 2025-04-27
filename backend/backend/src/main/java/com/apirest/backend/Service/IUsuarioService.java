@@ -14,5 +14,5 @@ public interface IUsuarioService {
     void eliminarCuenta(String id);
     String loginUsuario(String email, String contraseña);
     void actualizarContraseña(String id, String nuevaContraseña);
-    boolean existeUsuarioPorId(ObjectId idUsuario);
+    boolean existeUsuarioPorId(String idUsuario);
 }

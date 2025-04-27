@@ -21,14 +21,14 @@ public class NotificacionServiceImpl implements INotificacionService {
     private final AvisoRepository avisoRepository;
 
     @Override
-    public void enviarNotificacion(ObjectId usuarioId, String contenido, ObjectId avisoId) {
+    public void enviarNotificacion(String usuarioId, String contenido, String avisoId) {
         // Convertir ObjectId a String para el findById
         Aviso aviso = avisoRepository.findById(avisoId.toString())
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado: " + avisoId));
         
         // Crear nuevo mensaje (notificación)
         Mensaje mensaje = new Mensaje();
-        mensaje.setIdUsuario(usuarioId);
+        mensaje.setIdUsuario(new ObjectId(usuarioId));
         mensaje.setContenido(contenido);
         mensaje.setFechaAviso(new Date());
         mensaje.setEstadoMensaje(false); // No leído
@@ -46,27 +46,25 @@ public class NotificacionServiceImpl implements INotificacionService {
     }
     
     @Override
-    public void notificarNuevaCalificacion(ObjectId propietarioId, ObjectId espacioId, 
-                                          int puntuacion, ObjectId avisoId) {
+    public void notificarNuevaCalificacion(String propietarioId, String espacioId, int puntuacion, String avisoId) {
         String contenido = "Tu espacio ha recibido una nueva calificación de " + puntuacion + " estrellas.";
         enviarNotificacion(propietarioId, contenido, avisoId);
     }
     
     @Override
-    public void notificarNuevoComentario(ObjectId propietarioId, String comentario, ObjectId avisoId) {
+    public void notificarNuevoComentario(String propietarioId, String comentario, String avisoId) {
         String contenido = "Nuevo comentario: \"" + comentario + "\"";
         enviarNotificacion(propietarioId, contenido, avisoId);
     }
     
     @Override
-    public void notificarModeracionAviso(ObjectId propietarioId, ObjectId avisoId, 
-                                        String motivo, String accion) {
+    public void notificarModeracionAviso(String propietarioId, String avisoId, String motivo, String accion) {
         String contenido = "Tu aviso ha sido " + accion + ". Motivo: " + motivo;
         enviarNotificacion(propietarioId, contenido, avisoId);
     }
     
     @Override
-    public List<Mensaje> obtenerNotificacionesUsuario(ObjectId usuarioId, ObjectId avisoId) {
+    public List<Mensaje> obtenerNotificacionesUsuario(String usuarioId, String avisoId) {
         Aviso aviso = avisoRepository.findById(avisoId.toString())
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
@@ -86,7 +84,7 @@ public class NotificacionServiceImpl implements INotificacionService {
     }
     
     @Override
-    public List<Mensaje> obtenerNotificacionesNoLeidas(ObjectId usuarioId, ObjectId avisoId) {
+    public List<Mensaje> obtenerNotificacionesNoLeidas(String usuarioId, String avisoId) {
         List<Mensaje> todasNotificaciones = obtenerNotificacionesUsuario(usuarioId, avisoId);
         List<Mensaje> noLeidas = new ArrayList<>();
         
@@ -100,7 +98,7 @@ public class NotificacionServiceImpl implements INotificacionService {
     }
     
     @Override
-    public void marcarComoLeida(ObjectId avisoId, int indiceMensaje) {
+    public void marcarComoLeida(String avisoId, int indiceMensaje) {
         Aviso aviso = avisoRepository.findById(avisoId.toString())
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
@@ -116,7 +114,7 @@ public class NotificacionServiceImpl implements INotificacionService {
     }
     
     @Override
-    public void marcarTodasComoLeidas(ObjectId usuarioId, ObjectId avisoId) {
+    public void marcarTodasComoLeidas(String usuarioId, String avisoId) {
         Aviso aviso = avisoRepository.findById(avisoId.toString())
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
@@ -139,12 +137,12 @@ public class NotificacionServiceImpl implements INotificacionService {
     }
     
     @Override
-    public long contarNotificacionesNoLeidas(ObjectId usuarioId, ObjectId avisoId) {
+    public long contarNotificacionesNoLeidas(String usuarioId, String avisoId) {
         return obtenerNotificacionesNoLeidas(usuarioId, avisoId).size();
     }
     
     @Override
-    public void responderNotificacion(ObjectId avisoId, int indiceMensaje, String contenidoRespuesta) {
+    public void responderNotificacion(String avisoId, int indiceMensaje, String contenidoRespuesta) {
         Aviso aviso = avisoRepository.findById(avisoId.toString())
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         

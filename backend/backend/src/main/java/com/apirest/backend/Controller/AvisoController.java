@@ -39,7 +39,7 @@ public class AvisoController {
             @RequestParam String titulo,
             @RequestParam String direccion,
             @RequestParam BigDecimal area,
-            @RequestParam ObjectId idUsuario) {
+            @RequestParam String idUsuario) {
         try {
             avisoService.crearAviso(descripcion, precioMensual, imagenes, titulo, tipoEspacio, condicionesAdicionales, direccion, area, idUsuario);
             return new ResponseEntity<>("Aviso creado exitosamente", HttpStatus.CREATED);
@@ -128,7 +128,7 @@ public class AvisoController {
     }
 
     @DeleteMapping("/eliminar-por-propietario/{idPropietario}")
-    public ResponseEntity<String> eliminarAvisosPorPropietario(@PathVariable ObjectId idPropietario) {
+    public ResponseEntity<String> eliminarAvisosPorPropietario(@PathVariable String idPropietario) {
     try {
         avisoService.eliminarAvisosPorPropietario(idPropietario);
         return new ResponseEntity<>("Avisos eliminados correctamente", HttpStatus.OK);

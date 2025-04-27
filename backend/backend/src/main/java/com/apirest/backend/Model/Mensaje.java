@@ -2,9 +2,10 @@ package com.apirest.backend.Model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.bson.types.ObjectId;
 import lombok.NoArgsConstructor;
 import java.util.Date;
+
+import org.bson.types.ObjectId;
 
 
 @Data

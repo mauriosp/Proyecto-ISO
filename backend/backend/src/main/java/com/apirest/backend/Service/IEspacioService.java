@@ -12,8 +12,7 @@ public interface IEspacioService {
     Optional<Espacio> buscarEspacioPorId(String id);
     Espacio guardarEspacio(Espacio espacio);
     void eliminarEspacio(String id);
-    Espacio crearEspacio(ObjectId idUsuario, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area);
+    Espacio crearEspacio(String idUsuario, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area);
     Optional<Espacio> buscarEspacioPorDireccionYPropietario(String direccion, ObjectId idPropietario);
     Espacio editarEspacio(String idEspacio, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area);
-
 }

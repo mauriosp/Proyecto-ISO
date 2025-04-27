@@ -40,7 +40,7 @@ public class AvisoServiceImpl implements IAvisoService {
     }
 
     @Override
-    public void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String condicionesAdicionales, String direccion, BigDecimal area, ObjectId idUsuario) throws Exception {
+    public void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String condicionesAdicionales, String direccion, BigDecimal area, String idUsuario) throws Exception {
         // Validar que el usuario exista
         if (!usuarioService.existeUsuarioPorId(idUsuario)) {
             throw new IllegalArgumentException("El usuario con el ID proporcionado no existe.");
@@ -60,7 +60,6 @@ public class AvisoServiceImpl implements IAvisoService {
         if (precioMensual <= 0) {
             throw new IllegalArgumentException("El precio mensual debe ser un valor numérico positivo.");
         }
-
         // Validar las imágenes
         for (MultipartFile imagen : imagenes) {
             String contentType = imagen.getContentType();
@@ -75,45 +74,29 @@ public class AvisoServiceImpl implements IAvisoService {
         // Guardar las imágenes
         List<String> rutasImagenes = guardarImagenes(imagenes);
 
-        // Verificar si el usuario ya tiene un espacio con la misma dirección
-        Optional<Espacio> espacioExistente = espacioService.buscarEspacioPorDireccionYPropietario(direccion, idUsuario);
         Espacio espacio;
-        if (espacioExistente.isPresent()) {
-            // Verificar si ya existe un aviso para este espacio
-            if (espacioExistente.get().getIdAviso() != null) {
-                Optional<Aviso> avisoExistente = avisoRepository.findById(espacioExistente.get().getIdAviso().toHexString());
-                if (avisoExistente.isPresent()) {
-                    throw new IllegalArgumentException("Ya existe un aviso para este espacio. No se puede crear un nuevo aviso.");
-                }
-            }
-            espacio = espacioExistente.get();
-            espacio = espacioService.editarEspacio(espacio.getId().toHexString(), tipoEspacio, condicionesAdicionales, direccion, area);
-        } else {
-            // Crear un nuevo espacio si no existe
-            espacio = espacioService.crearEspacio(idUsuario, tipoEspacio, condicionesAdicionales, direccion, area);
-        }
+        espacio = espacioService.crearEspacio(idUsuario, tipoEspacio, condicionesAdicionales, direccion, area);
 
         // Validar que el espacio haya sido creado o actualizado correctamente
         if (espacio == null || espacio.getId() == null) {
             throw new IllegalStateException("No se pudo crear o actualizar el espacio. Por favor, intente nuevamente.");
         }
 
-        // Crear el aviso
         Aviso aviso = new Aviso();
         aviso.setDescripcion(descripcion);
-        aviso.setPrecio((int) precioMensual);
+        aviso.setPrecio((int) Math.round(precioMensual));  // Redondeo correcto
         aviso.setImagenes(String.join(",", rutasImagenes));
         aviso.setTitulo(titulo);
-        aviso.setEstado("Activo"); // Cambiar a "Activo"
-        aviso.setFechaPublicacion(new Date()); // Añadir fecha de publicación
-        aviso.setIdPropietario(espacio.getIdPropietario());
+        aviso.setEstado("Activo");
+        aviso.setFechaPublicacion(new Date());
+        aviso.setIdPropietario(espacio.getIdPropietario());  // Asegúrate de que sea ObjectId
+        aviso.setMotivoDesactivacion(null);  // Si el esquema lo permite
+        aviso.setMensaje(new ArrayList<>());  // Inicializa como lista vacía si no hay mensajes
+
+        avisoRepository.save(aviso);
 
         // Asociar el aviso al espacio
-        espacio.setIdAviso(aviso.getId());
         espacioService.guardarEspacio(espacio); // Guardar el espacio con el nuevo aviso
-
-        // Guardar el aviso en la base de datos
-        avisoRepository.save(aviso);
 
         // Notificar al administrador
         notificacionService.enviarNotificacionAdministrador("Nuevo aviso creado", "Se ha creado un nuevo aviso con el título: " + titulo);
@@ -234,7 +217,7 @@ public class AvisoServiceImpl implements IAvisoService {
     }
 
     @Override
-    public void eliminarAvisosPorPropietario(ObjectId idPropietario) {
+    public void eliminarAvisosPorPropietario(String idPropietario) {
         List<Aviso> avisos = avisoRepository.findByIdPropietario(idPropietario);
         avisoRepository.deleteAll(avisos);
     }

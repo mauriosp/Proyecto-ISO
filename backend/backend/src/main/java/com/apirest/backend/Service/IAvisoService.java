@@ -12,7 +12,7 @@ public interface IAvisoService {
     // Especificar las operaciones (CRUD)
     public List<Aviso> listarAvisos();
 
-    void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area, ObjectId idUsuario) throws Exception;
+    void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area, String idUsuario) throws Exception;
 
     void editarAviso(String id, String titulo, String descripcion, Double precioMensual, List<MultipartFile> imagenes, String estado) throws Exception;
 
@@ -24,6 +24,6 @@ public interface IAvisoService {
 
     void reactivarAviso(String id) throws Exception;
 
-    void eliminarAvisosPorPropietario(ObjectId idPropietario) throws Exception;
+    void eliminarAvisosPorPropietario(String idPropietario) throws Exception;
 
 }

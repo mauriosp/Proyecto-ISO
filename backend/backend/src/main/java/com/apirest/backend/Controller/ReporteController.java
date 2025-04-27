@@ -20,14 +20,21 @@ public class ReporteController {
     // Para usuarios: Crear reporte
     @PostMapping
     public ResponseEntity<Reporte> crearReporte(@RequestBody Reporte reporte) {
-        return new ResponseEntity<>(reporteService.crearReporte(reporte), HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(reporteService.crearReporte(reporte), HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
     // Para administradores: Listar todos los reportes
     @GetMapping
     public ResponseEntity<List<Reporte>> obtenerTodosReportes() {
         return new ResponseEntity<>(reporteService.obtenerTodosReportes(), HttpStatus.OK);
     }
-    
+
     // Obtener un reporte específico
     @GetMapping("/{id}")
     public ResponseEntity<Reporte> obtenerReportePorId(@PathVariable String id) {
@@ -37,7 +44,7 @@ public class ReporteController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    
+
     // Actualizar estado de un reporte (para administradores)
     @PutMapping("/{id}/estado")
     public ResponseEntity<Reporte> actualizarEstadoReporte(
@@ -49,38 +56,37 @@ public class ReporteController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    
+
     // Eliminar un reporte
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarReporte(@PathVariable String id) {
         reporteService.eliminarReporte(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
+
     // Obtener reportes por aviso
     @GetMapping("/aviso/{idAviso}")
     public ResponseEntity<List<Reporte>> obtenerReportesPorAviso(@PathVariable String idAviso) {
         return new ResponseEntity<>(reporteService.obtenerReportesPorAviso(idAviso), HttpStatus.OK);
     }
-    
+
     // Obtener reportes por usuario
     @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<List<Reporte>> obtenerReportesPorUsuario(@PathVariable String idUsuario) {
         return new ResponseEntity<>(reporteService.obtenerReportesPorUsuario(idUsuario), HttpStatus.OK);
     }
-    
+
     // Eliminar reportes por usuario
     @DeleteMapping("/usuario/{idUsuario}")
     public ResponseEntity<Void> eliminarReportesPorUsuario(@PathVariable String idUsuario) {
         reporteService.eliminarReportesPorUsuario(idUsuario);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
+
     // Eliminar reportes por aviso
     @DeleteMapping("/aviso/{idAviso}")
     public ResponseEntity<Void> eliminarReportesPorAviso(@PathVariable String idAviso) {
         reporteService.eliminarReportesPorAviso(idAviso);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }

@@ -20,8 +20,6 @@ public class CalificacionEspacioServiceImpl implements ICalificacionEspacioServi
 
     @Override
     public void calificarEspacio(String usuarioId, String espacioId, int puntuacion, String comentario) {
-        ObjectId objUsuarioId = new ObjectId(usuarioId);
-        ObjectId objEspacioId = new ObjectId(espacioId);
         
         // Buscar el espacio
         Espacio espacio = espacioRepository.findById(espacioId)
@@ -29,7 +27,7 @@ public class CalificacionEspacioServiceImpl implements ICalificacionEspacioServi
         
         // Crear una nueva calificación
         CalificacionEspacio calificacion = new CalificacionEspacio();
-        calificacion.setIdUsuarioCalifica(objUsuarioId);
+        calificacion.setIdUsuarioCalifica(new ObjectId(usuarioId));
         calificacion.setPuntuacion(puntuacion);
         calificacion.setFecha(new Date());
         calificacion.setComentario(comentario);
@@ -39,13 +37,13 @@ public class CalificacionEspacioServiceImpl implements ICalificacionEspacioServi
         // Por ejemplo, podrías buscar el arrendamiento por usuario y espacio, y luego añadir la calificación
         
         // Obtenemos el ID del propietario del espacio
-        ObjectId propietarioId = espacio.getIdPropietario();
+        String propietarioId = espacio.getIdPropietario().toHexString();
         
         // Buscar el aviso asociado a este espacio o crear un ID si no existe
-        ObjectId avisoId = obtenerAvisoIdPorEspacio(objEspacioId);
+        String avisoId = obtenerAvisoIdPorEspacio(espacioId);
         
         // Enviar notificación de calificación
-        notificacionService.notificarNuevaCalificacion(propietarioId, objEspacioId, puntuacion, avisoId);
+        notificacionService.notificarNuevaCalificacion(propietarioId, espacioId, puntuacion, avisoId);
         
         // Si hay comentario, enviar notificación específica
         if (comentario != null && !comentario.trim().isEmpty()) {
@@ -56,7 +54,7 @@ public class CalificacionEspacioServiceImpl implements ICalificacionEspacioServi
                 espacioId, usuarioId, puntuacion);
     }
     
-    private ObjectId obtenerAvisoIdPorEspacio(ObjectId espacioId) {
+    private String obtenerAvisoIdPorEspacio(String espacioId) {
         // Aquí implementarías la lógica para obtener el ID del aviso
         // Por ahora retorna un ID dummy
         return espacioId; // Cambia esto por la lógica real

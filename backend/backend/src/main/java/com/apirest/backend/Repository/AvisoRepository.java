@@ -9,9 +9,9 @@ import java.util.List;
 @Repository 
 public interface AvisoRepository extends MongoRepository<Aviso, String> {
     // Método para buscar avisos por ID de propietario
-    List<Aviso> findByIdPropietario(ObjectId idPropietario);
+    List<Aviso> findByIdPropietario(String idPropietario);
     
     // Opcional: Método para eliminar avisos de un propietario
-    void deleteByIdPropietario(ObjectId idPropietario);
+    void deleteByIdPropietario(String idPropietario);
 
 }

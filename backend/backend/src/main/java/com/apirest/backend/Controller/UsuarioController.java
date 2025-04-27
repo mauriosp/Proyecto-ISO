@@ -24,6 +24,7 @@ public class UsuarioController {
 
     @PostMapping("/registro")
     public ResponseEntity<String> registrarUsuario(@RequestBody Usuario usuario) {
+        
         try {
             String mensaje = usuarioService.registrarUsuario(usuario);
             return new ResponseEntity<>(mensaje, HttpStatus.CREATED);

@@ -28,6 +28,7 @@ public class EspacioController {
 
     @PostMapping("/insertar")
     public ResponseEntity<Espacio> insertarEspacio(@RequestBody Espacio espacio) {
+        System.out.println("Hola");
         return ResponseEntity.ok(espacioService.guardarEspacio(espacio));
     }
 
