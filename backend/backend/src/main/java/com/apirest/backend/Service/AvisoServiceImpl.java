@@ -31,9 +31,6 @@ public class AvisoServiceImpl implements IAvisoService {
     @Autowired
     private IEspacioService espacioService;
 
-    @Autowired
-    private IUsuarioService usuarioService;
-
     @Override
     public List<Aviso> listarAvisos() {
         return avisoRepository.findAll();
@@ -41,10 +38,7 @@ public class AvisoServiceImpl implements IAvisoService {
 
     @Override
     public void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String condicionesAdicionales, String direccion, BigDecimal area, ObjectId idUsuario) throws Exception {
-        // Validar que el usuario exista
-        if (!usuarioService.existeUsuarioPorId(idUsuario)) {
-            throw new IllegalArgumentException("El usuario con el ID proporcionado no existe.");
-        }
+
 
         // Validar el título
         if (titulo.length() > 100) {
@@ -81,10 +75,7 @@ public class AvisoServiceImpl implements IAvisoService {
         if (espacioExistente.isPresent()) {
             // Verificar si ya existe un aviso para este espacio
             if (espacioExistente.get().getIdAviso() != null) {
-                Optional<Aviso> avisoExistente = avisoRepository.findById(espacioExistente.get().getIdAviso().toHexString());
-                if (avisoExistente.isPresent()) {
-                    throw new IllegalArgumentException("Ya existe un aviso para este espacio. No se puede crear un nuevo aviso.");
-                }
+                throw new IllegalArgumentException("Ya existe un aviso para este espacio. No se puede crear un nuevo aviso.");
             }
             espacio = espacioExistente.get();
             espacio = espacioService.editarEspacio(espacio.getId().toHexString(), tipoEspacio, condicionesAdicionales, direccion, area);
