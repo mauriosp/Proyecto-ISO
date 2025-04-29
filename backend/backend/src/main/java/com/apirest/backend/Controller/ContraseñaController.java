@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -54,60 +53,48 @@ public class ContraseñaController {
     }
 
     private boolean validarComplejidadContraseña(String contraseña) {
-        // Al menos 8 caracteres
         if (contraseña.length() < 8) return false;
-
-        // Al menos una mayúscula
         if (!contraseña.matches(".*[A-Z].*")) return false;
-
-        // Al menos una minúscula
         if (!contraseña.matches(".*[a-z].*")) return false;
-
-        // Al menos un número
         if (!contraseña.matches(".*\\d.*")) return false;
-
-        // Al menos un carácter especial
         return contraseña.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*");
     }
-    
+
     @PostMapping("/solicitar-reset")
     public ResponseEntity<?> solicitarResetContraseña(@RequestParam String email) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.status(404).body("El correo no está registrado en el sistema");
+        }
         contraseñaService.enviarCorreoResetContraseña(email);
-        // Por seguridad, siempre devuelve un mensaje positivo para evitar enumerar usuarios
         return ResponseEntity.ok("Si el email está registrado, recibirás un correo con instrucciones para restablecer tu contraseña");
     }
-    
+
     @GetMapping("/formulario")
     public ResponseEntity<?> mostrarFormularioReset(@RequestParam String token) {
-        // Verificar que el token es válido y no ha expirado
+        // Buscar el usuario que tiene el token en su verificación de correo
         Optional<Usuario> usuarioOpt = usuarioRepository.findByVerificacionEmail_Token(token);
+        
         if (usuarioOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("Token inválido");
         }
 
         Usuario usuario = usuarioOpt.get();
-        // Obtener la verificación de email que contiene el token
-        List<VerificacionEmail> verificaciones = usuario.getVerificacionEmail();
-        VerificacionEmail ve = null;
-        
-        for (VerificacionEmail v : verificaciones) {
-            if (token.equals(v.getToken())) {
-                ve = v;
-                break;
-            }
-        }
+        // Buscar la verificación de correo electrónico con ese token
+        VerificacionEmail ve = usuario.getVerificacionEmail().stream()
+                                      .filter(v -> v.getToken().equals(token))
+                                      .findFirst()
+                                      .orElse(null);
         
         if (ve == null) {
             return ResponseEntity.badRequest().body("Token inválido");
         }
-        
 
-        if (ve.getFechaExpiracion().before(new Date()) || ve.getVerificado()) {
+        // Verificar si el enlace ha expirado o si ya ha sido utilizado
+        if (ve.getFechaExpiracion().before(new Date()) || ve.isVerificado()) {
             return ResponseEntity.badRequest().body("El enlace ha expirado o ya ha sido utilizado");
         }
 
-        // En una aplicación real, aquí devolverías una vista HTML con el formulario
-        // Para esta API RESTful, podemos devolver un mensaje indicando que el token es válido
         return ResponseEntity.ok("Token válido, puedes proceder a actualizar tu contraseña");
     }
 }

@@ -77,7 +77,7 @@ public class VerificacionEmailServiceImpl implements IVerificacionEmailService {
 
         if (ve.getToken().equals(token)
                 && ve.getFechaExpiracion().after(new Date())
-                && !ve.getVerificado()) {
+                && !ve.isVerificado()) {
 
             ve.setVerificado(true);
             usuarioRepository.save(usuario);

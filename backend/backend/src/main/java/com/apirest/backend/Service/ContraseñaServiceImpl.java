@@ -109,7 +109,7 @@ public class ContraseñaServiceImpl implements IContraseñaService {
         //    return false;
         // }
 
-        if (ve.getFechaExpiracion().before(new Date()) || ve.getVerificado()) {
+        if (ve.getFechaExpiracion().before(new Date()) || ve.isVerificado()) {
             log.warn("Intento de actualización de contraseña con token expirado o ya utilizado para: {}", usuario.getEmail());
             return false;
         }

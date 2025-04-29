@@ -69,7 +69,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
             // Verificación de email
             List<VerificacionEmail> verificaciones = usuario.getVerificacionEmail();
             if (verificaciones == null || verificaciones.isEmpty() || 
-                !verificaciones.get(verificaciones.size() - 1).getVerificado()) {
+                !verificaciones.get(verificaciones.size() - 1).isVerificado()) {
                 logger.warn("Intento de login con correo no verificado: {}", email);
                 return "Correo no verificado. Por favor verifica tu cuenta.";
             }

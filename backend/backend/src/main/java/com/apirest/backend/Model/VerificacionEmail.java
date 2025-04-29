@@ -16,6 +16,6 @@ public class VerificacionEmail {
     private String token;
     private Date fechaCreacion;
     private Date fechaExpiracion;
-    private Boolean verificado;
+    private boolean verificado;
     private String tipoVerificacion; // "Registro" o "Recuperacion"
 }
