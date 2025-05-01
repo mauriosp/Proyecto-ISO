@@ -116,10 +116,10 @@ public class AvisoServiceImpl implements IAvisoService {
         avisoRepository.save(aviso);
 
         // Notificar al administrador
-        notificacionService.enviarNotificacionAdministrador("Nuevo aviso creado", "Se ha creado un nuevo aviso con el título: " + titulo);
+        notificacionService.enviarMensajeAdministrador("Nuevo aviso creado", "Se ha creado un nuevo aviso con el título: " + titulo);
 
         // Notificar al propietario
-        notificacionService.enviarNotificacionPropietario("Aviso creado exitosamente", "Tu aviso con el título '" + titulo + "' ha sido creado y está disponible.");
+        notificacionService.enviarMensajePropietario("Aviso creado exitosamente", "Tu aviso con el título '" + titulo + "' ha sido creado y está disponible.");
     }
 
     @Override
