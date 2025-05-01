@@ -26,4 +26,5 @@ public interface IAvisoService {
 
     void eliminarAvisosPorPropietario(String idPropietario) throws Exception;
 
+    List<Aviso> filtrarAvisos(String tipoEspacio, Double precioMin, Double precioMax, String disponibilidad);
 }

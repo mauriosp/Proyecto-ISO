@@ -76,6 +76,8 @@ public class EspacioServiceImpl implements IEspacioService {
         if (area == null || area.doubleValue() <= 0) {
             throw new IllegalArgumentException("El área debe ser mayor a 0.");
         }
+        System.out.println("Creando aviso...");
+
         // Crear un nuevo espacio
         Espacio nuevoEspacio = new Espacio();
         nuevoEspacio.setIdPropietario(new ObjectId(idUsuario)); // Convertir el ID del usuario a ObjectId y establecerlo como propietario
@@ -86,7 +88,6 @@ public class EspacioServiceImpl implements IEspacioService {
         nuevoEspacio.setArea(area.doubleValue()); // Establecer el área
         nuevoEspacio.setEstado("Disponible"); // Establecer el estado como "Disponible"
         nuevoEspacio.setPromCalificacion(0);
-        nuevoEspacio.setArrendamiento(null);
 
         // Guardar el espacio en la base de datos
         return espacioRepository.save(nuevoEspacio);

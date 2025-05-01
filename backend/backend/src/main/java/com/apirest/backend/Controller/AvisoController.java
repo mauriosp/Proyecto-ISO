@@ -137,4 +137,19 @@ public class AvisoController {
     }
 }
 
+@GetMapping("/filtrar")
+    public ResponseEntity<List<Aviso>> filtrarAvisos(
+            @RequestParam(required = false) String tipoEspacio,
+            @RequestParam(required = false) Double precioMin,
+            @RequestParam(required = false) Double precioMax,
+            @RequestParam(required = false) String disponibilidad) {
+        List<Aviso> avisosFiltrados = avisoService.filtrarAvisos(tipoEspacio, precioMin, precioMax, disponibilidad);
+
+        // Siempre retorna 200 OK, incluso si la lista está vacía
+        if (avisosFiltrados.isEmpty()) {
+            return ResponseEntity.ok(avisosFiltrados); // Lista vacía
+        }
+        return ResponseEntity.ok(avisosFiltrados); // Lista con resultados
+    }
+
 }

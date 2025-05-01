@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.apirest.backend.Model.Espacio;
+import com.apirest.backend.Repository.EspacioRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,10 +15,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.math.BigDecimal;
 import org.bson.types.ObjectId;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class AvisoServiceImpl implements IAvisoService {
@@ -34,6 +37,9 @@ public class AvisoServiceImpl implements IAvisoService {
     @Autowired
     private IUsuarioService usuarioService;
 
+    @Autowired
+    private EspacioRepository espacioRepository;
+
     @Override
     public List<Aviso> listarAvisos() {
         return avisoRepository.findAll();
@@ -42,6 +48,7 @@ public class AvisoServiceImpl implements IAvisoService {
     @Override
     public void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String condicionesAdicionales, String direccion, BigDecimal area, String idUsuario) throws Exception {
         // Validar que el usuario exista
+        
         if (!usuarioService.existeUsuarioPorId(idUsuario)) {
             throw new IllegalArgumentException("El usuario con el ID proporcionado no existe.");
         }
@@ -81,7 +88,6 @@ public class AvisoServiceImpl implements IAvisoService {
         if (espacio == null || espacio.getId() == null) {
             throw new IllegalStateException("No se pudo crear o actualizar el espacio. Por favor, intente nuevamente.");
         }
-
         Aviso aviso = new Aviso();
         aviso.setDescripcion(descripcion);
         aviso.setPrecio((int) Math.round(precioMensual));  // Redondeo correcto
@@ -93,7 +99,8 @@ public class AvisoServiceImpl implements IAvisoService {
         aviso.setMotivoDesactivacion(null);  // Si el esquema lo permite
         aviso.setMensaje(new ArrayList<>());  // Inicializa como lista vacía si no hay mensajes
 
-        avisoRepository.save(aviso);
+        Aviso avisoGuardado = avisoRepository.save(aviso);
+        espacio.setIdAviso(avisoGuardado.getId()); // Asociar el aviso al espacio
 
         // Asociar el aviso al espacio
         espacioService.guardarEspacio(espacio); // Guardar el espacio con el nuevo aviso
@@ -220,5 +227,59 @@ public class AvisoServiceImpl implements IAvisoService {
     public void eliminarAvisosPorPropietario(String idPropietario) {
         List<Aviso> avisos = avisoRepository.findByIdPropietario(idPropietario);
         avisoRepository.deleteAll(avisos);
+    }
+
+    @Override
+    public List<Aviso> filtrarAvisos(String tipoEspacio, Double precioMin, Double precioMax, String disponibilidad) {
+        // Obtener todos los espacios de una vez
+        List<Espacio> todosEspacios = espacioRepository.findAll();
+        
+        // Filtrar espacios según los criterios
+        Stream<Espacio> espaciosFiltrados = todosEspacios.stream();
+        
+        // Filtrar por tipo de espacio si se proporciona
+        if (tipoEspacio != null && !tipoEspacio.isEmpty()) {
+            espaciosFiltrados = espaciosFiltrados.filter(
+                espacio -> espacio.getTipoEspacio() != null 
+                        && espacio.getTipoEspacio().equalsIgnoreCase(tipoEspacio));
+        }
+        
+        // Filtrar por disponibilidad si se proporciona
+        if (disponibilidad != null && !disponibilidad.isEmpty()) {
+            espaciosFiltrados = espaciosFiltrados.filter(
+                espacio -> espacio.getEstado() != null 
+                        && espacio.getEstado().equalsIgnoreCase(disponibilidad));
+        }
+        
+        // Obtener los IDs de avisos de los espacios filtrados
+        List<ObjectId> avisoIds = espaciosFiltrados
+                .map(Espacio::getIdAviso)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        
+        // Si no hay espacios que cumplan los criterios, devolver vacío
+        if (avisoIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        
+        // Obtener los avisos correspondientes a los IDs filtrados
+        List<Aviso> avisos = avisoRepository.findAllById(
+                avisoIds.stream().map(ObjectId::toString).collect(Collectors.toList())
+        );
+        
+        // Filtrar por rango de precio
+        if (precioMin != null) {
+            avisos = avisos.stream()
+                    .filter(aviso -> aviso.getPrecio() != null && aviso.getPrecio() >= precioMin)
+                    .collect(Collectors.toList());
+        }
+        
+        if (precioMax != null) {
+            avisos = avisos.stream()
+                    .filter(aviso -> aviso.getPrecio() != null && aviso.getPrecio() <= precioMax)
+                    .collect(Collectors.toList());
+        }
+        System.out.println(disponibilidad);
+        return avisos;
     }
 }

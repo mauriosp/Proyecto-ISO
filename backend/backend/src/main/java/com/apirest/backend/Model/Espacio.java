@@ -26,6 +26,7 @@ public class Espacio {
     private String estado;
     private int promCalificacion;
     private List<Arrendamiento> arrendamiento;
+    private ObjectId idAviso;
 
     // Serializa el campo "id" como String
     @JsonProperty("id")
