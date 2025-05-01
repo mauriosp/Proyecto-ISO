@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class ModeracionServiceImpl implements IModeracionService {
 
     private final AvisoRepository avisoRepository;
-    private final INotificacionService notificacionService;
+    private final IMensajeService notificacionService;
 
     @Override
     public void moderarAviso(String avisoId, String accion, String motivo) {

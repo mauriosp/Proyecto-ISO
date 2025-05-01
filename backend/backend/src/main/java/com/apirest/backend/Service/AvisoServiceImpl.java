@@ -26,7 +26,7 @@ public class AvisoServiceImpl implements IAvisoService {
     private AvisoRepository avisoRepository;
 
     @Autowired
-    private INotificacionService notificacionService;
+    private IMensajeService notificacionService;
 
     @Autowired
     private IEspacioService espacioService;

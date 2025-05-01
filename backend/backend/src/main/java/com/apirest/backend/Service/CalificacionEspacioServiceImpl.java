@@ -16,7 +16,7 @@ import java.util.Date;
 public class CalificacionEspacioServiceImpl implements ICalificacionEspacioService {
 
     private final EspacioRepository espacioRepository;
-    private final INotificacionService notificacionService;
+    private final IMensajeService notificacionService;
 
     @Override
     public void calificarEspacio(String usuarioId, String espacioId, int puntuacion, String comentario) {

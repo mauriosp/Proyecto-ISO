@@ -1,7 +1,7 @@
 package com.apirest.backend.Controller;
 
 import com.apirest.backend.Model.Mensaje;
-import com.apirest.backend.Service.INotificacionService;
+import com.apirest.backend.Service.IMensajeService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +13,15 @@ import java.util.Map;
 @RestController
 @RequestMapping("/UAO/apirest/Notificaciones")
 @RequiredArgsConstructor
-public class NotificacionController {
+public class MensajeController {
 
-    private final INotificacionService notificacionService;
+    private final IMensajeService notificacionService;
 
     @GetMapping("/usuario/{usuarioId}/aviso/{avisoId}")
     public ResponseEntity<List<Mensaje>> obtenerNotificacionesUsuario(
             @PathVariable String usuarioId,
             @PathVariable String avisoId) {
-        List<Mensaje> notificaciones = notificacionService.obtenerNotificacionesUsuario(
+        List<Mensaje> notificaciones = notificacionService.obtenerMensajesUsuario(
                 new ObjectId(usuarioId), new ObjectId(avisoId));
         return ResponseEntity.ok(notificaciones);
     }
@@ -30,7 +30,7 @@ public class NotificacionController {
     public ResponseEntity<List<Mensaje>> obtenerNotificacionesNoLeidas(
             @PathVariable String usuarioId,
             @PathVariable String avisoId) {
-        List<Mensaje> notificaciones = notificacionService.obtenerNotificacionesNoLeidas(
+        List<Mensaje> notificaciones = notificacionService.obtenerMensajesNoLeidas(
                 new ObjectId(usuarioId), new ObjectId(avisoId));
         return ResponseEntity.ok(notificaciones);
     }
@@ -39,7 +39,7 @@ public class NotificacionController {
     public ResponseEntity<Long> contarNotificacionesNoLeidas(
             @PathVariable String usuarioId,
             @PathVariable String avisoId) {
-        long cantidad = notificacionService.contarNotificacionesNoLeidas(
+        long cantidad = notificacionService.contarMensajesNoLeidas(
                 new ObjectId(usuarioId), new ObjectId(avisoId));
         return ResponseEntity.ok(cantidad);
     }
@@ -67,7 +67,7 @@ public class NotificacionController {
             @PathVariable int indiceMensaje,
             @RequestBody Map<String, String> payload) {
         String contenidoRespuesta = payload.get("contenido");
-        notificacionService.responderNotificacion(
+        notificacionService.responderMensaje(
                 new ObjectId(avisoId), indiceMensaje, contenidoRespuesta);
         return ResponseEntity.ok().build();
     }

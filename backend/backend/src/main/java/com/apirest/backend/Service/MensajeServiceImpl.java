@@ -16,12 +16,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class NotificacionServiceImpl implements INotificacionService {
+public class MensajeServiceImpl implements IMensajeService {
 
     private final AvisoRepository avisoRepository;
 
     @Override
-    public void enviarNotificacion(ObjectId usuarioId, String contenido, ObjectId avisoId) {
+    public void enviarMensaje(ObjectId usuarioId, String contenido, ObjectId avisoId) {
         // Convertir ObjectId a String para el findById
         Aviso aviso = avisoRepository.findById(avisoId.toString())
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado: " + avisoId));
@@ -30,7 +30,7 @@ public class NotificacionServiceImpl implements INotificacionService {
         Mensaje mensaje = new Mensaje();
         mensaje.setIdUsuario(usuarioId);
         mensaje.setContenido(contenido);
-        mensaje.setFechaAviso(new Date());
+        mensaje.setFechaMensaje(new Date());
         mensaje.setEstadoMensaje(false); // No leído
         
         // Añadir el mensaje al aviso
@@ -49,24 +49,24 @@ public class NotificacionServiceImpl implements INotificacionService {
     public void notificarNuevaCalificacion(ObjectId propietarioId, ObjectId espacioId, 
                                           int puntuacion, ObjectId avisoId) {
         String contenido = "Tu espacio ha recibido una nueva calificación de " + puntuacion + " estrellas.";
-        enviarNotificacion(propietarioId, contenido, avisoId);
+        enviarMensaje(propietarioId, contenido, avisoId);
     }
     
     @Override
     public void notificarNuevoComentario(ObjectId propietarioId, String comentario, ObjectId avisoId) {
         String contenido = "Nuevo comentario: \"" + comentario + "\"";
-        enviarNotificacion(propietarioId, contenido, avisoId);
+        enviarMensaje(propietarioId, contenido, avisoId);
     }
     
     @Override
     public void notificarModeracionAviso(ObjectId propietarioId, ObjectId avisoId, 
                                         String motivo, String accion) {
         String contenido = "Tu aviso ha sido " + accion + ". Motivo: " + motivo;
-        enviarNotificacion(propietarioId, contenido, avisoId);
+        enviarMensaje(propietarioId, contenido, avisoId);
     }
     
     @Override
-    public List<Mensaje> obtenerNotificacionesUsuario(ObjectId usuarioId, ObjectId avisoId) {
+    public List<Mensaje> obtenerMensajesUsuario(ObjectId usuarioId, ObjectId avisoId) {
         Aviso aviso = avisoRepository.findById(avisoId.toString())
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
@@ -86,8 +86,8 @@ public class NotificacionServiceImpl implements INotificacionService {
     }
     
     @Override
-    public List<Mensaje> obtenerNotificacionesNoLeidas(ObjectId usuarioId, ObjectId avisoId) {
-        List<Mensaje> todasNotificaciones = obtenerNotificacionesUsuario(usuarioId, avisoId);
+    public List<Mensaje> obtenerMensajesNoLeidas(ObjectId usuarioId, ObjectId avisoId) {
+        List<Mensaje> todasNotificaciones = obtenerMensajesUsuario(usuarioId, avisoId);
         List<Mensaje> noLeidas = new ArrayList<>();
         
         for (Mensaje mensaje : todasNotificaciones) {
@@ -139,12 +139,12 @@ public class NotificacionServiceImpl implements INotificacionService {
     }
     
     @Override
-    public long contarNotificacionesNoLeidas(ObjectId usuarioId, ObjectId avisoId) {
-        return obtenerNotificacionesNoLeidas(usuarioId, avisoId).size();
+    public long contarMensajesNoLeidas(ObjectId usuarioId, ObjectId avisoId) {
+        return obtenerMensajesNoLeidas(usuarioId, avisoId).size();
     }
     
     @Override
-    public void responderNotificacion(ObjectId avisoId, int indiceMensaje, String contenidoRespuesta) {
+    public void responderMensaje(ObjectId avisoId, int indiceMensaje, String contenidoRespuesta) {
         Aviso aviso = avisoRepository.findById(avisoId.toString())
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
@@ -167,13 +167,13 @@ public class NotificacionServiceImpl implements INotificacionService {
     
     // Añadir estos métodos que se utilizan en AvisoServiceImpl
     @Override
-    public void enviarNotificacionAdministrador(String titulo, String mensaje) {
+    public void enviarMensajeAdministrador(String titulo, String mensaje) {
         log.info("Notificación al administrador - Título: {}, Mensaje: {}", titulo, mensaje);
         // Implementar lógica para enviar notificación al administrador
     }
     
     @Override
-    public void enviarNotificacionPropietario(String titulo, String mensaje) {
+    public void enviarMensajePropietario(String titulo, String mensaje) {
         log.info("Notificación al propietario - Título: {}, Mensaje: {}", titulo, mensaje);
         // Implementar lógica para enviar notificación al propietario
     }
