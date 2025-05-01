@@ -26,7 +26,7 @@ public class AvisoServiceImpl implements IAvisoService {
     private AvisoRepository avisoRepository;
 
     @Autowired
-    private IMensajeService notificacionService;
+    private IMensajeService mensajeService;
 
     @Autowired
     private IEspacioService espacioService;
@@ -116,11 +116,11 @@ public class AvisoServiceImpl implements IAvisoService {
         avisoRepository.save(aviso);
 
         // Notificar al administrador
-        notificacionService.enviarMensajeAdministrador("Nuevo aviso creado", "Se ha creado un nuevo aviso con el título: " + titulo);
+        mensajeService.enviarMensajeAdministrador("Nuevo aviso creado", "Se ha creado un nuevo aviso con el título: " + titulo);
 
         // Notificar al propietario
-        notificacionService.enviarMensajePropietario("Aviso creado exitosamente", "Tu aviso con el título '" + titulo + "' ha sido creado y está disponible.");
-    }
+        mensajeService.enviarMensajePropietario("Aviso creado exitosamente", "Tu aviso con el título '" + titulo + "' ha sido creado y está disponible.");
+        }
 
     @Override
     public void editarAviso(String id, String titulo, String descripcion, Double precioMensual, List<MultipartFile> imagenes, String estado) throws Exception {
