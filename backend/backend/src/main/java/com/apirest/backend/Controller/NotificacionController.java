@@ -3,7 +3,6 @@ package com.apirest.backend.Controller;
 import com.apirest.backend.Model.Mensaje;
 import com.apirest.backend.Service.INotificacionService;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,5 +96,20 @@ public class NotificacionController {
         
         notificacionService.notificarModeracionAviso(propietarioId, avisoId, motivo, accion);
         return ResponseEntity.ok().build();
+    }
+    
+    @PostMapping("/enviar")
+    public ResponseEntity<?> enviarMensaje(
+            @RequestParam String usuarioId,
+            @RequestParam String avisoId,
+            @RequestParam String contenido) {
+        try {
+            notificacionService.enviarNotificacion(usuarioId, contenido, avisoId);
+            return ResponseEntity.ok("Mensaje enviado correctamente.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al enviar el mensaje: " + e.getMessage());
+        }
     }
 }

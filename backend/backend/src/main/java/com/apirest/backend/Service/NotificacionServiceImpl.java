@@ -30,7 +30,7 @@ public class NotificacionServiceImpl implements INotificacionService {
         Mensaje mensaje = new Mensaje();
         mensaje.setIdUsuario(new ObjectId(usuarioId));
         mensaje.setContenido(contenido);
-        mensaje.setFechaAviso(new Date());
+        mensaje.setFechaMensaje(new Date());
         mensaje.setEstadoMensaje(false); // No leído
         
         // Añadir el mensaje al aviso

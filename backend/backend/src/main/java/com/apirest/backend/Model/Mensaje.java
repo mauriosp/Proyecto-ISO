@@ -16,7 +16,7 @@ import org.bson.types.ObjectId;
 public class Mensaje {
     private ObjectId idUsuario;
     private String contenido;
-    private Date fechaAviso;
+    private Date fechaMensaje;
     private boolean estadoMensaje;
     private RespuestaMensaje respuestaMensaje;
 }
