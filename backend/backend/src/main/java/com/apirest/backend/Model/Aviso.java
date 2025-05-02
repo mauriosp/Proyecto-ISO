@@ -27,6 +27,7 @@ public class Aviso {
     private String imagenes;
     private String motivoDesactivacion;
     private List<Mensaje> mensaje;
+    private ObjectId idEspacio;
 
     // Serializa el campo "id" como String
     @JsonProperty("id")

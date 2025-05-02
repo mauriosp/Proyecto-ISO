@@ -32,7 +32,7 @@ public class NotificacionServiceImpl implements INotificacionService {
         mensaje.setContenido(contenido);
         mensaje.setFechaMensaje(new Date());
         mensaje.setEstadoMensaje(false); // No leído
-        
+
         // Añadir el mensaje al aviso
         if (aviso.getMensaje() == null) {
             aviso.setMensaje(new ArrayList<>());
