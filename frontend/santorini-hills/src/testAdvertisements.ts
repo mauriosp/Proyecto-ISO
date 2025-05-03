@@ -1,5 +1,5 @@
-import { AdvertisementResponse } from "./models/advertisement";
-export const testAdvertisements: AdvertisementResponse[] = [
+import { Advertisement } from "./models/advertisement";
+export const testAdvertisements: Advertisement[] = [
   {
     id: 1,
     title: "Beautiful apartment near the beach",
@@ -52,16 +52,12 @@ export const testAdvertisements: AdvertisementResponse[] = [
       bedrooms: 0
     },
     images: [
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5058c24_infocdn__n8fawnjfamtj9cynyzt4gus4p7rxa04egkhenvtvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d511c4f9_infocdn__hi36enq3pei2ptagpju82swjess6yd3kqxmx0lmejpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d527e7fe_infocdn__axdsghlnvm6hzno88bdtkb0bg8jzxm3vou3el4ljjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d531fb77_infocdn__bioeyek0enhdmoymoavbcuawxmeabqtqqolvlnghjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d545cc75_infocdn__rjaigtvlggeroefv9mnz1ip1so55vckoqwdkq42fjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d550a886_infocdn__qnkvj8pwp8yuoicrjmx3dz21hknyr5qsgbiqwdt0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5865f82_infocdn__oybnbdppflyrgiablczdragfp2qqnnen6ufwkbmrjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5d22967_infocdn__wdcss3farpl7znpds6vpwxb77zuypgiwjicccvr0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5f6cf77_infocdn__yqlosooq8kximrm3syblrngodrwksbcysgtjg0jvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d612c4e9_infocdn__muaih5abm5kjpovrqkebedrujwzgnhp5iwosl3jyjpg.jpg",
+      "https://a0.muscache.com/im/pictures/50648027-8d64-4aaf-aee8-10f8f1da3b0b.jpg?im_w=1200",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-781337955812915390/original/5ad81f77-a142-4029-b14f-40cf8ccb7cdc.jpeg?im_w=1440",
+      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d527e7fe_infocdn__axdsghlnvm6hzno88bdtkb0bg8jzxm3vou3el4ljjpg.jpghttps://a0.muscache.com/im/pictures/miso/Hosting-781337955812915390/original/782e6d10-a48d-4567-9ab9-885a79649bff.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-781337955812915390/original/8739637b-bee6-4675-ab3b-3cac8d976309.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-781337955812915390/original/ab5132b5-1ff4-45a3-a197-448b736ddf8f.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-781337955812915390/original/48964b50-4eef-4178-854c-7eb181479790.jpeg?im_w=1440",
     ],
     owner: {
       name: "Nikos Andreou",
@@ -88,16 +84,14 @@ export const testAdvertisements: AdvertisementResponse[] = [
       bedrooms: 3
     },
     images: [
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5058c24_infocdn__n8fawnjfamtj9cynyzt4gus4p7rxa04egkhenvtvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d511c4f9_infocdn__hi36enq3pei2ptagpju82swjess6yd3kqxmx0lmejpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d527e7fe_infocdn__axdsghlnvm6hzno88bdtkb0bg8jzxm3vou3el4ljjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d531fb77_infocdn__bioeyek0enhdmoymoavbcuawxmeabqtqqolvlnghjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d545cc75_infocdn__rjaigtvlggeroefv9mnz1ip1so55vckoqwdkq42fjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d550a886_infocdn__qnkvj8pwp8yuoicrjmx3dz21hknyr5qsgbiqwdt0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5865f82_infocdn__oybnbdppflyrgiablczdragfp2qqnnen6ufwkbmrjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5d22967_infocdn__wdcss3farpl7znpds6vpwxb77zuypgiwjicccvr0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5f6cf77_infocdn__yqlosooq8kximrm3syblrngodrwksbcysgtjg0jvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d612c4e9_infocdn__muaih5abm5kjpovrqkebedrujwzgnhp5iwosl3jyjpg.jpg",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/240fe7b9-5f1e-4749-bc86-f79f5c1cd72a.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/12a0d847-6fd7-4c21-99b6-1c20cf17f09f.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/8cdcd51b-6bc5-4317-8c59-6ff731993527.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/e4688bcd-6990-4c1d-a1ab-ffec93c50017.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/96ceb7d4-57e3-4587-bf8a-da46571c0ee2.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/fedfbf25-b887-4458-8326-3457eb0884e3.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-4786882/original/5b087f48-1927-4cab-bf60-dfb4e0e9a430.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/19bf5cc3-71e5-40b0-aa37-791ee05c2dc3.jpeg?im_w=1440",
     ],
     owner: {
       name: "Elena Dimitriou",
@@ -124,16 +118,11 @@ export const testAdvertisements: AdvertisementResponse[] = [
       bedrooms: 5
     },
     images: [
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5058c24_infocdn__n8fawnjfamtj9cynyzt4gus4p7rxa04egkhenvtvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d511c4f9_infocdn__hi36enq3pei2ptagpju82swjess6yd3kqxmx0lmejpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d527e7fe_infocdn__axdsghlnvm6hzno88bdtkb0bg8jzxm3vou3el4ljjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d531fb77_infocdn__bioeyek0enhdmoymoavbcuawxmeabqtqqolvlnghjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d545cc75_infocdn__rjaigtvlggeroefv9mnz1ip1so55vckoqwdkq42fjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d550a886_infocdn__qnkvj8pwp8yuoicrjmx3dz21hknyr5qsgbiqwdt0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5865f82_infocdn__oybnbdppflyrgiablczdragfp2qqnnen6ufwkbmrjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5d22967_infocdn__wdcss3farpl7znpds6vpwxb77zuypgiwjicccvr0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5f6cf77_infocdn__yqlosooq8kximrm3syblrngodrwksbcysgtjg0jvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d612c4e9_infocdn__muaih5abm5kjpovrqkebedrujwzgnhp5iwosl3jyjpg.jpg",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTIxNzU2OTEzMzE1NzU4OTE5NQ==/original/6d34fd9f-2329-43a6-ab55-8ab38c9c00e6.jpeg?im_w=1200",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTIxNzU2OTEzMzE1NzU4OTE5NQ==/original/1283983e-3ee6-44ec-8b12-be6d25005a9d.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTIxNzU2OTEzMzE1NzU4OTE5NQ==/original/c28efb8c-17e5-4e44-94e4-385f8c9522eb.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTIxNzU2OTEzMzE1NzU4OTE5NQ==/original/48fbb101-1605-41ce-ae9c-d3025b4f35c6.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTIxNzU2OTEzMzE1NzU4OTE5NQ==/original/dc7ceb4c-fbbd-4477-a4bb-79a6ff687b81.jpeg?im_w=1440",
     ],
     owner: {
       name: "Andreas Roussos",
@@ -160,16 +149,13 @@ export const testAdvertisements: AdvertisementResponse[] = [
       bedrooms: 1
     },
     images: [
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5058c24_infocdn__n8fawnjfamtj9cynyzt4gus4p7rxa04egkhenvtvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d511c4f9_infocdn__hi36enq3pei2ptagpju82swjess6yd3kqxmx0lmejpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d527e7fe_infocdn__axdsghlnvm6hzno88bdtkb0bg8jzxm3vou3el4ljjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d531fb77_infocdn__bioeyek0enhdmoymoavbcuawxmeabqtqqolvlnghjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d545cc75_infocdn__rjaigtvlggeroefv9mnz1ip1so55vckoqwdkq42fjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d550a886_infocdn__qnkvj8pwp8yuoicrjmx3dz21hknyr5qsgbiqwdt0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5865f82_infocdn__oybnbdppflyrgiablczdragfp2qqnnen6ufwkbmrjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5d22967_infocdn__wdcss3farpl7znpds6vpwxb77zuypgiwjicccvr0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5f6cf77_infocdn__yqlosooq8kximrm3syblrngodrwksbcysgtjg0jvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d612c4e9_infocdn__muaih5abm5kjpovrqkebedrujwzgnhp5iwosl3jyjpg.jpg",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/307c352c-4941-40b1-9b82-a85b5f2fad47.jpeg?im_w=1200",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/0ed36ed9-0014-4414-a163-103c8d5f52e8.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/d8e811b3-1542-4fd3-92fc-b045becc39ea.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/e8daf8a4-7f35-4aa3-8975-49a08254eb15.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/c846e446-b59a-40d4-8530-5f77352306b0.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/184d4086-315d-4b4b-9c2a-e1b93ac27a04.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/03a473d4-9eef-4894-872f-9f577e120885.jpeg?im_w=1440",
     ],
     owner: {
       name: "Kostas Georgiou",
@@ -196,16 +182,12 @@ export const testAdvertisements: AdvertisementResponse[] = [
       bedrooms: 1
     },
     images: [
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5058c24_infocdn__n8fawnjfamtj9cynyzt4gus4p7rxa04egkhenvtvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d511c4f9_infocdn__hi36enq3pei2ptagpju82swjess6yd3kqxmx0lmejpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d527e7fe_infocdn__axdsghlnvm6hzno88bdtkb0bg8jzxm3vou3el4ljjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d531fb77_infocdn__bioeyek0enhdmoymoavbcuawxmeabqtqqolvlnghjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d545cc75_infocdn__rjaigtvlggeroefv9mnz1ip1so55vckoqwdkq42fjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d550a886_infocdn__qnkvj8pwp8yuoicrjmx3dz21hknyr5qsgbiqwdt0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5865f82_infocdn__oybnbdppflyrgiablczdragfp2qqnnen6ufwkbmrjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5d22967_infocdn__wdcss3farpl7znpds6vpwxb77zuypgiwjicccvr0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5f6cf77_infocdn__yqlosooq8kximrm3syblrngodrwksbcysgtjg0jvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d612c4e9_infocdn__muaih5abm5kjpovrqkebedrujwzgnhp5iwosl3jyjpg.jpg",
+      "https://a0.muscache.com/im/pictures/77e5c035-80bc-422e-8dca-8cd24f8983da.jpg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-1045347397943323289/original/3ef3a976-9659-45e3-856e-a83082d0b9a4.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTA0NTM0NzM5Nzk0MzMyMzI4OQ%3D%3D/original/6bab55d8-486d-4927-92a4-3d3dfeb0915b.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTA0NTM0NzM5Nzk0MzMyMzI4OQ%3D%3D/original/110c9512-9519-4cc5-a629-06ff9c881de1.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTA0NTM0NzM5Nzk0MzMyMzI4OQ%3D%3D/original/dee211c9-bcb8-4db0-961f-cbac0788df56.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTA0NTM0NzM5Nzk0MzMyMzI4OQ%3D%3D/original/2c667421-617d-40b4-9a04-3494e1e524bb.jpeg?im_w=1440",
     ],
     owner: {
       name: "Dimitris Antonopoulos",
@@ -232,16 +214,14 @@ export const testAdvertisements: AdvertisementResponse[] = [
       bedrooms: 2
     },
     images: [
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5058c24_infocdn__n8fawnjfamtj9cynyzt4gus4p7rxa04egkhenvtvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d511c4f9_infocdn__hi36enq3pei2ptagpju82swjess6yd3kqxmx0lmejpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d527e7fe_infocdn__axdsghlnvm6hzno88bdtkb0bg8jzxm3vou3el4ljjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d531fb77_infocdn__bioeyek0enhdmoymoavbcuawxmeabqtqqolvlnghjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d545cc75_infocdn__rjaigtvlggeroefv9mnz1ip1so55vckoqwdkq42fjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d550a886_infocdn__qnkvj8pwp8yuoicrjmx3dz21hknyr5qsgbiqwdt0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5865f82_infocdn__oybnbdppflyrgiablczdragfp2qqnnen6ufwkbmrjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5d22967_infocdn__wdcss3farpl7znpds6vpwxb77zuypgiwjicccvr0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5f6cf77_infocdn__yqlosooq8kximrm3syblrngodrwksbcysgtjg0jvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d612c4e9_infocdn__muaih5abm5kjpovrqkebedrujwzgnhp5iwosl3jyjpg.jpg",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/e4688bcd-6990-4c1d-a1ab-ffec93c50017.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/8cdcd51b-6bc5-4317-8c59-6ff731993527.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/240fe7b9-5f1e-4749-bc86-f79f5c1cd72a.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/12a0d847-6fd7-4c21-99b6-1c20cf17f09f.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/96ceb7d4-57e3-4587-bf8a-da46571c0ee2.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/fedfbf25-b887-4458-8326-3457eb0884e3.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/prohost-api/Hosting-4786882/original/5b087f48-1927-4cab-bf60-dfb4e0e9a430.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/19bf5cc3-71e5-40b0-aa37-791ee05c2dc3.jpeg?im_w=1440",
     ],
     owner: {
       name: "Sofia Papas",
@@ -268,16 +248,13 @@ export const testAdvertisements: AdvertisementResponse[] = [
       bedrooms: 0
     },
     images: [
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5058c24_infocdn__n8fawnjfamtj9cynyzt4gus4p7rxa04egkhenvtvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d511c4f9_infocdn__hi36enq3pei2ptagpju82swjess6yd3kqxmx0lmejpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d527e7fe_infocdn__axdsghlnvm6hzno88bdtkb0bg8jzxm3vou3el4ljjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d531fb77_infocdn__bioeyek0enhdmoymoavbcuawxmeabqtqqolvlnghjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d545cc75_infocdn__rjaigtvlggeroefv9mnz1ip1so55vckoqwdkq42fjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d550a886_infocdn__qnkvj8pwp8yuoicrjmx3dz21hknyr5qsgbiqwdt0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5865f82_infocdn__oybnbdppflyrgiablczdragfp2qqnnen6ufwkbmrjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5d22967_infocdn__wdcss3farpl7znpds6vpwxb77zuypgiwjicccvr0jpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d5f6cf77_infocdn__yqlosooq8kximrm3syblrngodrwksbcysgtjg0jvjpg.jpg",
-      "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d612c4e9_infocdn__muaih5abm5kjpovrqkebedrujwzgnhp5iwosl3jyjpg.jpg",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/e8daf8a4-7f35-4aa3-8975-49a08254eb15.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/307c352c-4941-40b1-9b82-a85b5f2fad47.jpeg?im_w=1200",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/0ed36ed9-0014-4414-a163-103c8d5f52e8.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/d8e811b3-1542-4fd3-92fc-b045becc39ea.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/c846e446-b59a-40d4-8530-5f77352306b0.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/184d4086-315d-4b4b-9c2a-e1b93ac27a04.jpeg?im_w=1440",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/03a473d4-9eef-4894-872f-9f577e120885.jpeg?im_w=1440",
     ],
     owner: {
       name: "Giorgos Makris",

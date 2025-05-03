@@ -66,28 +66,37 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
           <img
             src={imageUrls[0]}
             alt="Imagen principal"
-            className="h-full object-cover rounded-l-2xl"
+            className="h-full w-full object-cover rounded-l-2xl"
           />
         </div>
-        <div className="hover:cursor-pointer" onClick={() => handleOpenModal(1)}>
+        <div
+          className="hover:cursor-pointer"
+          onClick={() => handleOpenModal(1)}
+        >
           <img
             src={imageUrls[1]}
             alt="Imagen 2"
-            className="h-full object-cover"
+            className="h-full w-full object-cover"
           />
         </div>
-        <div className="hover:cursor-pointer" onClick={() => handleOpenModal(2)}>
+        <div
+          className="hover:cursor-pointer"
+          onClick={() => handleOpenModal(2)}
+        >
           <img
             src={imageUrls[2]}
             alt="Imagen 3"
-            className="h-full object-cover rounded-tr-2xl"
+            className="h-full w-full object-cover rounded-tr-2xl"
           />
         </div>
-        <div className="hover:cursor-pointer" onClick={() => handleOpenModal(3)}>
+        <div
+          className="hover:cursor-pointer"
+          onClick={() => handleOpenModal(3)}
+        >
           <img
             src={imageUrls[3]}
             alt="Imagen 4"
-            className="h-full object-cover"
+            className="h-full w-full object-cover"
           />
         </div>
         <div
@@ -107,7 +116,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
           <img
             src={imageUrls[4]}
             alt="Imagen 5"
-            className="h-full object-cover rounded-br-2xl"
+            className="h-full w-full object-cover rounded-br-2xl"
           />
         </div>
       </div>

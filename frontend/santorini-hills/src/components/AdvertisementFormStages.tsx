@@ -1,13 +1,13 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { BsCaretLeft, BsCaretRight } from "react-icons/bs";
 import { FaCamera, FaDollarSign, FaLocationDot } from "react-icons/fa6";
-import { MdOutlineBed } from "react-icons/md";
-import { TbBath, TbMeterSquare, TbUpload } from "react-icons/tb";
+import { TbUpload } from "react-icons/tb";
 import { tiposInmuebles } from "../assets/tiposInmuebles";
 import { useAdvertisementContext } from "../context/advertisement/AdvertisementContext";
 import { useUserContext } from "../context/user/UserContext";
 import { Property, PropertyType } from "../models/property";
 import { User } from "../models/user";
+import AdvertisementPage from "../pages/AdvertisementPage";
 import { uploadFileToFirebase } from "../utils/UploadFileToFirebase";
 import FormRadioOption from "./FormRadioOption";
 import StageContainer from "./FormStageContainer";
@@ -15,8 +15,7 @@ import NavigationButtons from "./NavigationButtons";
 import NumberInputWithButtons from "./NumberInputWithButtons";
 import PlaceInput from "./PlaceInput";
 import TextInput from "./TextInput";
-import { motion, AnimatePresence } from "framer-motion";
-
+import { formatNumber } from "../utils/parseNumbers";
 
 export const AdvertisementTypeStage = () => {
   const { property, setNextStage } = useAdvertisementContext();
@@ -59,9 +58,9 @@ export const AdvertisementTypeStage = () => {
 
 export const PropertyLocationStage = () => {
   const { property, setNextStage, setPrevStage } = useAdvertisementContext();
-  const [propertyLocation, setPropertyLocation] = useState<Property["location"]>(
-    property.location || { latitude: 0, longitude: 0 }
-  );
+  const [propertyLocation, setPropertyLocation] = useState<
+    Property["location"]
+  >(property.location || { latitude: 0, longitude: 0 });
   const [propertyAddress, setPropertyAddress] = useState<string>(
     property.address || ""
   );
@@ -71,18 +70,22 @@ export const PropertyLocationStage = () => {
     setNextStage({
       property: {
         location: propertyLocation,
-        address: propertyAddress
-      }
+        address: propertyAddress,
+      },
     });
   };
 
-  const handlePlaceSelected = (locationData: {latitude: number; longitude: number; address: string}) => {
+  const handlePlaceSelected = (locationData: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  }) => {
     // Extraer solo las propiedades de ubicación requeridas para el tipo Property.location
     setPropertyLocation({
       latitude: locationData.latitude,
-      longitude: locationData.longitude
+      longitude: locationData.longitude,
     });
-    
+
     // Establecer la dirección como propiedad separada
     setPropertyAddress(locationData.address);
   };
@@ -112,15 +115,23 @@ export const PropertyLocationStage = () => {
 };
 
 export const AdvertisementPicturesStage = () => {
-  const { advertisement, setNextStage, setPrevStage } = useAdvertisementContext();
+  const { advertisement, setNextStage, setPrevStage } =
+    useAdvertisementContext();
 
-  const [advertisementPictures, setAdvertisementPictures] = useState<File[]>([]);
-  const [imageUrls, setImageUrls] = useState<string[]>(advertisement.images || []);
+  const [advertisementPictures, setAdvertisementPictures] = useState<File[]>(
+    []
+  );
+  const [imageUrls, setImageUrls] = useState<string[]>(
+    advertisement.images || []
+  );
   const [isUploading, setIsUploading] = useState(false);
 
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
-  const [selectedImageIsUploaded, setSelectedImageIsUploaded] = useState<boolean>(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
+    null
+  );
+  const [selectedImageIsUploaded, setSelectedImageIsUploaded] =
+    useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -156,7 +167,9 @@ export const AdvertisementPicturesStage = () => {
     if (selectedImageIsUploaded) {
       setImageUrls((prev) => prev.filter((_, i) => i !== selectedImageIndex));
     } else {
-      setAdvertisementPictures((prev) => prev.filter((_, i) => i !== selectedImageIndex));
+      setAdvertisementPictures((prev) =>
+        prev.filter((_, i) => i !== selectedImageIndex)
+      );
     }
 
     // Reset confirm state
@@ -197,11 +210,15 @@ export const AdvertisementPicturesStage = () => {
         <StageContainer title="Agrega algunas fotos de tu propiedad">
           <div className="flex flex-col items-center gap-6 h-full w-max m-auto">
             <FaCamera size={100} className="text-accent" />
-            {(advertisementPictures.length + imageUrls.length) < 10 && <FileUploadComponent />}
+            {advertisementPictures.length + imageUrls.length < 10 && (
+              <FileUploadComponent />
+            )}
 
             <p>
-              {(advertisementPictures.length + imageUrls.length) > 0
-                ? `${advertisementPictures.length + imageUrls.length} fotos seleccionadas`
+              {advertisementPictures.length + imageUrls.length > 0
+                ? `${
+                    advertisementPictures.length + imageUrls.length
+                  } fotos seleccionadas`
                 : "Selecciona al menos 5 fotos"}
             </p>
 
@@ -255,7 +272,6 @@ export const AdvertisementPicturesStage = () => {
                     </motion.div>
                   ))}
                 </AnimatePresence>
-
               </div>
             )}
           </div>
@@ -263,7 +279,9 @@ export const AdvertisementPicturesStage = () => {
 
         <NavigationButtons
           onBack={setPrevStage}
-          canContinue={(advertisementPictures.length + imageUrls.length) >= 5 && !isUploading}
+          canContinue={
+            advertisementPictures.length + imageUrls.length >= 5 && !isUploading
+          }
         />
       </form>
 
@@ -283,7 +301,9 @@ export const AdvertisementPicturesStage = () => {
               transition={{ duration: 0.25 }}
             >
               <h3 className="text-lg font-semibold">¿Eliminar esta imagen?</h3>
-              <p className="text-gray-600 text-sm">Esta acción no se puede deshacer.</p>
+              <p className="text-gray-600 text-sm">
+                Esta acción no se puede deshacer.
+              </p>
               <div className="flex justify-center gap-4 mt-4">
                 <button
                   onClick={() => setShowConfirmDelete(false)}
@@ -302,12 +322,9 @@ export const AdvertisementPicturesStage = () => {
           </motion.div>
         )}
       </AnimatePresence>
-
     </div>
   );
 };
-
-
 
 export const AdvertisementTitleStage = () => {
   const { advertisement, setNextStage, setPrevStage } =
@@ -516,9 +533,6 @@ export const AdvertisementPriceStage = () => {
     }
   };
 
-  const formatNumber = (value: number) => {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  };
 
   return (
     <form className="flex flex-col w-10/12 gap-10" onSubmit={handleSubmit}>
@@ -545,8 +559,6 @@ export const AdvertisementPreviewStage = () => {
   const { advertisement, setPrevStage, setNextStage } =
     useAdvertisementContext();
   const { user } = useUserContext();
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { property } = advertisement;
 
   const handleConfirm = () => {
     const advertisementWithOwner = {
@@ -559,184 +571,30 @@ export const AdvertisementPreviewStage = () => {
     });
   };
 
-  const goToNextImage = () => {
-    if (
-      advertisement.images &&
-      currentImageIndex < advertisement.images.length - 1
-    ) {
-      setCurrentImageIndex(currentImageIndex + 1);
-    }
-  };
-
-  const goToPrevImage = () => {
-    if (currentImageIndex > 0) {
-      setCurrentImageIndex(currentImageIndex - 1);
-    }
-  };
-
-  const selectImage = (index: number) => {
-    setCurrentImageIndex(index);
-  };
-
-  // Obtener el tipo de propiedad en formato legible
-  const propertyTypeObj = tiposInmuebles.find(
-    (tipo) => tipo.id === property?.type
-  );
-  const propertyTypeName = propertyTypeObj ? propertyTypeObj.nombre : "";
-
   return (
-    <div className="flex flex-col w-10/12 gap-6">
-      <h2 className="text-2xl font-bold mb-4">Vista previa de tu anuncio</h2>
-
-      {/* Imagen principal y galería */}
-      <div className="w-full rounded-xl overflow-hidden bg-gray-100 relative">
-        {/* Imagen principal */}
-        {advertisement.images && advertisement.images.length > 0 ? (
-          <div className="w-full h-96 relative">
-            <img
-              src={advertisement.images[currentImageIndex]}
-              alt={advertisement.title}
-              className="w-full h-full object-cover"
-            />
-            
-
-            {/* Botones de navegación de imágenes */}
-            {advertisement.images.length > 1 && (
-              <>
-                <button
-                  onClick={goToPrevImage}
-                  disabled={currentImageIndex === 0}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 disabled:opacity-30"
-                >
-                  <BsCaretLeft />
-                </button>
-                <button
-                  onClick={goToNextImage}
-                  disabled={
-                    currentImageIndex === advertisement.images.length - 1
-                  }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 disabled:opacity-30"
-                >
-                  <BsCaretRight />
-                </button>
-              </>
-            )}
-          </div>
-        ) : (
-          <div className="w-full h-96 bg-gray-200 flex items-center justify-center">
-            <p className="text-gray-500">No hay imágenes disponibles</p>
-          </div>
-        )}
-
-        {/* Miniaturas */}
-        {advertisement.images && advertisement.images.length > 0 && (
-          <div className="flex overflow-x-auto gap-2 p-2 bg-white">
-            {advertisement.images.map((image, index) => (
-              <div
-                key={index}
-                onClick={() => selectImage(index)}
-                className={`w-20 h-20 flex-shrink-0 cursor-pointer ${
-                  index === currentImageIndex
-                    ? "border-2 border-accent"
-                    : "opacity-70"
-                }`}
-              >
-                <img
-                  src={image}
-                  alt={`Miniatura ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Contenido principal */}
-      <div className="flex flex-col md:flex-row gap-8 mt-4">
-        {/* Panel izquierdo: Detalles del anuncio */}
-        <div className="flex flex-col flex-1 gap-6">
-          <section>
-            <h1 className="text-3xl font-semibold">{advertisement.title}</h1>
-            <p className="text-gray-600">{advertisement.property?.address}</p>
-
-            {/* Características de la propiedad */}
-            <div className="flex gap-4 mt-2">
-              <div className="flex items-center gap-1 text-accent">
-                <MdOutlineBed size={20} />
-                <p className="font-medium">{property?.bedrooms || 0}</p>
-              </div>
-              <div className="flex items-center gap-1 text-accent">
-                <TbBath size={20} />
-                <p className="font-medium">{property?.bathrooms || 0}</p>
-              </div>
-              <div className="flex items-center gap-1 text-accent">
-                <TbMeterSquare size={20} />
-                <p className="font-medium">{property?.area || 0} m²</p>
-              </div>
-              {propertyTypeName && (
-                <div className="flex items-center gap-1">
-                  <span className="font-medium text-gray-600">
-                    {propertyTypeName}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* Descripción */}
-            <div className="mt-6">
-              <h2 className="text-xl font-medium mb-2">Descripción</h2>
-              <p className="text-gray-700">{advertisement.description}</p>
-            </div>
-          </section>
-        </div>
-
-        {/* Panel derecho: Precio y contacto */}
-        <div className="w-full md:w-1/3">
-          <div className="bg-white shadow-md rounded-xl p-6">
-            <h2 className="text-2xl font-bold text-accent">
-              ${advertisement.price.toLocaleString()}
-            </h2>
-            <div className="mt-4 border-t pt-4">
-              <div className="flex items-center gap-2">
-                <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center text-white">
-                  {user?.name ? user.name.charAt(0).toUpperCase() : "?"}
-                </div>
-                <div>
-                  <p className="font-medium">{user?.name || "Usuario"}</p>
-                  <p className="text-sm text-gray-500">{user?.email}</p>
-                </div>
-              </div>
-              <p className="mt-3 text-sm text-gray-500">
-                Esta previsualización muestra cómo verán los usuarios tu
-                anuncio.
-              </p>
-            </div>
+    <section className="flex flex-col items-center w-10/12">
+      <div className="flex items-center justify-between w-10/12 gap-6">
+        <span className="text-neutral-600">Vista previa de tu anuncio</span>
+        <div className="min-w-56">
+          <div className="flex gap-4">
+            <button
+              type="button" // Especificamos type button para que no envíe el formulario
+              onClick={setPrevStage}
+              className="form-button max-w-40 hover:bg-black/10 text-accent border-2 border-accent font-semibold"
+            >
+              Atrás
+            </button>
+            <button
+              type="button"
+              className="form-button bg-accent text-white hover:bg-slate-800"
+              onClick={handleConfirm}
+            >
+              Publicar
+            </button>
           </div>
         </div>
       </div>
-
-      {/* Botones de navegación */}
-      <div className="flex items-center justify-between mt-8 w-full">
-        <div className="w-max">
-          <button
-            type="button"
-            onClick={setPrevStage}
-            className="form-button px-8 text-accent hover:bg-black/10 border-accent border-2 transition-all"
-          >
-            Atrás
-          </button>
-        </div>
-        <div className="w-max">
-          <button
-            type="button"
-            onClick={handleConfirm}
-            className="form-button w-40 px-8 bg-accent hover:bg-slate-800 text-white transition-all font-semibold border-2 border-accent"
-          >
-            Publicar anuncio
-          </button>
-        </div>
-      </div>
-    </div>
+      <AdvertisementPage advertisement={advertisement} demoPage />
+    </section>
   );
 };

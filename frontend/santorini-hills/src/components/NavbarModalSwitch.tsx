@@ -29,7 +29,7 @@ const NavbarModalSwitch = ({ Icon, children }: NavbarModalSwitchProps) => {
           <Icon size={20}/>
         </button>
         {isOpen && (
-          <div className="absolute w-56 max-h-80 overflow-y-auto top-full right-0 mt-2 bg-white rounded shadow-lg border-t-4 border-accent p-2">
+          <div className="absolute w-56 max-h-80 overflow-y-auto top-full right-0 mt-2 bg-white rounded-md shadow-lg border-t-4 border-accent p-2">
             {children}
           </div>
         )}

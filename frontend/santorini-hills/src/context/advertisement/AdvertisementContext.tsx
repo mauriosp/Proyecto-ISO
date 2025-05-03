@@ -1,15 +1,15 @@
 import { createContext, useContext } from "react";
-import { AdvertisementPost } from "../../models/advertisement";
+import { Advertisement, AdvertisementPost } from "../../models/advertisement";
 import { Property } from "../../models/property";
 
 type AdvertisementContextType = {
   stage: number;
-  advertisement: AdvertisementPost;
+  advertisement: Advertisement;
   property: Property;
   setAdvertisement: (advertisement: AdvertisementPost) => void;
   setProperty: (property: Property) => void;
   setNextStage: (updates: {
-    advertisement?: Partial<AdvertisementPost>;
+    advertisement?: Partial<Advertisement>;
     property?: Partial<Property>;
   }) => void;
   setPrevStage: () => void;

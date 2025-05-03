@@ -4,7 +4,7 @@ import NavbarModalSwitch from "./NavbarModalSwitch";
 import Separator from "./Separator";
 import { useModalContext, ModalView } from "../context/modal/ModalContext";
 import { FaExclamationCircle } from "react-icons/fa";
-import { Link } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const UserButtons = () => {
   const { user, logout } = useUserContext();
@@ -12,19 +12,27 @@ const UserButtons = () => {
   const handleClick = (view: ModalView) => {
     openModal(view);
   };
+  // Add this at component level
+  const navigate = useNavigate();
 
   const handlePostClick = () => {
     if (user && !user?.isVerified) {
       openModal("verification");
+    } else {
+      // Replace placeholder with:
+      navigate("/postAdvertisement");
     }
-  }
+  };
   return (
     <div className="flex items-center w-full text-accent gap-4">
       {user?.profile === "owner" && (
-        <Link to={"postAdvertisement"} onClick={handlePostClick} className="flex items-center justify-center gap-3 hover:cursor-pointer rounded-md py-3 px-4 h-min w-max hover:bg-slate-800 bg-accent text-white font-semibold transition-all">
+        <button
+          onClick={handlePostClick}
+          className="flex items-center justify-center gap-3 hover:cursor-pointer rounded-md py-3 px-4 h-min w-max hover:bg-slate-800 bg-accent text-white font-semibold transition-all"
+        >
           Publicar
           <FaHouseChimney size={18} />
-        </Link>
+        </button>
       )}
       <NavbarModalSwitch Icon={FaInbox}>
         <div className="flex flex-col gap-1">
@@ -40,7 +48,7 @@ const UserButtons = () => {
         <div className="flex flex-col gap-3">
           <h2 className="text-lg font-semibold">Mi perfil</h2>
           <Separator />
-          <div>
+          <div className="px-2">
             <div className="flex items-center gap-1">
               <h3 className="text-sm font-medium">{user?.name}</h3>{" "}
               {!user?.isVerified && (
@@ -57,13 +65,23 @@ const UserButtons = () => {
           </div>
         </div>
         <div className="flex flex-col gap-1 mt-4">
-          <a
-            href="#"
-            onClick={() => handleClick("edit")}
-            className="hover:bg-black/10 p-2 rounded-md transition-all"
-          >
-            Editar perfil
-          </a>
+          <div className="flex flex-col">
+            <a
+              href="#"
+              onClick={() => handleClick("edit")}
+              className="hover:bg-black/10 p-2 rounded-md transition-all"
+            >
+              Mi cuenta
+            </a>
+            {user?.profile === "owner" && (
+              <a
+                href="#"
+                className="hover:bg-black/10 p-2 rounded-md transition-all"
+              >
+                Mis propiedades
+              </a>
+            )}
+          </div>
           <a
             href="#"
             onClick={logout}

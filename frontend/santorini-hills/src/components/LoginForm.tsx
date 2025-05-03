@@ -20,6 +20,7 @@ const LoginForm = () => {
       .catch((error) => {
         console.error("Login failed", error);
       });
+    
     console.log({ email: data.email, password: data.password });
   };
 
