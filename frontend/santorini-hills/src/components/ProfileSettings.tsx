@@ -13,7 +13,7 @@ type EditProfileForm = {
   profilePhoto: FileList;
 };
 
-const EditForm = () => {
+const ProfileSettings = () => {
   const { user, setUser } = useUserContext();
   const { closeModal } = useModalContext();
 
@@ -231,4 +231,4 @@ const EditForm = () => {
   );
 };
 
-export default EditForm;
+export default ProfileSettings;

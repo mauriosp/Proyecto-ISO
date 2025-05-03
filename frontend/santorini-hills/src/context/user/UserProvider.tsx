@@ -10,6 +10,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null);
 
   const ownerUser: User = {
+    id: "1",
     name: "Juan Pérez",
     email: "juanperez@email.com",
     password: null,
@@ -20,6 +21,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const renterUser: User = {
+    id: "1",
     name: "María López",
     email: "maria@email.com",
     password: null,
@@ -36,13 +38,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       // Usuario por defecto si no hay nada guardado (solo para pruebas)
 
       // Solo para pruebas (owner)
-        setUser(ownerUser);
+      setUser(ownerUser);
 
       // Solo para pruebas (renter)
-        // setUser(renterUser);
+      // setUser(renterUser);
 
       // No logeado por defecto
-    //   setUser(null);
+      //   setUser(null);
     }
   }, []);
   /*

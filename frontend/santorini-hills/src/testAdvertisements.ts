@@ -28,6 +28,7 @@ export const testAdvertisements: Advertisement[] = [
       "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d612c4e9_infocdn__muaih5abm5kjpovrqkebedrujwzgnhp5iwosl3jyjpg.jpg",
     ],
     owner: {
+      id: "1",
       name: "Maria Papadopoulos",
       email: "maria@example.com",
       password: "securepassword1",
@@ -60,6 +61,7 @@ export const testAdvertisements: Advertisement[] = [
       "https://a0.muscache.com/im/pictures/miso/Hosting-781337955812915390/original/48964b50-4eef-4178-854c-7eb181479790.jpeg?im_w=1440",
     ],
     owner: {
+      id: "456",
       name: "Nikos Andreou",
       email: "nikos@example.com",
       password: "securepassword2",
@@ -94,6 +96,7 @@ export const testAdvertisements: Advertisement[] = [
       "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/19bf5cc3-71e5-40b0-aa37-791ee05c2dc3.jpeg?im_w=1440",
     ],
     owner: {
+      id: "84567",
       name: "Elena Dimitriou",
       email: "elena@example.com",
       password: "securepassword3",
@@ -125,6 +128,7 @@ export const testAdvertisements: Advertisement[] = [
       "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTIxNzU2OTEzMzE1NzU4OTE5NQ==/original/dc7ceb4c-fbbd-4477-a4bb-79a6ff687b81.jpeg?im_w=1440",
     ],
     owner: {
+      id: "1",
       name: "Andreas Roussos",
       email: "andreas@example.com",
       password: "securepassword4",
@@ -158,6 +162,7 @@ export const testAdvertisements: Advertisement[] = [
       "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/03a473d4-9eef-4894-872f-9f577e120885.jpeg?im_w=1440",
     ],
     owner: {
+      id: "1234",
       name: "Kostas Georgiou",
       email: "kostas@example.com",
       password: "securepassword5",
@@ -169,7 +174,7 @@ export const testAdvertisements: Advertisement[] = [
   {
     id: 6,
     title: "Rustic cabin with vineyard views",
-    description: "Experience the agricultural side of Santorini in this charming cabin surrounded by vineyards.",
+    description: "Experience the agricultural side of Santorini in this charming cabin surrounded by vineyards. Experience the agricultural side of Santorini in this charming cabin surrounded by vineyards. Experience the agricultural side of Santorini in this charming cabin surrounded by vineyards. Experience the agricultural side of Santorini in this charming cabin surrounded by vineyards. Experience the agricultural side of Santorini in this charming cabin surrounded by vineyards. ",
     price: 750,
     status: "available",
     publicationDate: new Date("2023-11-10"),
@@ -190,6 +195,7 @@ export const testAdvertisements: Advertisement[] = [
       "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTA0NTM0NzM5Nzk0MzMyMzI4OQ%3D%3D/original/2c667421-617d-40b4-9a04-3494e1e524bb.jpeg?im_w=1440",
     ],
     owner: {
+      id: "1",
       name: "Dimitris Antonopoulos",
       email: "dimitris@example.com",
       password: "securepassword6",
@@ -224,6 +230,7 @@ export const testAdvertisements: Advertisement[] = [
       "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NDc4Njg4Mg%3D%3D/original/19bf5cc3-71e5-40b0-aa37-791ee05c2dc3.jpeg?im_w=1440",
     ],
     owner: {
+      id: "1",
       name: "Sofia Papas",
       email: "sofia@example.com",
       password: "securepassword7",
@@ -257,6 +264,7 @@ export const testAdvertisements: Advertisement[] = [
       "https://a0.muscache.com/im/pictures/miso/Hosting-48748370/original/03a473d4-9eef-4894-872f-9f577e120885.jpeg?im_w=1440",
     ],
     owner: {
+      id: "1",
       name: "Giorgos Makris",
       email: "giorgos@example.com",
       password: "securepassword8",
@@ -293,6 +301,7 @@ export const testAdvertisements: Advertisement[] = [
       "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d612c4e9_infocdn__muaih5abm5kjpovrqkebedrujwzgnhp5iwosl3jyjpg.jpg",
     ],
     owner: {
+      id: "1",
       name: "Anna Kyriakidou",
       email: "anna@example.com",
       password: "securepassword9",
@@ -329,6 +338,7 @@ export const testAdvertisements: Advertisement[] = [
       "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d612c4e9_infocdn__muaih5abm5kjpovrqkebedrujwzgnhp5iwosl3jyjpg.jpg",
     ],
     owner: {
+      id: "1",
       name: "Petros Economou",
       email: "petros@example.com",
       password: "securepassword10",
