@@ -13,7 +13,7 @@ export type PropertyType =
 export interface Property {
   id?: string;
   type: PropertyType;
-  location: { latitude: number; longitude: number };
+  location: { latitude: number; longitude: number } | null;
   address: string;
   area: number; // in square meters
   bathrooms: number;
@@ -66,8 +66,8 @@ export const propertyPresenter = (
     tipo: property.type,
     direccion: property.address,
     localizacion: {
-      latitud: property.location.latitude,
-      longitud: property.location.longitude,
+      latitud: property.location ? property.location.latitude : 0,
+      longitud: property.location ? property.location.longitude : 0,
     },
     area: property.area,
     caracteristicas: property.extraInfo || [],

@@ -1,6 +1,6 @@
 import axios from "axios";
-import { User, userAdapter, UserGet } from "../models/user";
-import { userPresenter } from "../models/user";
+import { User, userAdapter, userPresenter, UserGet } from "../models/user";
+import { Advertisement } from "../models/advertisement";
 
 export const register = async (user: User) => {
   try {
@@ -39,5 +39,16 @@ export const login = async (email: string, password: string): Promise<User | Err
       }
     }
     throw error; // Otro tipo de error
+  }
+}
+
+export const publishAdvertisement = async (advertisement: Advertisement) => {
+  try {
+    const response = await axios.post("/advertisement", advertisement);
+    console.log("Response from publishAdvertisement:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error publishing advertisement:", error);
+    throw error;
   }
 }

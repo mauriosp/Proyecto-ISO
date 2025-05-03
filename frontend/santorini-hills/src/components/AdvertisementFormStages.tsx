@@ -16,6 +16,9 @@ import NumberInputWithButtons from "./NumberInputWithButtons";
 import PlaceInput from "./PlaceInput";
 import TextInput from "./TextInput";
 import { formatNumber } from "../utils/parseNumbers";
+import { Advertisement } from "../models/advertisement";
+import { publishAdvertisement } from "../utils/APICalls";
+import { redirect } from "react-router";
 
 export const AdvertisementTypeStage = () => {
   const { property, setNextStage } = useAdvertisementContext();
@@ -216,9 +219,8 @@ export const AdvertisementPicturesStage = () => {
 
             <p>
               {advertisementPictures.length + imageUrls.length > 0
-                ? `${
-                    advertisementPictures.length + imageUrls.length
-                  } fotos seleccionadas`
+                ? `${advertisementPictures.length + imageUrls.length
+                } fotos seleccionadas`
                 : "Selecciona al menos 5 fotos"}
             </p>
 
@@ -556,19 +558,34 @@ export const AdvertisementPriceStage = () => {
 };
 
 export const AdvertisementPreviewStage = () => {
-  const { advertisement, setPrevStage, setNextStage } =
+  const { advertisement, setPrevStage, setAdvertisement } =
     useAdvertisementContext();
   const { user } = useUserContext();
 
   const handleConfirm = () => {
-    const advertisementWithOwner = {
+    const advertisementWithOwnerAndStatus: Advertisement = {
       ...advertisement,
-      owner: user,
+      owner: user as User,
+      status: "pending",
     };
-    console.log("Advertisement to be published:", advertisementWithOwner);
-    setNextStage({
-      advertisement: { owner: user as User, status: "available" },
-    });
+    console.log("Advertisement to be published:", advertisementWithOwnerAndStatus);
+    setAdvertisement(
+      advertisementWithOwnerAndStatus,
+    );
+
+    // Aquí puedes agregar la lógica para enviar el anuncio a la API o realizar cualquier otra acción necesaria
+    publishAdvertisement(advertisementWithOwnerAndStatus)
+      .then((response) => {
+        console.log("Anuncio publicado con éxito:", response);
+        redirect("/advertisement/" + response.id); // Redirigir a la página del anuncio publicado
+      })
+      .catch((error) => {
+        console.error("Error al publicar el anuncio:", error);
+        
+      });
+
+
+
   };
 
   return (
