@@ -63,6 +63,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logout = () => {
     setUser(null);
+    window.location.href = "/";
   };
 
   return (

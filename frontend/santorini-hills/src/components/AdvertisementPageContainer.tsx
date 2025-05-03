@@ -4,7 +4,9 @@ import AdvertisementPage from "../pages/AdvertisementPage";
 
 const AdvertisementPageContainer = () => {
   const { id } = useParams<{ id: string }>();
-  const advertisement = testAdvertisements.find((ad) => ad.id === Number(id));
+
+  // Llamado a la API para obtener el anuncio por ID
+  const advertisement = testAdvertisements.find((ad) => ad.id === Number(id)); // Simulación de la API
 
   if (!advertisement) {
     return <p className="text-center text-red-500">Anuncio no encontrado</p>;

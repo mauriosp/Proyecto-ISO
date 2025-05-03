@@ -79,6 +79,9 @@ const EditForm = () => {
     if (confirmed) {
       setUser(null);
       localStorage.removeItem("loggedUser");
+      // Llamado a la API para eliminar la cuenta
+      
+      window.location.href = "/";
     }
   };
 

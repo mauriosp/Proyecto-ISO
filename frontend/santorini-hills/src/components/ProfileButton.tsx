@@ -2,16 +2,13 @@ import { FaHouseChimney, FaInbox, FaUser } from "react-icons/fa6";
 import { useUserContext } from "../context/user/UserContext";
 import NavbarModalSwitch from "./NavbarModalSwitch";
 import Separator from "./Separator";
-import { useModalContext, ModalView } from "../context/modal/ModalContext";
+import { useModalContext } from "../context/modal/ModalContext";
 import { FaExclamationCircle } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const UserButtons = () => {
   const { user, logout } = useUserContext();
   const { openModal } = useModalContext();
-  const handleClick = (view: ModalView) => {
-    openModal(view);
-  };
   // Add this at component level
   const navigate = useNavigate();
 
@@ -66,29 +63,28 @@ const UserButtons = () => {
         </div>
         <div className="flex flex-col gap-1 mt-4">
           <div className="flex flex-col">
-            <a
-              href="#"
-              onClick={() => handleClick("edit")}
+            <Link
+              to={"/settings/profile"}
               className="hover:bg-black/10 p-2 rounded-md transition-all"
             >
               Mi cuenta
-            </a>
+            </Link>
             {user?.profile === "owner" && (
-              <a
-                href="#"
+              <Link
+                to={"/settings/properties"}
                 className="hover:bg-black/10 p-2 rounded-md transition-all"
               >
                 Mis propiedades
-              </a>
+              </Link>
             )}
           </div>
-          <a
-            href="#"
+          <Link
+            to={"/"}
             onClick={logout}
             className="font-medium text-red-500 p-2 rounded-md hover:text-white hover:bg-red-500 transition-all"
           >
             Cerrar sesión
-          </a>
+          </Link>
         </div>
       </NavbarModalSwitch>
     </div>

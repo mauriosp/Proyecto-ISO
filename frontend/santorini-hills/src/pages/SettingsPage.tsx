@@ -1,4 +1,10 @@
-const ProfilePage = () => {
+import { useParams } from "react-router";
+import EditForm from "../components/EditForm";
+
+const SettingsPage = () => {
+  type Settings = "profile" | "properties" | "notifications" | "security" | "payment" | "privacy";
+  const { setting } = useParams<{ setting : string }>();
+
   return (
     <div className="flex max-w-7xl mx-auto min-h-[calc(100vh-10rem)] mt-5 gap-3">
       <aside className="w-1/4 rounded-xl bg-white shadow-lg p-4 font-medium text-neutral-800">
@@ -11,11 +17,11 @@ const ProfilePage = () => {
           </li>
         </ul>
       </aside>
-      <main className="flex-1 py-6 px-10 rounded-xl bg-white shadow-lg">
-        <h2 className="font-semibold text-4xl">Perfil</h2>
+      <main className="flex-1 p-10 rounded-xl bg-white shadow-lg">
+        <EditForm />
       </main>
     </div>
   );
 };
 
-export default ProfilePage;
+export default SettingsPage;

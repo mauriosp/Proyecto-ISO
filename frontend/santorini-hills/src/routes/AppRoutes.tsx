@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router";
 import Home from "../pages/Home";
 import PostAdvertisement from "../pages/PostAdvertisement";
 import Layout from "../layouts/Layout";
-import ProfilePage from "../pages/ProfilePage";
+import SettingsPage from "../pages/SettingsPage";
 import AdvertisementPageContainer from "../components/AdvertisementPageContainer";
 
 const AppRoutes = () => {
@@ -11,7 +11,7 @@ const AppRoutes = () => {
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="advertisements/:id" element={<AdvertisementPageContainer />} />
-        <Route path="profile" element={<ProfilePage />} />
+        <Route path="/settings/:setting" element={<SettingsPage />} />
       </Route>
 
       <Route path="postAdvertisement" element={<PostAdvertisement />} />
