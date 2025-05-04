@@ -9,6 +9,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const ownerUser: User = {
     id: "1",
     name: "Juan Pérez",
@@ -21,12 +22,23 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const renterUser: User = {
-    id: "1",
+    id: "4",
     name: "María López",
     email: "maria@email.com",
     password: null,
     phone: "+573001112244",
     profile: "renter",
+    isVerified: true,
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const adminUser: User = {
+    id: "2",
+    name: "Admin",
+    email: "admin@santorini.com",
+    password: null,
+    phone: "+573001112233",
+    profile: "admin",
     isVerified: true,
   };
 
@@ -38,10 +50,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       // Usuario por defecto si no hay nada guardado (solo para pruebas)
 
       // Solo para pruebas (owner)
-      setUser(ownerUser);
+      // setUser(ownerUser);
 
       // Solo para pruebas (renter)
       // setUser(renterUser);
+      
+      // Solo para pruebas (admin)
+      setUser(adminUser);
 
       // No logeado por defecto
       //   setUser(null);

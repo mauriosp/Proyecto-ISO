@@ -16,6 +16,7 @@ const AppRoutes = () => {
 
       <Route element={<Layout />}>
         <Route path="publish" element={<PostAdvertisement />} />
+        <Route path="edit/:id" element={<PostAdvertisement />} />
       </Route>
     </Routes>
   );

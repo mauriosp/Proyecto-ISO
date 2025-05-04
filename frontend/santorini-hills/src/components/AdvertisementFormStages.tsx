@@ -2,12 +2,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { FaCamera, FaDollarSign, FaLocationDot, FaPlus, FaTrash } from "react-icons/fa6";
 import { TbUpload } from "react-icons/tb";
+import { redirect, useLocation, useParams } from "react-router";
 import { tiposInmuebles } from "../assets/tiposInmuebles";
 import { useAdvertisementContext } from "../context/advertisement/AdvertisementContext";
 import { useUserContext } from "../context/user/UserContext";
 import { Property, PropertyType } from "../models/property";
-import { User } from "../models/user";
 import AdvertisementPage from "../pages/AdvertisementPage";
+import { publishAdvertisement, updateAdvertisement } from "../utils/APICalls";
+import { formatNumber } from "../utils/parseNumbers";
 import { uploadFileToFirebase } from "../utils/UploadFileToFirebase";
 import FormRadioOption from "./FormRadioOption";
 import StageContainer from "./FormStageContainer";
@@ -15,10 +17,6 @@ import NavigationButtons from "./NavigationButtons";
 import NumberInputWithButtons from "./NumberInputWithButtons";
 import PlaceInput from "./PlaceInput";
 import TextInput from "./TextInput";
-import { formatNumber } from "../utils/parseNumbers";
-import { Advertisement } from "../models/advertisement";
-import { publishAdvertisement } from "../utils/APICalls";
-import { redirect } from "react-router";
 
 export const AdvertisementTypeStage = () => {
   const { property, setNextStage } = useAdvertisementContext();
@@ -639,31 +637,38 @@ export const AdvertisementPreviewStage = () => {
   const { advertisement, setPrevStage, setAdvertisement } =
     useAdvertisementContext();
   const { user } = useUserContext();
+  const location = useLocation();
+  const { id } = useParams();
+  const isEdit = location.pathname.startsWith("/edit/");
 
   const handleConfirm = () => {
-    const advertisementWithOwnerAndStatus: Advertisement = {
+    if (!user) {
+      console.error("No hay usuario autenticado para asignar como owner.");
+      return;
+    }
+    const advertisementWithOwnerAndStatus = {
       ...advertisement,
-      owner: user as User,
-      status: "pending",
+      owner: user,
+      status: "pending" as const,
     };
-    console.log("Advertisement to be published:", advertisementWithOwnerAndStatus);
-    setAdvertisement(
-      advertisementWithOwnerAndStatus,
-    );
-
-    // Aquí puedes agregar la lógica para enviar el anuncio a la API o realizar cualquier otra acción necesaria
-    publishAdvertisement(advertisementWithOwnerAndStatus)
-      .then((response) => {
-        console.log("Anuncio publicado con éxito:", response);
-        redirect("/advertisement/" + response.id); // Redirigir a la página del anuncio publicado
-      })
-      .catch((error) => {
-        console.error("Error al publicar el anuncio:", error);
-
-      });
-
-
-
+    setAdvertisement(advertisementWithOwnerAndStatus);
+    if (isEdit && id) {
+      updateAdvertisement(id, advertisementWithOwnerAndStatus)
+        .then((response) => {
+          redirect("/advertisement/" + response.id);
+        })
+        .catch((error) => {
+          console.error("Error al actualizar el anuncio:", error);
+        });
+    } else {
+      publishAdvertisement(advertisementWithOwnerAndStatus)
+        .then((response) => {
+          redirect("/advertisement/" + response.id);
+        })
+        .catch((error) => {
+          console.error("Error al publicar el anuncio:", error);
+        });
+    }
   };
 
   return (
@@ -673,18 +678,18 @@ export const AdvertisementPreviewStage = () => {
         <div className="min-w-56">
           <div className="flex gap-4">
             <button
-              type="button" // Especificamos type button para que no envíe el formulario
+              type="button"
               onClick={setPrevStage}
-              className="form-button max-w-40 hover:bg-black/10 text-accent border-2 border-accent font-semibold"
+              className="px-4 form-button max-w-40 hover:bg-black/10 text-accent border-2 border-accent font-semibold"
             >
               Atrás
             </button>
             <button
               type="button"
-              className="form-button bg-accent text-white hover:bg-slate-800"
+              className="min-w-max form-button px-4 bg-accent text-white hover:bg-slate-800"
               onClick={handleConfirm}
             >
-              Publicar
+              {isEdit ? "Publicar cambios" : "Publicar"}
             </button>
           </div>
         </div>
