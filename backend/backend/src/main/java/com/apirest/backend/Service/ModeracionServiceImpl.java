@@ -4,7 +4,6 @@ import com.apirest.backend.Model.Aviso;
 import com.apirest.backend.Repository.AvisoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +16,6 @@ public class ModeracionServiceImpl implements IModeracionService {
 
     @Override
     public void moderarAviso(String avisoId, String accion, String motivo) {
-        ObjectId objAvisoId = new ObjectId(avisoId);
         
         Aviso aviso = avisoRepository.findById(avisoId)
                 .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
@@ -34,8 +32,8 @@ public class ModeracionServiceImpl implements IModeracionService {
         avisoRepository.save(aviso);
         
         // Notificar al propietario sobre la moderación
-        ObjectId propietarioId = aviso.getIdPropietario();
-        notificacionService.notificarModeracionAviso(propietarioId, objAvisoId, motivo, accion);
+        String propietarioId = aviso.getIdPropietario().toString();
+        notificacionService.notificarModeracionAviso(propietarioId, avisoId, motivo, accion);
         
         log.info("Aviso moderado: id={}, acción={}, motivo={}", avisoId, accion, motivo);
     }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.apirest.backend.Model.Espacio;
+import com.apirest.backend.Repository.EspacioRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,7 +17,6 @@ import java.util.Date;
 import java.util.List;
 import java.math.BigDecimal;
 import org.bson.types.ObjectId;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,13 +34,16 @@ public class AvisoServiceImpl implements IAvisoService {
     @Autowired
     private IUsuarioService usuarioService;
 
+    @Autowired
+    private EspacioRepository espacioRepository;
+
     @Override
     public List<Aviso> listarAvisos() {
         return avisoRepository.findAll();
     }
 
     @Override
-    public void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String condicionesAdicionales, String direccion, BigDecimal area, ObjectId idUsuario) throws Exception {
+    public void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String condicionesAdicionales, String direccion, BigDecimal area, String idUsuario) throws Exception {
         // Validar que el usuario exista
         if (!usuarioService.existeUsuarioPorId(idUsuario)) {
             throw new IllegalArgumentException("El usuario con el ID proporcionado no existe.");
@@ -75,23 +78,8 @@ public class AvisoServiceImpl implements IAvisoService {
         // Guardar las imágenes
         List<String> rutasImagenes = guardarImagenes(imagenes);
 
-        // Verificar si el usuario ya tiene un espacio con la misma dirección
-        Optional<Espacio> espacioExistente = espacioService.buscarEspacioPorDireccionYPropietario(direccion, idUsuario);
-        Espacio espacio;
-        if (espacioExistente.isPresent()) {
-            // Verificar si ya existe un aviso para este espacio
-            if (espacioExistente.get().getIdAviso() != null) {
-                Optional<Aviso> avisoExistente = avisoRepository.findById(espacioExistente.get().getIdAviso().toHexString());
-                if (avisoExistente.isPresent()) {
-                    throw new IllegalArgumentException("Ya existe un aviso para este espacio. No se puede crear un nuevo aviso.");
-                }
-            }
-            espacio = espacioExistente.get();
-            espacio = espacioService.editarEspacio(espacio.getId().toHexString(), tipoEspacio, condicionesAdicionales, direccion, area);
-        } else {
-            // Crear un nuevo espacio si no existe
-            espacio = espacioService.crearEspacio(idUsuario, tipoEspacio, condicionesAdicionales, direccion, area);
-        }
+        // Crear el espacio
+        Espacio espacio = espacioService.crearEspacio(idUsuario, tipoEspacio, condicionesAdicionales, direccion, area);
 
         // Validar que el espacio haya sido creado o actualizado correctamente
         if (espacio == null || espacio.getId() == null) {
@@ -101,16 +89,15 @@ public class AvisoServiceImpl implements IAvisoService {
         // Crear el aviso
         Aviso aviso = new Aviso();
         aviso.setDescripcion(descripcion);
-        aviso.setPrecio((int) precioMensual);
+        aviso.setPrecio((int) Math.round(precioMensual));  // Redondeo correcto
         aviso.setImagenes(String.join(",", rutasImagenes));
         aviso.setTitulo(titulo);
-        aviso.setEstado("Activo"); // Cambiar a "Activo"
-        aviso.setFechaPublicacion(new Date()); // Añadir fecha de publicación
-        aviso.setIdPropietario(espacio.getIdPropietario());
-
-        // Asociar el aviso al espacio
-        espacio.setIdAviso(aviso.getId());
-        espacioService.guardarEspacio(espacio); // Guardar el espacio con el nuevo aviso
+        aviso.setEstado("Activo");
+        aviso.setFechaPublicacion(new Date());
+        aviso.setIdEspacio(espacio.getId()); // Asociar el espacio al aviso
+        aviso.setIdPropietario(new ObjectId(idUsuario)); // Asegúrate de que sea ObjectId
+        aviso.setMotivoDesactivacion(null);  // Si el esquema lo permite
+        aviso.setMensaje(new ArrayList<>());  // Inicializa como lista vacía si no hay mensajes
 
         // Guardar el aviso en la base de datos
         avisoRepository.save(aviso);
@@ -234,8 +221,57 @@ public class AvisoServiceImpl implements IAvisoService {
     }
 
     @Override
-    public void eliminarAvisosPorPropietario(ObjectId idPropietario) {
+    public void eliminarAvisosPorPropietario(String idPropietario) {
         List<Aviso> avisos = avisoRepository.findByIdPropietario(idPropietario);
         avisoRepository.deleteAll(avisos);
+    }
+
+    @Override
+    public List<Aviso> filtrarAvisos(String tipoEspacio, Double precioMin, Double precioMax, String disponibilidad) {
+        // Obtener todos los avisos
+        List<Aviso> avisos = avisoRepository.findAll();
+
+        // Filtrar avisos por tipo de espacio si se proporciona
+        if (tipoEspacio != null && !tipoEspacio.isEmpty()) {
+            // Obtener los espacios que coincidan con el tipo de espacio
+            List<ObjectId> espaciosFiltrados = espacioRepository.findAll().stream()
+                    .filter(espacio -> espacio.getTipoEspacio() != null && espacio.getTipoEspacio().equalsIgnoreCase(tipoEspacio))
+                    .map(Espacio::getId)
+                    .collect(Collectors.toList());
+
+            // Filtrar los avisos que estén relacionados con los espacios filtrados
+            avisos = avisos.stream()
+                    .filter(aviso -> aviso.getIdEspacio() != null && espaciosFiltrados.contains(aviso.getIdEspacio()))
+                    .collect(Collectors.toList());
+        }
+
+        // Filtrar avisos por disponibilidad basada en el estado del espacio si se proporciona
+        if (disponibilidad != null && !disponibilidad.isEmpty()) {
+            // Obtener los espacios que coincidan con la disponibilidad
+            List<ObjectId> espaciosDisponibles = espacioRepository.findAll().stream()
+                    .filter(espacio -> espacio.getEstado() != null && espacio.getEstado().equalsIgnoreCase(disponibilidad))
+                    .map(Espacio::getId)
+                    .collect(Collectors.toList());
+
+            // Filtrar los avisos que estén relacionados con los espacios disponibles
+            avisos = avisos.stream()
+                    .filter(aviso -> aviso.getIdEspacio() != null && espaciosDisponibles.contains(aviso.getIdEspacio()))
+                    .collect(Collectors.toList());
+        }
+
+        // Filtrar avisos por rango de precio
+        if (precioMin != null) {
+            avisos = avisos.stream()
+                    .filter(aviso -> aviso.getPrecio() != null && aviso.getPrecio() >= precioMin)
+                    .collect(Collectors.toList());
+        }
+
+        if (precioMax != null) {
+            avisos = avisos.stream()
+                    .filter(aviso -> aviso.getPrecio() != null && aviso.getPrecio() <= precioMax)
+                    .collect(Collectors.toList());
+        }
+
+        return avisos;
     }
 }

@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -258,13 +257,12 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    public boolean existeUsuarioPorId(ObjectId idUsuario) {
+    public boolean existeUsuarioPorId(String idUsuario) {
         return usuarioRepository.existsById(idUsuario);
     }
 
     private void eliminarDatosRelacionados(String usuarioId) {
-        ObjectId propietarioId = new ObjectId(usuarioId);
-        avisoRepository.deleteByIdPropietario(propietarioId);
+        avisoRepository.deleteByIdPropietario(usuarioId);
 
         // Eliminar reportes relacionados
         reporteRepository.deleteByIdUsuario(usuarioId);

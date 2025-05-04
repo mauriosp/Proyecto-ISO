@@ -30,7 +30,7 @@ public class EspacioServiceImpl implements IEspacioService {
     }
 
     @Override
-    public Optional<Espacio> buscarEspacioPorDireccionYPropietario(String direccion, ObjectId idPropietario) {
+    public Optional<Espacio> buscarEspacioPorDireccionYPropietario(String direccion, String idPropietario) {
         return espacioRepository.findByDireccionAndIdPropietario(direccion, idPropietario);
     }
 
@@ -45,7 +45,8 @@ public class EspacioServiceImpl implements IEspacioService {
     }
 
     @Override
-    public Espacio crearEspacio(ObjectId idUsuario, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area) {
+    public Espacio crearEspacio(String idUsuario, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area) {
+        
         // Validar que el usuario exista
         if (!usuarioService.existeUsuarioPorId(idUsuario)) {
             throw new IllegalArgumentException("El usuario con el ID proporcionado no existe.");
@@ -75,19 +76,22 @@ public class EspacioServiceImpl implements IEspacioService {
         if (area == null || area.doubleValue() <= 0) {
             throw new IllegalArgumentException("El área debe ser mayor a 0.");
         }
+        System.out.println("Creando aviso...");
 
         // Crear un nuevo espacio
         Espacio nuevoEspacio = new Espacio();
-        nuevoEspacio.setIdPropietario(idUsuario); // Establecer el ID del propietario
+        nuevoEspacio.setIdPropietario(new ObjectId(idUsuario)); // Convertir el ID del usuario a ObjectId y establecerlo como propietario
         nuevoEspacio.setTipo(tipoEspacio); // Establecer el tipo de espacio
         nuevoEspacio.setTipoEspacio(tipoEspacio); // Establecer el campo tipoEspacio
         nuevoEspacio.setCaracteristicas(caracteristicas); // Establecer las características
         nuevoEspacio.setDireccion(direccion); // Establecer la dirección
         nuevoEspacio.setArea(area.doubleValue()); // Establecer el área
         nuevoEspacio.setEstado("Disponible"); // Establecer el estado como "Disponible"
+        nuevoEspacio.setPromCalificacion(0);
 
         // Guardar el espacio en la base de datos
         return espacioRepository.save(nuevoEspacio);
+
     }
 
     @Override

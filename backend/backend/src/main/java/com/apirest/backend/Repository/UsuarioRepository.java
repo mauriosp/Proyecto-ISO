@@ -4,7 +4,6 @@ import com.apirest.backend.Model.Usuario;
 import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import org.bson.types.ObjectId;
 
 @Repository
 public interface UsuarioRepository extends MongoRepository<Usuario, String> {
@@ -12,5 +11,5 @@ public interface UsuarioRepository extends MongoRepository<Usuario, String> {
 
     Optional<Usuario> findByEmail(String email);
 
-    boolean existsById(ObjectId id);
+    boolean existsById(String id);
 }

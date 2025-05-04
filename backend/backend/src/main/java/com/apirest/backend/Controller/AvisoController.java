@@ -3,7 +3,6 @@ package com.apirest.backend.Controller;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +38,7 @@ public class AvisoController {
             @RequestParam String titulo,
             @RequestParam String direccion,
             @RequestParam BigDecimal area,
-            @RequestParam ObjectId idUsuario) {
+            @RequestParam String idUsuario) {
         try {
             avisoService.crearAviso(descripcion, precioMensual, imagenes, titulo, tipoEspacio, condicionesAdicionales, direccion, area, idUsuario);
             return new ResponseEntity<>("Aviso creado exitosamente", HttpStatus.CREATED);
@@ -128,7 +127,7 @@ public class AvisoController {
     }
 
     @DeleteMapping("/eliminar-por-propietario/{idPropietario}")
-    public ResponseEntity<String> eliminarAvisosPorPropietario(@PathVariable ObjectId idPropietario) {
+    public ResponseEntity<String> eliminarAvisosPorPropietario(@PathVariable String idPropietario) {
     try {
         avisoService.eliminarAvisosPorPropietario(idPropietario);
         return new ResponseEntity<>("Avisos eliminados correctamente", HttpStatus.OK);
@@ -137,4 +136,20 @@ public class AvisoController {
     }
 }
 
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<Aviso>> filtrarAvisos(
+            @RequestParam(required = false) String tipoEspacio,
+            @RequestParam(required = false) Double precioMin,
+            @RequestParam(required = false) Double precioMax,
+            @RequestParam(required = false) String disponibilidad) {
+        List<Aviso> avisosFiltrados = avisoService.filtrarAvisos(tipoEspacio, precioMin, precioMax, disponibilidad);
+
+        // Siempre retorna 200 OK, incluso si la lista está vacía
+        if (avisosFiltrados.isEmpty()) {
+            return ResponseEntity.ok(avisosFiltrados); // Lista vacía
+        }
+        return ResponseEntity.ok(avisosFiltrados); // Lista con resultados
+    }
 }
+
+
