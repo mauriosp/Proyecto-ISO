@@ -17,7 +17,7 @@ const UserButtons = () => {
       openModal("verification");
     } else {
       // Replace placeholder with:
-      navigate("/postAdvertisement");
+      navigate("/publish");
     }
   };
   return (

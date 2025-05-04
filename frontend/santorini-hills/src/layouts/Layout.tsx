@@ -15,9 +15,11 @@ const Layout: React.FC<React.PropsWithChildren> = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
     return (
-        <>
+        <div className="min-h-screen flex flex-col">
             <Navbar />
-            <Outlet />
+            <div className="flex-1 flex flex-col">
+                <Outlet />
+            </div>
             {isOpen && (
                 <div className="flex justify-center items-center bg-neutral-100">
                     <div className="min-w-md">
@@ -25,7 +27,7 @@ const Layout: React.FC<React.PropsWithChildren> = () => {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     )
 }
 

@@ -11,10 +11,12 @@ const AppRoutes = () => {
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="advertisements/:id" element={<AdvertisementPageContainer />} />
-        <Route path="/settings/:setting" element={<SettingsPage />} />
+        <Route path="settings/:setting" element={<SettingsPage />} />
       </Route>
 
-      <Route path="postAdvertisement" element={<PostAdvertisement />} />
+      <Route element={<Layout />}>
+        <Route path="publish" element={<PostAdvertisement />} />
+      </Route>
     </Routes>
   );
 };

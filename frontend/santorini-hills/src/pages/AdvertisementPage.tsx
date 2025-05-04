@@ -78,7 +78,7 @@ const AdvertisementPage: React.FC<AdvertisementPageProps> = ({ advertisement, de
 
         {/* Right panel */}
         <div className="flex flex-col gap-8 w-1/3">
-          <ContactBox price={advertisement.price} />
+          <ContactBox price={advertisement.price} keypoints={advertisement.extraInfo} />
           <CommentsSection />
         </div>
       </div>
