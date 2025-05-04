@@ -6,9 +6,10 @@ import { formatNumber } from "../utils/parseNumbers";
 const PropertiesSettings = () => {
 
     const { user } = useUserContext();
-    // Aquí se realizará la consulta a la API para obtener las propiedades del usuario
-    // y se guardarán en el estado local del componente.
-    const properties = testAdvertisements.filter(ad => ad.owner?.id === user?.id); // Simulación de la API
+    // Mostrar todas las propiedades si el usuario es admin, solo las propias si no
+    const properties = user?.profile === "admin"
+        ? testAdvertisements
+        : testAdvertisements.filter(ad => ad.owner?.id === user?.id); // Simulación de la API
     return (
         <div>
             <div className="flex flex-col gap-4">
