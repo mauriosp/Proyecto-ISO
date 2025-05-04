@@ -11,6 +11,7 @@ export interface Advertisement {
     property: Property | null;
     owner?: User;
     images: string[];
+    extraInfo: string[];
 }
 
 export interface AdvertisementPost {
