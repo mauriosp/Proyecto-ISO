@@ -3,6 +3,7 @@ import EditProfile from "../pages/EditProfile";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Verification from "../pages/Verification";
+import Report from "../pages/Report";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Modal = () => {
@@ -44,6 +45,7 @@ const Modal = () => {
               {view === "register" && <Register />}
               {view === "edit" && <EditProfile />}
               {view === "verification" && <Verification />}
+              {view === "report" && <Report />}
             </div>
           </motion.div>
         </motion.div>
