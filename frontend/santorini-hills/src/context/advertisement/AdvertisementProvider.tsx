@@ -5,27 +5,38 @@ import { AdvertisementContext } from "./AdvertisementContext";
 
 export const AdvertisementProvider = ({
   children,
+  initialData
 }: {
   children: React.ReactNode;
+  initialData?: Advertisement;
 }) => {
   const [stage, setStage] = useState<number>(0);
-  const [advertisement, setAdvertisement] = useState<Advertisement>({
-    title: "",
-    description: "",
-    price: 0,
-    status: null,
-    publicationDate: new Date(),
-    property: null,
-    images: [],
-  });
-  const [property, setPropertyState] = useState<Property>({
-    type: "",
-    location: null,
-    address: "",
-    area: 0,
-    bathrooms: 0,
-    bedrooms: 0,
-  });
+  const [advertisement, setAdvertisement] = useState<Advertisement>(
+    initialData
+      ? { ...initialData }
+      : {
+        title: "",
+        description: "",
+        price: 0,
+        status: null,
+        publicationDate: new Date(),
+        property: null,
+        images: [],
+        extraInfo: [],
+      }
+  );
+  const [property, setPropertyState] = useState<Property>(
+    initialData && initialData.property
+      ? { ...initialData.property }
+      : {
+        type: "",
+        location: { latitude: 0, longitude: 0 },
+        address: "",
+        area: 0,
+        bathrooms: 0,
+        bedrooms: 0,
+      }
+  );
 
   const setProperty = (newProperty: Property) => {
     setPropertyState(newProperty);

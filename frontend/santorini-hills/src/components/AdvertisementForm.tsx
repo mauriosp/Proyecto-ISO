@@ -1,16 +1,15 @@
 import { useAdvertisementContext } from "../context/advertisement/AdvertisementContext";
 import {
-  AdvertisementTypeStage,
-  AdvertisementPicturesStage,
-  PropertyLocationStage,
-  AdvertismentInformationStage,
-  AdvertisementTitleStage,
   AdvertisementDescriptionStage,
-  AdvertisementPriceStage,
+  AdvertisementExtraInfoStage,
+  AdvertisementPicturesStage,
   AdvertisementPreviewStage,
+  AdvertisementPriceStage,
+  AdvertisementTitleStage,
+  AdvertisementTypeStage,
+  AdvertismentInformationStage,
+  PropertyLocationStage,
 } from "./AdvertisementFormStages";
-import name from "../assets/logo/Name.png";
-import { Link } from "react-router";
 
 const AdvertisementForm = () => {
   const { stage } = useAdvertisementContext();
@@ -22,6 +21,7 @@ const AdvertisementForm = () => {
     AdvertisementPicturesStage,
     AdvertisementTitleStage,
     AdvertisementDescriptionStage,
+    AdvertisementExtraInfoStage,
     AdvertisementPriceStage,
     AdvertisementPreviewStage,
   ];
@@ -33,13 +33,6 @@ const AdvertisementForm = () => {
 
   return (
     <>
-      <nav className="p-4 max-w-7xl text-accent">
-        <div className="w-1/5">
-          <Link className="w-min" to={"/"}>
-            <img src={name} alt="Santorini Hills" className="h-8 object-contain" />
-          </Link>
-        </div>
-      </nav>
       <main className="flex-1 flex items-center justify-center p-4">
         <CurrentStageComponent />
       </main>

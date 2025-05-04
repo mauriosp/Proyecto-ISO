@@ -52,3 +52,13 @@ export const publishAdvertisement = async (advertisement: Advertisement) => {
     throw error;
   }
 }
+
+export const updateAdvertisement = async (id: string | number, advertisement: Advertisement) => {
+  try {
+    const response = await axios.put(`/advertisement/${id}`, advertisement);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating advertisement:", error);
+    throw error;
+  }
+};

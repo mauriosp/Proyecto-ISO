@@ -1,10 +1,13 @@
-interface TextInputProps {
+type TextInputProps = {
     id: string;
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    placeholder: string;
-    icon?: React.ComponentType<{size: number; className: string}>;
-}
+    placeholder?: string;
+    icon?: React.ElementType;
+    type?: string;
+    className?: string;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  };
 
 const TextInput = ({ 
     id, 
@@ -15,7 +18,7 @@ const TextInput = ({
 }: TextInputProps) => (
     <label
         htmlFor={id}
-        className="flex items-center gap-2 border-neutral-500 border-2 rounded-md p-2 hover:cursor-text"
+        className="flex min-w-xl items-center gap-2 border-neutral-500 border-2 rounded-md p-2 hover:cursor-text"
     >
         {Icon && <Icon size={20} className="text-accent w-min" />}
         <input

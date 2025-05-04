@@ -17,7 +17,7 @@ const UserButtons = () => {
       openModal("verification");
     } else {
       // Replace placeholder with:
-      navigate("/postAdvertisement");
+      navigate("/publish");
     }
   };
   return (
@@ -75,6 +75,14 @@ const UserButtons = () => {
                 className="hover:bg-black/10 p-2 rounded-md transition-all"
               >
                 Mis propiedades
+              </Link>
+            )}
+            {user?.profile === "admin" && (
+              <Link
+                to={"/settings/properties"}
+                className="hover:bg-black/10 p-2 rounded-md transition-all"
+              >
+                Administrar propiedades
               </Link>
             )}
           </div>

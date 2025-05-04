@@ -86,7 +86,7 @@ const ProfileSettings = () => {
   };
 
   return (
-    <form className="flex flex-col space-y-2" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex flex-col space-y-2 w-full" onSubmit={handleSubmit(onSubmit)}>
       {/* Espacio para foto de perfil y subir nueva imagen */}
       <div className="flex flex-col items-center">
         {user && user.photo ? (

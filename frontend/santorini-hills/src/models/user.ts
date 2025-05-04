@@ -6,7 +6,7 @@ export interface User {
   email: string;
   password: string | null;
   phone: string;
-  profile?: "owner" | "renter";
+  profile?: "owner" | "renter" | "admin";
   isVerified?: boolean;
   photo?: string;
 }

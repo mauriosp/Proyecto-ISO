@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router";
 import ProfileSettings from "../components/ProfileSettings";
 import { JSX } from "react";
 import PropertiesSettings from "../components/PropertiesSettings";
+import { useUserContext } from "../context/user/UserContext";
 
 const SettingsPage = () => {
   type Settings = "profile" | "properties" | "notifications" | "security";
@@ -27,16 +28,23 @@ const SettingsPage = () => {
   // Obtener todas las opciones disponibles
   const settingOptions = Object.keys(settingsComponents) as Settings[];
 
+  // Filtrar opciones según el perfil del usuario
+  const { user } = useUserContext();
+  const filteredSettingOptions = settingOptions.filter(option => {
+    if (option === "properties" && user?.profile === "renter") return false;
+    return true;
+  });
+
   return (
-    <div className="flex max-w-7xl mx-auto min-h-[calc(100vh-10rem)] mt-5 gap-3">
+    <div className="flex w-7xl mx-auto min-h-[calc(100vh-10rem)] mt-5 gap-3">
       <aside className="w-1/4 rounded-xl bg-white shadow-lg p-4 font-medium text-neutral-800">
         <ul>
-          {settingOptions.map((option) => (
+          {filteredSettingOptions.map((option) => (
             <li key={option}>
               <Link
                 className={`block w-full my-2 text-right p-3 transition-all rounded-md ${setting === option
-                    ? "bg-accent text-white"
-                    : "hover:bg-accent hover:text-white"
+                  ? "bg-accent text-white"
+                  : "hover:bg-accent hover:text-white"
                   }`}
                 to={`/settings/${option}`}
               >
@@ -47,7 +55,9 @@ const SettingsPage = () => {
         </ul>
       </aside>
       <main className="flex-1 p-10 rounded-xl bg-white shadow-lg">
-        {selectedSetting}
+        <div className="w-full h-full flex flex-col justify-start items-start">
+          {selectedSetting}
+        </div>
       </main>
     </div>
   );

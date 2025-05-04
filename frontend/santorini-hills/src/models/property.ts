@@ -18,7 +18,6 @@ export interface Property {
   area: number; // in square meters
   bathrooms: number;
   bedrooms: number;
-  extraInfo?: string[];
 }
 
 export interface PropertyPost {
@@ -27,7 +26,6 @@ export interface PropertyPost {
   direccion: string;
   localizacion: { latitud: number; longitud: number };
   area: number;
-  caracteristicas: string[];
   baños: number;
   habitaciones: number;
   tipoEspacio: string; // Puede coincidir con "tipo" o utilizarse para afinar la categoría
@@ -49,7 +47,6 @@ export interface PropertyGet {
   direccion: string;
   localizacion: { latitud: number; longitud: number };
   area: number;
-  caracteristicas: string[];
   baños: number;
   habitaciones: number;
   tipoEspacio: string;
@@ -70,7 +67,6 @@ export const propertyPresenter = (
       longitud: property.location ? property.location.longitude : 0,
     },
     area: property.area,
-    caracteristicas: property.extraInfo || [],
     baños: property.bathrooms,
     habitaciones: property.bedrooms,
     tipoEspacio: property.type,
@@ -92,6 +88,5 @@ export const propertyAdapter = (property: PropertyGet): Property => {
     area: property.area,
     bathrooms: property.baños,
     bedrooms: property.habitaciones,
-    extraInfo: property.caracteristicas,
   };
 };

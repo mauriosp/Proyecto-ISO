@@ -6,9 +6,10 @@ import { formatNumber } from "../utils/parseNumbers";
 const PropertiesSettings = () => {
 
     const { user } = useUserContext();
-    // Aquí se realizará la consulta a la API para obtener las propiedades del usuario
-    // y se guardarán en el estado local del componente.
-    const properties = testAdvertisements.filter(ad => ad.owner?.id === user?.id); // Simulación de la API
+    // Mostrar todas las propiedades si el usuario es admin, solo las propias si no
+    const properties = user?.profile === "admin"
+        ? testAdvertisements
+        : testAdvertisements.filter(ad => ad.owner?.id === user?.id); // Simulación de la API
     return (
         <div>
             <div className="flex flex-col gap-4">
@@ -37,9 +38,9 @@ const PropertiesSettings = () => {
                                 </div>
                             </div>
                             <div className="flex gap-2 mt-4">
-                                <button className="flex items-center gap-1 px-3 py-1 bg-accent hover:bg-slate-800 hover:cursor-pointer text-white rounded transition">
+                                <Link to={`/edit/${property.id}`} className="flex items-center gap-1 px-3 py-1 bg-accent hover:bg-slate-800 hover:cursor-pointer text-white rounded transition">
                                     Editar
-                                </button>
+                                </Link>
                                 <button className="flex items-center gap-1 px-3 py-1 border-2 border-accent hover:bg-red-500 hover:cursor-pointer hover:border-red-700 hover:text-white rounded transition">
                                     Eliminar
                                 </button>

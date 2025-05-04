@@ -1,13 +1,15 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { FaCamera, FaDollarSign, FaLocationDot } from "react-icons/fa6";
+import { FaCamera, FaDollarSign, FaLocationDot, FaPlus, FaTrash } from "react-icons/fa6";
 import { TbUpload } from "react-icons/tb";
+import { redirect, useLocation, useParams } from "react-router";
 import { tiposInmuebles } from "../assets/tiposInmuebles";
 import { useAdvertisementContext } from "../context/advertisement/AdvertisementContext";
 import { useUserContext } from "../context/user/UserContext";
 import { Property, PropertyType } from "../models/property";
-import { User } from "../models/user";
 import AdvertisementPage from "../pages/AdvertisementPage";
+import { publishAdvertisement, updateAdvertisement } from "../utils/APICalls";
+import { formatNumber } from "../utils/parseNumbers";
 import { uploadFileToFirebase } from "../utils/UploadFileToFirebase";
 import FormRadioOption from "./FormRadioOption";
 import StageContainer from "./FormStageContainer";
@@ -15,10 +17,6 @@ import NavigationButtons from "./NavigationButtons";
 import NumberInputWithButtons from "./NumberInputWithButtons";
 import PlaceInput from "./PlaceInput";
 import TextInput from "./TextInput";
-import { formatNumber } from "../utils/parseNumbers";
-import { Advertisement } from "../models/advertisement";
-import { publishAdvertisement } from "../utils/APICalls";
-import { redirect } from "react-router";
 
 export const AdvertisementTypeStage = () => {
   const { property, setNextStage } = useAdvertisementContext();
@@ -30,6 +28,7 @@ export const AdvertisementTypeStage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!propertyType) return; // Solo avanza si hay tipo seleccionado
     setNextStage({ property: { type: propertyType } });
   };
 
@@ -70,6 +69,7 @@ export const PropertyLocationStage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!propertyLocation || propertyLocation.latitude === 0) return; // Solo avanza si hay ubicación válida
     setNextStage({
       property: {
         location: propertyLocation,
@@ -138,6 +138,7 @@ export const AdvertisementPicturesStage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (advertisementPictures.length + imageUrls.length < 5) return; // Solo avanza si hay al menos 5 imágenes
     setIsUploading(true);
 
     try {
@@ -337,6 +338,7 @@ export const AdvertisementTitleStage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!advertisementTitle) return; // Solo avanza si hay título
     setNextStage({ advertisement: { title: advertisementTitle } });
   };
 
@@ -380,6 +382,7 @@ export const AdvertisementDescriptionStage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!advertisementDescription) return; // Solo avanza si hay descripción
     setNextStage({ advertisement: { description: advertisementDescription } });
   };
 
@@ -422,6 +425,7 @@ export const AdvertismentInformationStage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!(parseInt(area) > 0)) return; // Solo avanza si el área es mayor a 0
     setNextStage({
       property: {
         bedrooms: parseInt(bedrooms) || 0,
@@ -525,6 +529,7 @@ export const AdvertisementPriceStage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!(advertisementPrice > 0)) return; // Solo avanza si el precio es mayor a 0
     setNextStage({ advertisement: { price: advertisementPrice } });
   };
 
@@ -534,7 +539,6 @@ export const AdvertisementPriceStage = () => {
       setAdvertisementPrice(Number(value));
     }
   };
-
 
   return (
     <form className="flex flex-col w-10/12 gap-10" onSubmit={handleSubmit}>
@@ -557,35 +561,114 @@ export const AdvertisementPriceStage = () => {
   );
 };
 
+export const AdvertisementExtraInfoStage = () => {
+  const { advertisement, setNextStage, setPrevStage } =
+    useAdvertisementContext();
+  const [extraInfo, setExtraInfo] = useState<string[]>(
+    advertisement.extraInfo || []
+  );
+  const [newExtraInfo, setNewExtraInfo] = useState<string>("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (extraInfo.length <= 1) return; // Solo avanza si hay al menos 2 keypoints
+    setNextStage({ advertisement: { extraInfo } });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewExtraInfo(e.target.value);
+  };
+
+  const handleAddExtraInfo = () => {
+    if (newExtraInfo.trim() !== "") {
+      setExtraInfo((prev) => [...prev, newExtraInfo]);
+      setNewExtraInfo("");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddExtraInfo();
+    }
+  };
+
+  const handleDeleteKeypoint = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Evitar que el evento se propague al contenedor padre
+    const keypointToDelete = (e.target as HTMLButtonElement).closest("div")?.textContent;
+    if (keypointToDelete) {
+      setExtraInfo((prev) => prev.filter((keypoint) => keypoint !== keypointToDelete));
+    }
+  };
+
+  return (
+    <form className="flex flex-col w-10/12 gap-10" onSubmit={handleSubmit}>
+      <StageContainer title="Puntos clave de tu propiedad">
+        <div className="flex flex-col gap-3">{extraInfo.map(keypoint => (
+          <div className="flex items-center justify-between w-xl border-2 border-neutral-400 rounded-md px-5 py-3" key={keypoint}>
+            <h4 className="font-semibold text-neutral-800">{keypoint}</h4>
+            <button type="button" className="text-neutral-500 hover:cursor-pointer hover:text-red-600 transition-all" onClick={handleDeleteKeypoint}><FaTrash /></button>
+          </div>
+        ))}
+        </div>
+        <div className="flex items-center gap-3 h-full w-max m-auto">
+          <TextInput
+            id="extraInfoInput"
+            value={newExtraInfo}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            placeholder="Escribe un punto clave de tu propiedad"
+          />
+          <button
+            type="button"
+            onClick={handleAddExtraInfo}
+            className="form-button aspect-square h-full p-3 bg-accent text-white hover:bg-slate-800"
+          >
+            <FaPlus />
+          </button>
+        </div>
+      </StageContainer>
+      <NavigationButtons onBack={setPrevStage} canContinue={extraInfo.length > 1} />
+    </form>
+  );
+}
+
 export const AdvertisementPreviewStage = () => {
   const { advertisement, setPrevStage, setAdvertisement } =
     useAdvertisementContext();
   const { user } = useUserContext();
+  const location = useLocation();
+  const { id } = useParams();
+  const isEdit = location.pathname.startsWith("/edit/");
 
   const handleConfirm = () => {
-    const advertisementWithOwnerAndStatus: Advertisement = {
+    if (!user) {
+      console.error("No hay usuario autenticado para asignar como owner.");
+      return;
+    }
+    const advertisementWithOwnerAndStatus = {
       ...advertisement,
-      owner: user as User,
-      status: "pending",
+      owner: user,
+      status: "pending" as const,
     };
-    console.log("Advertisement to be published:", advertisementWithOwnerAndStatus);
-    setAdvertisement(
-      advertisementWithOwnerAndStatus,
-    );
-
-    // Aquí puedes agregar la lógica para enviar el anuncio a la API o realizar cualquier otra acción necesaria
-    publishAdvertisement(advertisementWithOwnerAndStatus)
-      .then((response) => {
-        console.log("Anuncio publicado con éxito:", response);
-        redirect("/advertisement/" + response.id); // Redirigir a la página del anuncio publicado
-      })
-      .catch((error) => {
-        console.error("Error al publicar el anuncio:", error);
-        
-      });
-
-
-
+    setAdvertisement(advertisementWithOwnerAndStatus);
+    if (isEdit && id) {
+      updateAdvertisement(id, advertisementWithOwnerAndStatus)
+        .then((response) => {
+          redirect("/advertisement/" + response.id);
+        })
+        .catch((error) => {
+          console.error("Error al actualizar el anuncio:", error);
+        });
+    } else {
+      publishAdvertisement(advertisementWithOwnerAndStatus)
+        .then((response) => {
+          redirect("/advertisement/" + response.id);
+        })
+        .catch((error) => {
+          console.error("Error al publicar el anuncio:", error);
+        });
+    }
   };
 
   return (
@@ -595,18 +678,18 @@ export const AdvertisementPreviewStage = () => {
         <div className="min-w-56">
           <div className="flex gap-4">
             <button
-              type="button" // Especificamos type button para que no envíe el formulario
+              type="button"
               onClick={setPrevStage}
-              className="form-button max-w-40 hover:bg-black/10 text-accent border-2 border-accent font-semibold"
+              className="px-4 form-button max-w-40 hover:bg-black/10 text-accent border-2 border-accent font-semibold"
             >
               Atrás
             </button>
             <button
               type="button"
-              className="form-button bg-accent text-white hover:bg-slate-800"
+              className="min-w-max form-button px-4 bg-accent text-white hover:bg-slate-800"
               onClick={handleConfirm}
             >
-              Publicar
+              {isEdit ? "Publicar cambios" : "Publicar"}
             </button>
           </div>
         </div>
