@@ -79,7 +79,6 @@ public class EspacioServiceImpl implements IEspacioService {
         // Crear un nuevo espacio
         Espacio nuevoEspacio = new Espacio();
         nuevoEspacio.setIdPropietario(idUsuario); // Establecer el ID del propietario
-        nuevoEspacio.setTipo(tipoEspacio); // Establecer el tipo de espacio
         nuevoEspacio.setTipoEspacio(tipoEspacio); // Establecer el campo tipoEspacio
         nuevoEspacio.setCaracteristicas(caracteristicas); // Establecer las características
         nuevoEspacio.setDireccion(direccion); // Establecer la dirección
@@ -121,7 +120,7 @@ public class EspacioServiceImpl implements IEspacioService {
         }
 
         // Actualizar los datos del espacio
-        espacio.setTipo(tipoEspacio);
+
         espacio.setTipoEspacio(tipoEspacio);
         espacio.setCaracteristicas(caracteristicas);
         espacio.setDireccion(direccion);

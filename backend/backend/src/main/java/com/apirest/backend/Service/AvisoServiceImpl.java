@@ -108,8 +108,8 @@ public class AvisoServiceImpl implements IAvisoService {
         aviso.setFechaPublicacion(new Date()); // Añadir fecha de publicación
         aviso.setMensaje(new ArrayList<>());
 
-        // Asociar el aviso al espacio
-        espacio.setIdAviso(aviso.getId());
+        // Asociar el espacio con el aviso
+        espacio.setIdEspacio(aviso.getId());
         espacioService.guardarEspacio(espacio); // Guardar el espacio con el nuevo aviso
 
         // Guardar el aviso en la base de datos

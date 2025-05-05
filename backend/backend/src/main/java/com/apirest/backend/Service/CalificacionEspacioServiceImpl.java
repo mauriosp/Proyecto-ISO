@@ -20,7 +20,7 @@ public class CalificacionEspacioServiceImpl implements ICalificacionEspacioServi
 
     @Override
     public void calificarEspacio(String usuarioId, String espacioId, int puntuacion, String comentario) {
-        ObjectId objUsuarioId = new ObjectId(usuarioId);
+
         ObjectId objEspacioId = new ObjectId(espacioId);
         
         // Buscar el espacio
@@ -29,7 +29,7 @@ public class CalificacionEspacioServiceImpl implements ICalificacionEspacioServi
         
         // Crear una nueva calificación
         CalificacionEspacio calificacion = new CalificacionEspacio();
-        calificacion.setIdUsuarioCalifica(objUsuarioId);
+
         calificacion.setPuntuacion(puntuacion);
         calificacion.setFecha(new Date());
         calificacion.setComentario(comentario);

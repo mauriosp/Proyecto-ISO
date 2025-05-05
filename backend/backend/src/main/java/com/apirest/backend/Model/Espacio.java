@@ -18,12 +18,12 @@ public class Espacio {
     @Id
     private ObjectId id;
     private ObjectId idPropietario;
-    private String tipo;
     private String direccion;
     private Double area;
     private String caracteristicas;
     private String tipoEspacio;
     private String estado;
-    private ObjectId idAviso;
+    private int promCalificacion;
+
     private List <Arrendamiento> arrendamiento;
 }
