@@ -31,7 +31,7 @@ public class EspacioServiceImpl implements IEspacioService {
 
     @Override
     public Optional<Espacio> buscarEspacioPorDireccionYPropietario(String direccion, ObjectId idPropietario) {
-        return espacioRepository.buscarEspacioPorDireccionYPropietario(direccion, idPropietario);
+        return espacioRepository.deleteByIdPropietario(direccion, idPropietario);
     }
 
     @Override
