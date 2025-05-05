@@ -81,13 +81,11 @@ public class EspacioServiceImpl implements IEspacioService {
         // Crear un nuevo espacio
         Espacio nuevoEspacio = new Espacio();
         nuevoEspacio.setIdPropietario(new ObjectId(idUsuario)); // Convertir el ID del usuario a ObjectId y establecerlo como propietario
-        nuevoEspacio.setTipo(tipoEspacio); // Establecer el tipo de espacio
         nuevoEspacio.setTipoEspacio(tipoEspacio); // Establecer el campo tipoEspacio
         nuevoEspacio.setCaracteristicas(caracteristicas); // Establecer las características
         nuevoEspacio.setDireccion(direccion); // Establecer la dirección
         nuevoEspacio.setArea(area.doubleValue()); // Establecer el área
         nuevoEspacio.setEstado("Disponible"); // Establecer el estado como "Disponible"
-        nuevoEspacio.setPromCalificacion(0);
 
         // Guardar el espacio en la base de datos
         return espacioRepository.save(nuevoEspacio);
@@ -125,7 +123,6 @@ public class EspacioServiceImpl implements IEspacioService {
         }
 
         // Actualizar los datos del espacio
-        espacio.setTipo(tipoEspacio);
         espacio.setTipoEspacio(tipoEspacio);
         espacio.setCaracteristicas(caracteristicas);
         espacio.setDireccion(direccion);

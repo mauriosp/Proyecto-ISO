@@ -26,14 +26,13 @@ import java.util.List;
 public class Aviso {
     @Id
     private ObjectId id;
-    private ObjectId idPropietario;
     private String titulo;
     private String descripcion;
     private Integer precio;
     private String estado;
     private Date fechaPublicacion;
     private String imagenes;
-    private String motivoDesactivacion;
+    private String motivoDesactivacion;// 
     private List <Mensaje> mensaje;
     private ObjectId idEspacio;
 
@@ -41,12 +40,6 @@ public class Aviso {
     @JsonProperty("id")
     public String getIdAsString() {
         return id != null ? id.toHexString() : null;
-    }
-
-    // Serializa el campo "idPropietario" como String (opcional)
-    @JsonProperty("idPropietario")
-    public String getIdPropietarioAsString() {
-        return idPropietario != null ? idPropietario.toHexString() : null;
     }
 
     @JsonProperty("idEspacio")

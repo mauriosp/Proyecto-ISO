@@ -95,7 +95,6 @@ public class AvisoServiceImpl implements IAvisoService {
         aviso.setEstado("Activo");
         aviso.setFechaPublicacion(new Date());
         aviso.setIdEspacio(espacio.getId()); // Asociar el espacio al aviso
-        aviso.setIdPropietario(new ObjectId(idUsuario)); // Asegúrate de que sea ObjectId
         aviso.setMotivoDesactivacion(null);  // Si el esquema lo permite
         aviso.setMensaje(new ArrayList<>());  // Inicializa como lista vacía si no hay mensajes
 

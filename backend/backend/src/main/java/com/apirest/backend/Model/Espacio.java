@@ -20,14 +20,12 @@ public class Espacio {
     @Id
     private ObjectId id;
     private ObjectId idPropietario;
-    private String tipo;
     private String direccion;
     private Double area;
     private String caracteristicas;
     private String tipoEspacio;
     private String estado;
     private List <Arrendamiento> arrendamiento;
-    private int promCalificacion;
 
     // Serializa el campo "id" como String
     @JsonProperty("id")

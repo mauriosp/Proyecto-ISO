@@ -3,14 +3,8 @@ package com.apirest.backend.Repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import com.apirest.backend.Model.Aviso;
 import org.springframework.stereotype.Repository;
-import java.util.List;
 
 @Repository 
 public interface AvisoRepository extends MongoRepository<Aviso, String> {
-    // Método para buscar avisos por ID de propietario
-    List<Aviso> findByIdPropietario(String idPropietario);
-    
-    // Opcional: Método para eliminar avisos de un propietario
-    void deleteByIdPropietario(String idPropietario);
 
 }
