@@ -25,6 +25,8 @@ public class Espacio {
     private String caracteristicas;
     private String tipoEspacio;
     private String estado;
+    private int promCalificacion;
+
     private List <Arrendamiento> arrendamiento;
 
     // Serializa el campo "id" como String

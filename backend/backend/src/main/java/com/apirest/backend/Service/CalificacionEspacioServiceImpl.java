@@ -5,7 +5,7 @@ import com.apirest.backend.Model.Espacio;
 import com.apirest.backend.Repository.EspacioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -27,7 +27,7 @@ public class CalificacionEspacioServiceImpl implements ICalificacionEspacioServi
         
         // Crear una nueva calificación
         CalificacionEspacio calificacion = new CalificacionEspacio();
-        calificacion.setIdUsuarioCalifica(new ObjectId(usuarioId)); // Convertir String a ObjectId
+        
         calificacion.setPuntuacion(puntuacion);
         calificacion.setFecha(new Date());
         calificacion.setComentario(comentario);

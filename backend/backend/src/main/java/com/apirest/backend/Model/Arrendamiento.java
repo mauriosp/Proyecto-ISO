@@ -13,9 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 
 public class Arrendamiento {
-    private ObjectId id;  
-    private ObjectId idUsuario;
-    private ObjectId idEspacio; 
+    private ObjectId idUsuario; 
     private Date fechaSalida;
     private Date fechaInicio;
     private String estado;

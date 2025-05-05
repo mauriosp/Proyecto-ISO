@@ -26,15 +26,16 @@ import java.util.List;
 public class Aviso {
     @Id
     private ObjectId id;
+    private ObjectId idEspacio;
     private String titulo;
     private String descripcion;
     private Integer precio;
     private String estado;
     private Date fechaPublicacion;
     private String imagenes;
-    private String motivoDesactivacion;// 
     private List <Mensaje> mensaje;
-    private ObjectId idEspacio;
+    private List<ExtraInfo> extraInfo;
+
 
     // Serializa el campo "id" como String
     @JsonProperty("id")
