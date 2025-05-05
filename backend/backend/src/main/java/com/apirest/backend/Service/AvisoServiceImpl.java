@@ -106,7 +106,7 @@ public class AvisoServiceImpl implements IAvisoService {
         aviso.setTitulo(titulo);
         aviso.setEstado("Activo"); // Cambiar a "Activo"
         aviso.setFechaPublicacion(new Date()); // Añadir fecha de publicación
-        aviso.setIdPropietario(espacio.getIdPropietario());
+        aviso.setMensaje(new ArrayList<>());
 
         // Asociar el aviso al espacio
         espacio.setIdAviso(aviso.getId());
@@ -200,7 +200,6 @@ public class AvisoServiceImpl implements IAvisoService {
 
         // Cambiar el estado del aviso a "Inactivo"
         aviso.setEstado("Inactivo");
-        aviso.setMotivoDesactivacion(motivo);
 
         // Guardar los cambios
         avisoRepository.save(aviso);
@@ -215,7 +214,6 @@ public class AvisoServiceImpl implements IAvisoService {
 
         // Cambiar el estado del aviso a "Activo"
         aviso.setEstado("Activo");  // Cambiar "Publicado" a "Activo"
-        aviso.setMotivoDesactivacion(null); // Limpiar el motivo de desactivación
 
         // Guardar los cambios
         avisoRepository.save(aviso);

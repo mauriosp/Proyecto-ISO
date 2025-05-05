@@ -33,9 +33,9 @@ public class ModeracionServiceImpl implements IModeracionService {
         // Guardar el aviso actualizado
         avisoRepository.save(aviso);
         
-        // Notificar al propietario sobre la moderación
-        ObjectId propietarioId = aviso.getIdPropietario();
-        notificacionService.notificarModeracionAviso(propietarioId, objAvisoId, motivo, accion);
+        // Notificar al propietario sobre la moderación basandose en el Id del Espacio
+        ObjectId espacioId = aviso.getIdEspacio();
+        notificacionService.notificarModeracionAviso(espacioId, objAvisoId, motivo, accion);
         
         log.info("Aviso moderado: id={}, acción={}, motivo={}", avisoId, accion, motivo);
     }

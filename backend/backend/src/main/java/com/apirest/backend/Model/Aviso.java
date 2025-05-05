@@ -24,13 +24,15 @@ import java.util.List;
 public class Aviso {
     @Id
     private ObjectId id;
-    private ObjectId idPropietario;
+    private ObjectId idEspacio;
     private String titulo;
     private String descripcion;
     private Integer precio;
     private String estado;
     private Date fechaPublicacion;
     private String imagenes;
-    private String motivoDesactivacion;
     private List <Mensaje> mensaje;
+    private List<ExtraInfo> extraInfo;
 }
+
+
