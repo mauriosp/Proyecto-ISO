@@ -22,9 +22,8 @@ import com.apirest.backend.Service.IAvisoService;
 
 @RestController
 @RequestMapping("/UAO/apirest/Aviso") // Endpoint
-
 public class AvisoController {
-    
+
     @Autowired
     private IAvisoService avisoService;
 
@@ -40,6 +39,17 @@ public class AvisoController {
             @RequestParam BigDecimal area,
             @RequestParam String idUsuario) {
         try {
+            // Validaciones preliminares
+            if (titulo.length() > 100) {
+                return new ResponseEntity<>("El título no puede exceder los 100 caracteres.", HttpStatus.BAD_REQUEST);
+            }
+            if (descripcion.length() > 500) {
+                return new ResponseEntity<>("La descripción no puede exceder los 500 caracteres.", HttpStatus.BAD_REQUEST);
+            }
+            if (precioMensual <= 0) {
+                return new ResponseEntity<>("El precio mensual debe ser un valor numérico positivo.", HttpStatus.BAD_REQUEST);
+            }
+
             avisoService.crearAviso(descripcion, precioMensual, imagenes, titulo, tipoEspacio, condicionesAdicionales, direccion, area, idUsuario);
             return new ResponseEntity<>("Aviso creado exitosamente", HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
@@ -58,6 +68,20 @@ public class AvisoController {
             @RequestParam(required = false) List<MultipartFile> imagenes,
             @RequestParam(required = false) String estado) {
         try {
+            // Validaciones preliminares
+            if (titulo != null && titulo.length() > 100) {
+                return new ResponseEntity<>("El título no puede exceder los 100 caracteres.", HttpStatus.BAD_REQUEST);
+            }
+            if (descripcion != null && descripcion.length() > 500) {
+                return new ResponseEntity<>("La descripción no puede exceder los 500 caracteres.", HttpStatus.BAD_REQUEST);
+            }
+            if (precioMensual != null && precioMensual <= 0) {
+                return new ResponseEntity<>("El precio mensual debe ser un valor numérico positivo.", HttpStatus.BAD_REQUEST);
+            }
+            if (estado != null && !List.of("Activo", "Inactivo").contains(estado)) {
+                return new ResponseEntity<>("Estado no válido. Valores permitidos: Activo, Inactivo", HttpStatus.BAD_REQUEST);
+            }
+
             avisoService.editarAviso(id, titulo, descripcion, precioMensual, imagenes, estado);
             return new ResponseEntity<>("Aviso actualizado correctamente", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
@@ -84,8 +108,6 @@ public class AvisoController {
         return ResponseEntity.ok(avisoService.listarAvisos());
     }
 
-    // Listar avisos para moderación (solo para administradores)
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/moderacion/listar")
     public ResponseEntity<List<Aviso>> listarAvisosParaModeracion() {
         try {
@@ -96,13 +118,14 @@ public class AvisoController {
         }
     }
 
-    // Desactivar un aviso (solo para administradores)
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/moderacion/desactivar/{id}")
     public ResponseEntity<String> desactivarAviso(
             @PathVariable String id,
             @RequestParam String motivo) {
         try {
+            if (motivo == null || motivo.trim().isEmpty()) {
+                return new ResponseEntity<>("El motivo de desactivación no puede estar vacío", HttpStatus.BAD_REQUEST);
+            }
             avisoService.desactivarAviso(id, motivo);
             return new ResponseEntity<>("Aviso desactivado correctamente", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
@@ -112,8 +135,6 @@ public class AvisoController {
         }
     }
 
-    // Reactivar un aviso (solo para administradores)
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/moderacion/reactivar/{id}")
     public ResponseEntity<String> reactivarAviso(@PathVariable String id) {
         try {
@@ -128,13 +149,13 @@ public class AvisoController {
 
     @DeleteMapping("/eliminar-por-propietario/{idPropietario}")
     public ResponseEntity<String> eliminarAvisosPorPropietario(@PathVariable String idPropietario) {
-    try {
-        avisoService.eliminarAvisosPorPropietario(idPropietario);
-        return new ResponseEntity<>("Avisos eliminados correctamente", HttpStatus.OK);
-    } catch (Exception e) {
-        return new ResponseEntity<>("Error al eliminar avisos: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        try {
+            avisoService.eliminarAvisosPorPropietario(idPropietario);
+            return new ResponseEntity<>("Avisos eliminados correctamente", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al eliminar avisos: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-}
 
     @GetMapping("/filtrar")
     public ResponseEntity<List<Aviso>> filtrarAvisos(
@@ -143,13 +164,6 @@ public class AvisoController {
             @RequestParam(required = false) Double precioMax,
             @RequestParam(required = false) String disponibilidad) {
         List<Aviso> avisosFiltrados = avisoService.filtrarAvisos(tipoEspacio, precioMin, precioMax, disponibilidad);
-
-        // Siempre retorna 200 OK, incluso si la lista está vacía
-        if (avisosFiltrados.isEmpty()) {
-            return ResponseEntity.ok(avisosFiltrados); // Lista vacía
-        }
-        return ResponseEntity.ok(avisosFiltrados); // Lista con resultados
+        return ResponseEntity.ok(avisosFiltrados);
     }
 }
-
-
