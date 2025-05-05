@@ -157,7 +157,7 @@ export const PersonalInfoStage = () => {
   const onSubmit = (data: { name: string; surname: string; phone: string; dialCode: string }) => {
     setNextStage({
       name: `${data.name} ${data.surname}`,
-      phone: `${data.dialCode}${data.phone}`,
+      phone: `${data.phone}`,
     });
   };
 

@@ -3,7 +3,7 @@ import { FcGoogle as GoogleIcon } from "react-icons/fc";
 import Separator from "./Separator";
 import SocialLoginButton from "./SocialLoginButton";
 import { useForm } from "react-hook-form";
-import { login } from "../utils/APICalls";
+import { loginUser } from "../utils/APICalls";
 
 const LoginForm = () => {
   const {
@@ -13,7 +13,7 @@ const LoginForm = () => {
   } = useForm<{ email: string; password: string }>();
 
   const onSubmit = (data: { email: string; password: string }) => {
-    login(data.email, data.password)
+    loginUser(data.email, data.password)
       .then((response) => {
         console.log("Login successful", response);
       })
@@ -54,7 +54,13 @@ const LoginForm = () => {
           id="password-input"
           placeholder="Escribe tu contraseña"
           type="password"
+          {...register("password", {
+            required: "La contraseña es obligatoria",
+          })}
         />
+        {errors.password && (
+          <p className="text-red-500 text-sm">{errors.password.message}</p>
+        )}
         <div className="flex h-6 justify-end items-center">
           <a
             className="text-xs text-accent font-medium hover:saturate-200 transition-all"

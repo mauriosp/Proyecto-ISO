@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaHouseChimney, FaHouseChimneyUser } from "react-icons/fa6";
 import { useRegisterContext } from "../context/registerForm/RegisterContext";
-import { register } from "../utils/APICalls";
+import { createUser } from "../utils/APICalls";
 import { User } from "../models/user";
 import FormRadioOption from "./FormRadioOption";
 import { useModalContext } from "../context/modal/ModalContext";
@@ -51,7 +51,7 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = () => {
     e.preventDefault();
     const updatedUser : User = { ...user, profile, isVerified: false };
     setUser(updatedUser);
-    register(updatedUser);
+    createUser(updatedUser);
     openModal("login");
   };
 
