@@ -377,18 +377,24 @@
             "9bc725a3-e87c-4c1a-9905-0aa5fd7c80dc"
           ],
           "childRelationships": [
-            "b9a5e55d-5f8e-4160-bbd6-209a767f647e",
-            "f75cb6a3-968c-4469-8b15-fa0871ec0783"
+            "b9a5e55d-5f8e-4160-bbd6-209a767f647e"
           ]
         },
         {
-          "name": "idPropietario",
+          "name": "idEspacio",
           "hackoladeMeta": {},
           "isActivated": true,
           "type": "objectId",
+          "GUID": "66fc94e3-7f4e-42b5-925a-05c9afa4345e",
           "required": true,
-          "GUID": "82fe9a09-e164-4338-8f51-7adae072db9b",
-          "error": {}
+          "error": {},
+          "foreignCollection": "64ec329a-6291-4127-9c5b-5064a1dcc681",
+          "foreignField": [
+            "64ec329a-6291-4127-9c5b-5064a1dcc681",
+            "9bc725a3-e87c-4c1a-9905-0aa5fd7c80dc"
+          ],
+          "relationshipType": "Foreign Key",
+          "parentRelationship": "ac2053f2-9396-49c1-96c3-0f7727243513"
         },
         {
           "name": "titulo",
@@ -524,9 +530,9 @@
                     }
                   ],
                   "additionalProperties": false,
-                  "error": {},
-                  "required": true,
-                  "GUID": "2d6f266f-4ff9-4412-bd73-413989e45610"
+                  "required": false,
+                  "GUID": "2d6f266f-4ff9-4412-bd73-413989e45610",
+                  "error": {}
                 }
               ],
               "additionalProperties": false,
@@ -539,6 +545,27 @@
           "error": {},
           "GUID": "4f50a275-482d-49c8-8a83-544a8eda441f",
           "foreignCollection": "cc027a96-0517-45d8-8bcb-8578054fbf59"
+        },
+        {
+          "name": "extraInfo",
+          "hackoladeMeta": {},
+          "isActivated": true,
+          "type": "array",
+          "properties": [
+            {
+              "hackoladeMeta": {},
+              "isActivated": true,
+              "type": "document",
+              "properties": [],
+              "additionalProperties": false,
+              "error": {},
+              "GUID": "0f04c59c-91cd-45de-8409-094bae76d90d",
+              "arrayItem": true
+            }
+          ],
+          "additionalItems": true,
+          "error": {},
+          "GUID": "41892028-c915-4ebb-84b6-c3200ff75e92"
         }
       ],
       "definitions": {
@@ -575,7 +602,8 @@
           "primaryKey": true,
           "error": {},
           "childRelationships": [
-            "e31d98fa-2616-474e-b2e9-5028dddaaef6"
+            "e31d98fa-2616-474e-b2e9-5028dddaaef6",
+            "ac2053f2-9396-49c1-96c3-0f7727243513"
           ]
         },
         {
@@ -593,22 +621,6 @@
           ],
           "parentRelationship": "2a955624-b070-4f46-ad19-0e6b218f6416",
           "error": {}
-        },
-        {
-          "name": "idAviso",
-          "hackoladeMeta": {},
-          "isActivated": true,
-          "type": "objectId",
-          "GUID": "e6692a1f-2fdd-40c1-b66a-8304697fa46b",
-          "required": true,
-          "error": {},
-          "foreignCollection": "2422d126-82ae-47d3-bbb2-1947cdd05f21",
-          "foreignField": [
-            "2422d126-82ae-47d3-bbb2-1947cdd05f21",
-            "525dc40f-f66d-45b9-a8f8-678814a9f2f5"
-          ],
-          "relationshipType": "Foreign Key",
-          "parentRelationship": "f75cb6a3-968c-4469-8b15-fa0871ec0783"
         },
         {
           "hackoladeMeta": {},
@@ -1024,12 +1036,20 @@
         "dataType": "",
         "shape": [
           {
-            "x": 2096.1355762020503,
-            "y": 3616.7147193081546
+            "x": 2411.4689095353842,
+            "y": 3814.4413042839424
           },
           {
-            "x": 2258.0113337778103,
-            "y": 3616.7147193081546
+            "x": 2494.344667111144,
+            "y": 3814.4413042839424
+          },
+          {
+            "x": 2494.344667111144,
+            "y": 3834.622094783071
+          },
+          {
+            "x": 2570.344667111144,
+            "y": 3834.622094783071
           }
         ],
         "sides": [
@@ -1061,19 +1081,27 @@
       "childCollection": "2422d126-82ae-47d3-bbb2-1947cdd05f21",
       "hackoladeStyles": {
         "GUID": "35d21daf-735c-4b62-99d7-45458b5c039c",
-        "autoPositioning": false,
+        "autoPositioning": true,
         "type": "Orthogonal",
         "thickness": 2,
         "color": "#79c4ff",
         "dataType": "",
         "shape": [
           {
-            "x": 2096.1355762020503,
-            "y": 3410.024637617275
+            "x": 2411.4689095353842,
+            "y": 3932.4413042839424
           },
           {
-            "x": 2789.684061050537,
-            "y": 3410.024637617275
+            "x": 2756.7431519596275,
+            "y": 3932.4413042839424
+          },
+          {
+            "x": 2756.7431519596275,
+            "y": 3814.7736099345875
+          },
+          {
+            "x": 3102.017394383871,
+            "y": 3814.7736099345875
           }
         ],
         "sides": [
@@ -1112,20 +1140,20 @@
         "dataType": "",
         "shape": [
           {
-            "x": 2789.684061050537,
-            "y": 3527.6069432679205
+            "x": 3102.017394383871,
+            "y": 3939.7736099345875
           },
           {
-            "x": 2710.3476974141736,
-            "y": 3527.6069432679205
+            "x": 3022.6810307475075,
+            "y": 3939.7736099345875
           },
           {
-            "x": 2710.3476974141736,
-            "y": 3650.2887614497376
+            "x": 3022.6810307475075,
+            "y": 4103.622094783072
           },
           {
-            "x": 2631.0113337778103,
-            "y": 3650.2887614497376
+            "x": 2943.344667111144,
+            "y": 4103.622094783072
           }
         ],
         "sides": [
@@ -1159,31 +1187,35 @@
       "childCollection": "64ec329a-6291-4127-9c5b-5064a1dcc681",
       "hackoladeStyles": {
         "GUID": "9b785f35-7cfe-43b9-84e0-d71eb3612a3d",
-        "autoPositioning": true,
+        "autoPositioning": false,
         "type": "Orthogonal",
         "thickness": 2,
         "color": "#79c4ff",
         "dataType": "",
         "shape": [
           {
-            "x": 2789.684061050537,
-            "y": 3625.8569432679205
+            "x": 3167.017394383871,
+            "y": 4064.7736099345875
           },
           {
-            "x": 2710.3476974141736,
-            "y": 3625.8569432679205
+            "y": 4079.7736099345875,
+            "x": 3167.017394383871
           },
           {
-            "x": 2710.3476974141736,
-            "y": 3839.6220947830707
+            "y": 4079.7736099345875,
+            "x": 3022.681030747508
           },
           {
-            "x": 2631.0113337778103,
-            "y": 3839.6220947830707
+            "x": 3022.681030747508,
+            "y": 4198.288761449738
+          },
+          {
+            "x": 2943.344667111144,
+            "y": 4198.288761449738
           }
         ],
         "sides": [
-          "left",
+          "bottom",
           "right"
         ]
       }
@@ -1218,25 +1250,25 @@
         "dataType": "",
         "shape": [
           {
-            "x": 2061.8811605762876,
-            "y": 3824.677796706109
+            "x": 2234.3811605762876,
+            "y": 4218.011130039442
           },
           {
-            "x": 2121.1355762020503,
-            "y": 3824.677796706109
+            "x": 2234.3811605762876,
+            "y": 4180.726217161692
           },
           {
-            "x": 2121.1355762020503,
-            "y": 3569.107970950609
+            "x": 2234.9689095353842,
+            "y": 4180.726217161692
           },
           {
-            "x": 2096.1355762020503,
-            "y": 3569.107970950609
+            "x": 2234.9689095353842,
+            "y": 4143.441304283942
           }
         ],
         "sides": [
-          "right",
-          "right"
+          "top",
+          "bottom"
         ]
       }
     },
@@ -1270,12 +1302,12 @@
         "dataType": "",
         "shape": [
           {
-            "x": 2258.0113337778103,
-            "y": 3825.667428145513
+            "x": 2570.344667111144,
+            "y": 4310.0007614788465
           },
           {
-            "x": 2061.8811605762876,
-            "y": 3825.667428145513
+            "x": 2379.8811605762876,
+            "y": 4310.0007614788465
           }
         ],
         "sides": [
@@ -1285,54 +1317,58 @@
       }
     },
     {
-      "name": "fk_Aviso._id_to_Espacio.idAviso",
+      "name": "fk_Espacio._id_to_Aviso.idEspacio",
       "relationshipType": "Foreign Key",
       "parentField": [
         [
-          "2422d126-82ae-47d3-bbb2-1947cdd05f21",
-          "525dc40f-f66d-45b9-a8f8-678814a9f2f5"
+          "64ec329a-6291-4127-9c5b-5064a1dcc681",
+          "9bc725a3-e87c-4c1a-9905-0aa5fd7c80dc"
         ]
       ],
       "parentCardinality": "1",
       "childField": [
         [
-          "64ec329a-6291-4127-9c5b-5064a1dcc681",
-          "e6692a1f-2fdd-40c1-b66a-8304697fa46b"
+          "2422d126-82ae-47d3-bbb2-1947cdd05f21",
+          "66fc94e3-7f4e-42b5-925a-05c9afa4345e"
         ]
       ],
       "isActivated": true,
       "childCardinality": "1",
-      "GUID": "f75cb6a3-968c-4469-8b15-fa0871ec0783",
-      "parentCollection": "2422d126-82ae-47d3-bbb2-1947cdd05f21",
-      "childCollection": "64ec329a-6291-4127-9c5b-5064a1dcc681",
+      "GUID": "ac2053f2-9396-49c1-96c3-0f7727243513",
+      "parentCollection": "64ec329a-6291-4127-9c5b-5064a1dcc681",
+      "childCollection": "2422d126-82ae-47d3-bbb2-1947cdd05f21",
       "hackoladeStyles": {
-        "GUID": "fab8e30e-36f9-45c5-ab99-78c331cf00bd",
-        "autoPositioning": true,
+        "GUID": "1db2eb7f-3ea3-4798-accf-9cc06f7c7313",
+        "autoPositioning": false,
         "type": "Orthogonal",
         "thickness": 2,
         "color": "#79c4ff",
         "dataType": "",
         "shape": [
           {
-            "x": 2789.684061050537,
-            "y": 3429.3569432679205
+            "x": 2375.1729439436967,
+            "y": 3721.4413042839424
           },
           {
-            "x": 2442.9098186262936,
-            "y": 3429.3569432679205
+            "y": 3706.4413042839424,
+            "x": 2375.1729439436967
           },
           {
-            "x": 2442.9098186262936,
-            "y": 3451.441304283942
+            "y": 3706.4413042839424,
+            "x": 3020.017394383871
           },
           {
-            "x": 2096.1355762020503,
-            "y": 3451.441304283942
+            "x": 3020.017394383871,
+            "y": 3704.7736099345875
+          },
+          {
+            "x": 3102.017394383871,
+            "y": 3704.7736099345875
           }
         ],
         "sides": [
-          "left",
-          "right"
+          "top",
+          "left"
         ]
       }
     }
@@ -1373,7 +1409,6 @@
     "2e3b7b72-9481-4593-96e0-4c39a52c8f1f": "estado",
     "d6740a44-17a9-445c-b118-52c9f08dbf2b": "idUsuario",
     "16ffd2b5-ecd7-4604-9bcf-462bf0ead066": "califiacionUsuario",
-    "82fe9a09-e164-4338-8f51-7adae072db9b": "idPropietario",
     "7367bfb3-7a5a-44dd-897f-79117e8ecbdf": "idUsuario",
     "14124546-1172-4c4f-96b8-4c6023088962": "idPropietario",
     "6d8d1cfa-2e5d-427a-8ff9-798ee697da56": "fk_Aviso._id_to_Usuario._id",
@@ -1411,9 +1446,12 @@
     "44f50ee7-0c28-4ef9-af6a-506765cf9f46": "estado",
     "a153df23-36b4-40f4-b8a6-a942e78dcb58": "idAviso",
     "db7cc4fa-9f56-4b67-a442-af95569a5889": "idUsuario",
-    "e6692a1f-2fdd-40c1-b66a-8304697fa46b": "idAviso",
-    "f75cb6a3-968c-4469-8b15-fa0871ec0783": "fk_Aviso._id_to_Espacio.idAviso",
-    "78b10420-cb38-4529-a95d-7869731f09bd": "contenido"
+    "78b10420-cb38-4529-a95d-7869731f09bd": "contenido",
+    "66fc94e3-7f4e-42b5-925a-05c9afa4345e": "idEspacio",
+    "ac2053f2-9396-49c1-96c3-0f7727243513": "fk_Espacio._id_to_Aviso.idEspacio",
+    "41892028-c915-4ebb-84b6-c3200ff75e92": "extraInfo",
+    "4205e7d1-6cf8-43e9-bd26-3109820b33d4": "New view",
+    "20a8ffee-9e0e-4736-9e1b-4ede82bc0673": "New view1"
   },
   "definitions": {
     "type": "definitions",
@@ -1438,7 +1476,7 @@
   "creationTS": "2025-03-02T02:39:23.661Z",
   "GUID": "9bc66a07-e7d1-4934-b13f-50dc8a7fb470",
   "isLineageEnabled": false,
-  "lastModifTS": "2025-05-01T18:15:32.191Z",
+  "lastModifTS": "2025-05-05T01:56:31.457Z",
   "persistenceSchemaVersion": "8",
   "isCreatedByPlugin": true,
   "pluginInformation": {
@@ -1454,32 +1492,32 @@
         "erd": [
           {
             "GUID": "cc027a96-0517-45d8-8bcb-8578054fbf59",
-            "x": 2258.0113337778103,
-            "y": 3460.955428116404,
+            "x": 2570.344667111144,
+            "y": 3819.622094783071,
             "width": 373,
             "height": 568,
             "color": {}
           },
           {
             "GUID": "2422d126-82ae-47d3-bbb2-1947cdd05f21",
-            "x": 1754.1355762020505,
-            "y": 3333.7746376172754,
-            "width": 342,
-            "height": 353,
+            "x": 2058.4689095353842,
+            "y": 3721.4413042839424,
+            "width": 353,
+            "height": 422,
             "color": {}
           },
           {
             "GUID": "64ec329a-6291-4127-9c5b-5064a1dcc681",
-            "x": 2789.684061050537,
-            "y": 3331.1069432679205,
+            "x": 3102.017394383871,
+            "y": 3689.7736099345875,
             "width": 311,
-            "height": 393,
+            "height": 375,
             "color": {}
           },
           {
             "GUID": "c5f736de-e5da-4913-86a4-2f6da473f297",
-            "x": 1770.8811605762878,
-            "y": 3733.677796706109,
+            "x": 2088.8811605762876,
+            "y": 4218.011130039442,
             "width": 291,
             "height": 182,
             "color": {}
@@ -1493,8 +1531,8 @@
         },
         "buckets": [
           {
-            "x": 1714.1355762020505,
-            "y": 3291.1069432679205,
+            "x": 2018.4689095353842,
+            "y": 3649.7736099345875,
             "GUID": "4f3c5945-7d83-4c19-87bb-d0a959ca48ce"
           }
         ],
