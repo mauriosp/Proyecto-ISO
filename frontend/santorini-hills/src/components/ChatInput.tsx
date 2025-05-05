@@ -26,7 +26,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
       />
       <button
         type="submit"
-        className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 flex items-center justify-center"
+        className="bg-accent text-white p-2 rounded-full hover:bg-slate-800 flex items-center justify-center"
         aria-label="Enviar mensaje"
         >
         <FiSend className="h-4 w-4" />
