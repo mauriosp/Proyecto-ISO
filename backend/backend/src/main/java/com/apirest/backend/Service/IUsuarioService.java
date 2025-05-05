@@ -3,6 +3,7 @@ package com.apirest.backend.Service;
 import com.apirest.backend.Model.Usuario;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
+import org.bson.types.ObjectId;
 
 public interface IUsuarioService {
     // Especificar las operaciones (CRUD)
@@ -13,5 +14,5 @@ public interface IUsuarioService {
     void eliminarCuenta(String id);
     String loginUsuario(String email, String contraseña);
     void actualizarContraseña(String id, String nuevaContraseña);
-    boolean existeUsuarioPorId(String idUsuario);
+    boolean existeUsuarioPorId(ObjectId idUsuario);
 }

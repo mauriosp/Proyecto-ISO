@@ -30,8 +30,8 @@ public class EspacioServiceImpl implements IEspacioService {
     }
 
     @Override
-    public Optional<Espacio> buscarEspacioPorDireccionYPropietario(String direccion, String idPropietario) {
-        return espacioRepository.findByDireccionAndIdPropietario(direccion, idPropietario);
+    public Optional<Espacio> buscarEspacioPorDireccionYPropietario(String direccion, ObjectId idPropietario) {
+        return espacioRepository.buscarEspacioPorDireccionYPropietario(direccion, idPropietario);
     }
 
     @Override
@@ -45,8 +45,7 @@ public class EspacioServiceImpl implements IEspacioService {
     }
 
     @Override
-    public Espacio crearEspacio(String idUsuario, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area) {
-        
+    public Espacio crearEspacio(ObjectId idUsuario, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area) {
         // Validar que el usuario exista
         if (!usuarioService.existeUsuarioPorId(idUsuario)) {
             throw new IllegalArgumentException("El usuario con el ID proporcionado no existe.");
@@ -76,11 +75,10 @@ public class EspacioServiceImpl implements IEspacioService {
         if (area == null || area.doubleValue() <= 0) {
             throw new IllegalArgumentException("El área debe ser mayor a 0.");
         }
-        System.out.println("Creando aviso...");
 
         // Crear un nuevo espacio
         Espacio nuevoEspacio = new Espacio();
-        nuevoEspacio.setIdPropietario(new ObjectId(idUsuario)); // Convertir el ID del usuario a ObjectId y establecerlo como propietario
+        nuevoEspacio.setIdPropietario(idUsuario); // Establecer el ID del propietario
         nuevoEspacio.setTipoEspacio(tipoEspacio); // Establecer el campo tipoEspacio
         nuevoEspacio.setCaracteristicas(caracteristicas); // Establecer las características
         nuevoEspacio.setDireccion(direccion); // Establecer la dirección
@@ -89,7 +87,6 @@ public class EspacioServiceImpl implements IEspacioService {
 
         // Guardar el espacio en la base de datos
         return espacioRepository.save(nuevoEspacio);
-
     }
 
     @Override
@@ -123,6 +120,7 @@ public class EspacioServiceImpl implements IEspacioService {
         }
 
         // Actualizar los datos del espacio
+
         espacio.setTipoEspacio(tipoEspacio);
         espacio.setCaracteristicas(caracteristicas);
         espacio.setDireccion(direccion);
