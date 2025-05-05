@@ -24,7 +24,7 @@ const ContactBox: React.FC<ContactBoxProps> = ({ price, keypoints = [] }) => {
       {keypoints && <KeyPoints points={keypoints} />}
       <div className="font-medium flex flex-col gap-2 mt-3">
         <p>¿Te interesa este inmueble?</p>
-        <button className="form-button bg-accent text-white hover:bg-slate-800 font-semibold">
+        <button onClick={()=>handleClick("message")} className="form-button bg-accent text-white hover:bg-slate-800 font-semibold">
           Contactar propietario
         </button>
         <button onClick={()=>handleClick("report")} className="form-button bg-red-700 text-white hover:bg-red-800 font-semibold">

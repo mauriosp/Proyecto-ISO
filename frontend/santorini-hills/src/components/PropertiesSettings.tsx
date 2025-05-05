@@ -2,8 +2,13 @@ import { Link } from "react-router";
 import { useUserContext } from "../context/user/UserContext";
 import { testAdvertisements } from "../testAdvertisements";
 import { formatNumber } from "../utils/parseNumbers";
+import { ModalView, useModalContext } from "../context/modal/ModalContext";
 
 const PropertiesSettings = () => {
+    const { openModal } = useModalContext();
+      const handleClick = (view:ModalView) => {
+        openModal(view);
+    };
 
     const { user } = useUserContext();
     // Mostrar todas las propiedades si el usuario es admin, solo las propias si no
@@ -41,6 +46,9 @@ const PropertiesSettings = () => {
                                 <Link to={`/edit/${property.id}`} className="flex items-center gap-1 px-3 py-1 bg-accent hover:bg-slate-800 hover:cursor-pointer text-white rounded transition">
                                     Editar
                                 </Link>
+                                <button onClick={()=>handleClick("list")} className="flex items-center gap-1 px-3 py-1 bg-accent hover:bg-slate-800 hover:cursor-pointer text-white rounded transition">
+                                    Mensajes
+                                </button>
                                 <button className="flex items-center gap-1 px-3 py-1 border-2 border-accent hover:bg-red-500 hover:cursor-pointer hover:border-red-700 hover:text-white rounded transition">
                                     Eliminar
                                 </button>

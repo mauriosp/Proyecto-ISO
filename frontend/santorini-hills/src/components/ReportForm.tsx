@@ -1,5 +1,10 @@
 import { useState } from "react";
 
+interface ReportFormProps {
+  idAviso: string;
+  idUsuario: string;
+}
+
 const motivosPredefinidos = [
   "Información falsa",
   "Precio engañoso",
@@ -8,7 +13,7 @@ const motivosPredefinidos = [
   "Propiedad ya no disponible",
 ];
 
-export default function ReportForm() {
+export default function ReportForm({ idAviso, idUsuario }: ReportFormProps) {
   const [motivo, setMotivo] = useState("");
   const [otroMotivo, setOtroMotivo] = useState("");
   const [detalles, setDetalles] = useState("");
@@ -22,16 +27,25 @@ export default function ReportForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Motivo:", motivoFinal);
-    console.log("Detalles:", detalles);
-    // Aquí podrías enviar a backend o mostrar feedback
+
+    const jsonPreview = {
+      idAviso,
+      idUsuario,
+      descripcion: detalles, // puedes agregar lógica para esto si lo usas
+      motivoReporte: motivoFinal,
+      comentarioAdicional: null,
+      fechaReporte: new Date().toISOString(),
+      estado: "abierto",
+    };
+
+    console.log(JSON.stringify(jsonPreview, null, 2));
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex justify-center">
-            <h3 className="text-lg font-semibold">¿Por qué estás reportando este aviso?</h3>
-        </div>
+      <div className="flex justify-center">
+        <h3 className="text-lg font-semibold">¿Por qué estás reportando este aviso?</h3>
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {motivosPredefinidos.map((m) => (
@@ -69,23 +83,22 @@ export default function ReportForm() {
       )}
 
       <textarea
-        placeholder="Detalles adicionales (opcional)"
+        placeholder="Descripción"
         value={detalles}
         onChange={(e) => setDetalles(e.target.value)}
         className="w-full p-2 bg-white text-sm rounded border border-gray-300"
         rows={4}
       />
 
-        <div className="flex justify-center">
-            <button
-                type="submit"
-                disabled={!motivoFinal.trim()}
-                className="form-button bg-red-600 text-white px-6 py-2 font-semibold w-full max-w-xs disabled:opacity-50"
-            >
-                Enviar reporte
-            </button>
-        </div>
-
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          disabled={!motivoFinal.trim() || !detalles.trim()}
+          className="form-button bg-red-600 text-white px-6 py-2 font-semibold w-full max-w-xs disabled:opacity-50"
+        >
+          Enviar reporte
+        </button>
+      </div>
     </form>
   );
 }

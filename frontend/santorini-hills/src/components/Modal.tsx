@@ -4,7 +4,9 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Verification from "../pages/Verification";
 import Report from "../pages/Report";
+import Message from "../pages/Message";
 import { motion, AnimatePresence } from "framer-motion";
+import Messages from "../pages/Messages";
 
 const Modal = () => {
   const { message, view, closeModal } = useModalContext();
@@ -46,6 +48,8 @@ const Modal = () => {
               {view === "edit" && <EditProfile />}
               {view === "verification" && <Verification />}
               {view === "report" && <Report />}
+              {view === "message" && <Message />}
+              {view === "list" && <Messages />}
             </div>
           </motion.div>
         </motion.div>
