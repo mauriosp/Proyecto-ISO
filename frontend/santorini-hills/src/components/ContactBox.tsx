@@ -9,12 +9,13 @@ interface ContactBoxProps {
 }
 
 
+
+const ContactBox: React.FC<ContactBoxProps> = ({ price, keypoints = [] }) => {
+
   const { openModal } = useModalContext();
   const handleClick = (view:ModalView) => {
     openModal(view);
   };
-const ContactBox: React.FC<ContactBoxProps> = ({ price, keypoints = [] }) => {
-  
   return (
     <section className="bg-white rounded-xl shadow p-8 flex flex-col gap-2">
       <h3 className="text-4xl font-semibold">
