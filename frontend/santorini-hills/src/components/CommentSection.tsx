@@ -1,26 +1,58 @@
-import React from 'react';
+import React, { useState } from "react";
+import CommentInput from "./CommentInput";
+import Comment from "./Comment";
+import { useUserContext } from "../context/user/UserContext"; // ajusta esta ruta si es necesario
 
-interface Comment {
+interface CommentData {
   id: number;
-  text: string;
   author: string;
+  text: string;
+  rating: number;
+  date: string;
+  avatarUrl?: string;
 }
 
 interface CommentsSectionProps {
-  comments?: Comment[];
+  initialComments?: CommentData[];
 }
 
-const CommentsSection: React.FC<CommentsSectionProps> = ({ comments = [] }) => {
+const CommentsSection: React.FC<CommentsSectionProps> = ({ initialComments = [] }) => {
+  const { user } = useUserContext();
+  const [comments, setComments] = useState<CommentData[]>(initialComments);
+
+  const handleAddComment = (text: string, rating: number) => {
+    if (!user) return; // Opcional: podrías manejar el caso donde no haya usuario autenticado
+
+    const newComment: CommentData = {
+      id: Date.now(),
+      author: user.name,
+      text,
+      rating,
+      date: new Date().toLocaleDateString(),
+      avatarUrl: user.photo || undefined,
+    };
+    setComments([newComment, ...comments]);
+  };
+
   return (
-    <section className="bg-white rounded-xl shadow p-8 flex flex-col gap-2">
+    <section className="bg-white rounded-xl shadow p-8 flex flex-col gap-4">
       <h3 className="text-2xl font-medium">Comentarios</h3>
-      <div className="p-4">
+      {user ? (
+        <CommentInput onAddComment={handleAddComment} />
+      ) : (
+        <p className="text-sm text-gray-600">Inicia sesión para dejar un comentario.</p>
+      )}
+      <div className="mt-4">
         {comments.length > 0 ? (
-          comments.map(comment => (
-            <div key={comment.id} className="mb-2">
-              <p className="font-medium">{comment.author}</p>
-              <p>{comment.text}</p>
-            </div>
+          comments.map((comment) => (
+            <Comment
+              key={comment.id}
+              author={comment.author}
+              text={comment.text}
+              rating={comment.rating}
+              date={comment.date}
+              avatarUrl={comment.avatarUrl}
+            />
           ))
         ) : (
           <p className="text-sm text-center text-neutral-600">
