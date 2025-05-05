@@ -1,6 +1,6 @@
 package com.apirest.backend.Model;
 
-import java.util.Date;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class CalificacionEspacio {
-    private int puntuacion;
-    private Date fecha;
-    private String comentario;
+public class ExtraInfo {
+    private Map<String, Object> detalles;  // Permite almacenar datos dinámicos
 }

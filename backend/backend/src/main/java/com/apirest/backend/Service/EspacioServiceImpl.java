@@ -1,14 +1,15 @@
 package com.apirest.backend.Service;
 
-import com.apirest.backend.Model.Espacio;
-import com.apirest.backend.Repository.EspacioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.bson.types.ObjectId;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.apirest.backend.Model.Espacio;
+import com.apirest.backend.Repository.EspacioRepository;
 
 @Service
 public class EspacioServiceImpl implements IEspacioService {
@@ -31,7 +32,11 @@ public class EspacioServiceImpl implements IEspacioService {
 
     @Override
     public Optional<Espacio> buscarEspacioPorDireccionYPropietario(String direccion, ObjectId idPropietario) {
-        return espacioRepository.findByDireccionAndIdPropietario(direccion, idPropietario);
+        // Convertir ObjectId a String para trabajar con el repositorio
+        String idPropietarioStr = idPropietario.toHexString();
+        
+        // Llamar al método del repositorio con los parámetros adecuados
+        return espacioRepository.findByDireccionAndIdPropietario(direccion, idPropietarioStr);
     }
 
     @Override
@@ -79,7 +84,6 @@ public class EspacioServiceImpl implements IEspacioService {
         // Crear un nuevo espacio
         Espacio nuevoEspacio = new Espacio();
         nuevoEspacio.setIdPropietario(idUsuario); // Establecer el ID del propietario
-        nuevoEspacio.setTipo(tipoEspacio); // Establecer el tipo de espacio
         nuevoEspacio.setTipoEspacio(tipoEspacio); // Establecer el campo tipoEspacio
         nuevoEspacio.setCaracteristicas(caracteristicas); // Establecer las características
         nuevoEspacio.setDireccion(direccion); // Establecer la dirección
@@ -121,7 +125,7 @@ public class EspacioServiceImpl implements IEspacioService {
         }
 
         // Actualizar los datos del espacio
-        espacio.setTipo(tipoEspacio);
+
         espacio.setTipoEspacio(tipoEspacio);
         espacio.setCaracteristicas(caracteristicas);
         espacio.setDireccion(direccion);

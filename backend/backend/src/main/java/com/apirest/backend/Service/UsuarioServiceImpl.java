@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -18,9 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.apirest.backend.Model.AuditoriaPerfil;
+import com.apirest.backend.Model.Aviso;
+import com.apirest.backend.Model.Espacio;
 import com.apirest.backend.Model.Usuario;
 import com.apirest.backend.Model.VerificacionEmail;
 import com.apirest.backend.Repository.AvisoRepository;
+import com.apirest.backend.Repository.EspacioRepository;
 import com.apirest.backend.Repository.ReporteRepository;
 import com.apirest.backend.Repository.UsuarioRepository;
 
@@ -41,6 +45,9 @@ public class UsuarioServiceImpl implements IUsuarioService {
     
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EspacioRepository espacioRepository;
 
     @Override
     public String guardarUsuario(Usuario usuario) {
@@ -264,9 +271,28 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     private void eliminarDatosRelacionados(String usuarioId) {
         ObjectId propietarioId = new ObjectId(usuarioId);
-        avisoRepository.deleteByIdPropietario(propietarioId);
-
-        // Eliminar reportes relacionados
+        
+        // 1. Buscar todos los espacios del usuario
+        List<Espacio> espaciosUsuario = espacioRepository.findAll().stream()
+            .filter(espacio -> espacio.getIdPropietario() != null && 
+                    espacio.getIdPropietario().equals(propietarioId))
+            .collect(Collectors.toList());
+        
+        // 2. Para cada espacio, buscar y eliminar sus avisos
+        for (Espacio espacio : espaciosUsuario) {
+            List<Aviso> avisosEspacio = avisoRepository.findAll().stream()
+                .filter(aviso -> aviso.getIdEspacio() != null && 
+                        aviso.getIdEspacio().equals(espacio.getId()))
+                .collect(Collectors.toList());
+            
+            // Eliminar los avisos asociados a este espacio
+            avisoRepository.deleteAll(avisosEspacio);
+        }
+        
+        // 3. Eliminar los espacios del usuario
+        espacioRepository.deleteAll(espaciosUsuario);
+    
+        // 4. Eliminar reportes relacionados
         reporteRepository.deleteByIdUsuario(usuarioId);
     }
 

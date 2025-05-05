@@ -1,7 +1,8 @@
 package com.apirest.backend.Service;
 
-import com.apirest.backend.Model.Aviso;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.apirest.backend.Model.Aviso;
 
 public interface IImagenAvisoService {
     /**

@@ -1,14 +1,16 @@
 package com.apirest.backend.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
+
+import org.springframework.stereotype.Service;
+
 import com.apirest.backend.Model.AuditoriaPerfil;
 import com.apirest.backend.Model.Usuario;
 import com.apirest.backend.Repository.UsuarioRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
