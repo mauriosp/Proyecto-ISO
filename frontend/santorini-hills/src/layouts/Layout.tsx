@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar"
 import { useModalContext } from "../context/modal/ModalContext"
 import { useUserContext } from "../context/user/UserContext";
 import { useEffect } from "react";
-import ChatSystem from "../components/ChatSystem";
+
 
 const Layout: React.FC<React.PropsWithChildren> = () => {
     const { isOpen, openModal } = useModalContext();
@@ -28,7 +28,7 @@ const Layout: React.FC<React.PropsWithChildren> = () => {
                     </div>
                 </div>
             )}
-            <ChatSystem />
+            
         </div>
 
     )
