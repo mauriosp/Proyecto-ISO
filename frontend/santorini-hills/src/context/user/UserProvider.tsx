@@ -10,7 +10,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const ownerUser: User = {
+  /*const ownerUser: User = {
     id: "1",
     name: "Juan Pérez",
     email: "juanperez@email.com",
@@ -18,10 +18,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     phone: "+573001112233",
     profile: "owner",
     isVerified: true,
-  };
+  }; */
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const renterUser: User = {
+  /*const renterUser: User = {
     id: "4",
     name: "María López",
     email: "maria@email.com",
@@ -32,7 +32,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const adminUser: User = {
+ /* const adminUser: User = {
     id: "2",
     name: "Admin",
     email: "admin@santorini.com",
@@ -40,7 +40,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     phone: "+573001112233",
     profile: "admin",
     isVerified: true,
-  };
+  }; */
 
   useEffect(() => {
     const storedUser = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -56,10 +56,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       // setUser(renterUser);
       
       // Solo para pruebas (admin)
-      setUser(adminUser);
+      //setUser(adminUser);
 
       // No logeado por defecto
-      //   setUser(null);
+      setUser(null);
     }
   }, []);
   /*

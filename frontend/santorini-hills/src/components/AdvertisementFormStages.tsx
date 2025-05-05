@@ -8,7 +8,7 @@ import { useAdvertisementContext } from "../context/advertisement/AdvertisementC
 import { useUserContext } from "../context/user/UserContext";
 import { Property, PropertyType } from "../models/property";
 import AdvertisementPage from "../pages/AdvertisementPage";
-import { publishAdvertisement, updateAdvertisement } from "../utils/APICalls";
+import { createAdvertisement, updateAdvertisement } from "../utils/APICalls";
 import { formatNumber } from "../utils/parseNumbers";
 import { uploadFileToFirebase } from "../utils/UploadFileToFirebase";
 import FormRadioOption from "./FormRadioOption";
@@ -661,7 +661,7 @@ export const AdvertisementPreviewStage = () => {
           console.error("Error al actualizar el anuncio:", error);
         });
     } else {
-      publishAdvertisement(advertisementWithOwnerAndStatus)
+      createAdvertisement(advertisementWithOwnerAndStatus)
         .then((response) => {
           redirect("/advertisement/" + response.id);
         })

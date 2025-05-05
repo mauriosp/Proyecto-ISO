@@ -59,6 +59,19 @@ export async function createUser(user: User) {
   return res.data;
 }
 
+// POST login
+export async function loginUser(email: string, password: string) {
+  try {
+    const res = await axios.post(
+      `${API_URL}Usuario/login?email=${encodeURIComponent(email)}&contraseña=${encodeURIComponent(password)}`
+    );
+    return res.data;
+  } catch (error: any) {
+    const backendMessage = error.response?.data || 'Error al iniciar sesión';
+    throw new Error(typeof backendMessage === 'string' ? backendMessage : 'Error al iniciar sesión');
+  }
+}
+
 // POST propiedad
 export async function createProperty(property: Property) {
   // Adaptar property a formato backend
@@ -97,3 +110,22 @@ export async function createAdvertisement(ad: Advertisement) {
   return res.data;
 }
 
+// PUT aviso (form-data)
+export async function updateAdvertisement(id: string, ad: Advertisement) {
+  const formData = new FormData();
+  formData.append("id", id); // Asegúrate de que el backend espera el ID en el body
+  formData.append("tipoEspacio", ad.property?.type || "");
+  formData.append("descripcion", ad.description);
+  formData.append("precioMensual", ad.price.toString());
+  formData.append("extraInfo", ad.extraInfo.join(", "));
+  ad.images.forEach((img) => formData.append("imagenes", img));
+  formData.append("titulo", ad.title);
+  formData.append("direccion", ad.property?.address || "");
+  formData.append("area", ad.property?.area?.toString() || "");
+  formData.append("idUsuario", ad.owner?.id || "");
+  if (ad.property?.bedrooms) formData.append("habitaciones", ad.property.bedrooms.toString());
+  if (ad.property?.bathrooms) formData.append("baños", ad.property.bathrooms.toString());
+  
+  const res = await axios.put(`${API_URL}Aviso/actualizar/${id}`, formData);
+  return res.data;
+}
