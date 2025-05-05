@@ -1,10 +1,14 @@
 package com.apirest.backend.Model;
 
+import java.util.Date;
+
+import org.bson.types.ObjectId;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.bson.types.ObjectId;
 import lombok.NoArgsConstructor;
-import java.util.Date;
 
 
 @Data
@@ -18,4 +22,9 @@ public class Mensaje {
     private Date fechaMensaje;
     private boolean estadoMensaje;
     private RespuestaMensaje respuestaMensaje;
+
+    @JsonProperty("idUsuario")
+    public String getIdUsuarioAsString() {
+        return idUsuario != null ? idUsuario.toHexString() : null;
+    }
 }

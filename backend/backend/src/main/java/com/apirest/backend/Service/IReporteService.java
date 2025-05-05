@@ -1,8 +1,8 @@
 package com.apirest.backend.Service;
 
-import com.apirest.backend.Model.Reporte;
-
 import java.util.List;
+
+import com.apirest.backend.Model.Reporte;
 
 public interface IReporteService {
     Reporte crearReporte(Reporte reporte);

@@ -1,11 +1,8 @@
 package com.apirest.backend.Controller;
 
-import com.apirest.backend.Dto.CambioContraseñaDTO;
-import com.apirest.backend.Model.Usuario;
-import com.apirest.backend.Model.VerificacionEmail;
-import com.apirest.backend.Repository.UsuarioRepository;
-import com.apirest.backend.Service.IContraseñaService;
-import lombok.RequiredArgsConstructor;
+import java.util.Date;
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,8 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-import java.util.Optional;
+import com.apirest.backend.Dto.CambioContraseñaDTO;
+import com.apirest.backend.Model.Usuario;
+import com.apirest.backend.Model.VerificacionEmail;
+import com.apirest.backend.Repository.UsuarioRepository;
+import com.apirest.backend.Service.IContraseñaService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/UAO/apirest/password")

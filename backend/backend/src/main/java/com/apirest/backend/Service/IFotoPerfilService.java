@@ -1,7 +1,8 @@
 package com.apirest.backend.Service;
 
-import com.apirest.backend.Model.Usuario;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.apirest.backend.Model.Usuario;
 
 public interface IFotoPerfilService {
     /**

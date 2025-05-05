@@ -1,11 +1,12 @@
 package com.apirest.backend.Service;
 
-import com.apirest.backend.Model.Espacio;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+
 import org.bson.types.ObjectId;
+
+import com.apirest.backend.Model.Espacio;
 
 public interface IEspacioService {
     List<Espacio> listarEspacios();

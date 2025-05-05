@@ -1,13 +1,5 @@
 package com.apirest.backend.Service;
 
-import com.apirest.backend.Exception.ImagenException;
-import com.apirest.backend.Model.Usuario;
-import com.apirest.backend.Repository.UsuarioRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,6 +8,16 @@ import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.apirest.backend.Exception.ImagenException;
+import com.apirest.backend.Model.Usuario;
+import com.apirest.backend.Repository.UsuarioRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

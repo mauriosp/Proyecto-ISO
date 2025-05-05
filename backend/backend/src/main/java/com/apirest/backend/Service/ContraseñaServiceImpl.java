@@ -1,10 +1,10 @@
 package com.apirest.backend.Service;
 
-import com.apirest.backend.Model.Usuario;
-import com.apirest.backend.Model.VerificacionEmail;
-import com.apirest.backend.Repository.UsuarioRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailPreparationException;
@@ -14,12 +14,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.apirest.backend.Model.Usuario;
+import com.apirest.backend.Model.VerificacionEmail;
+import com.apirest.backend.Repository.UsuarioRepository;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor

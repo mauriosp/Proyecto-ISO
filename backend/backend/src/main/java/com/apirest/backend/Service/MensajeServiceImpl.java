@@ -1,17 +1,19 @@
 package com.apirest.backend.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.bson.types.ObjectId;
+import org.springframework.stereotype.Service;
+
 import com.apirest.backend.Model.Aviso;
 import com.apirest.backend.Model.Mensaje;
 import com.apirest.backend.Model.RespuestaMensaje;
 import com.apirest.backend.Repository.AvisoRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,14 +23,14 @@ public class MensajeServiceImpl implements IMensajeService {
     private final AvisoRepository avisoRepository;
 
     @Override
-    public void enviarMensaje(ObjectId usuarioId, String contenido, ObjectId avisoId) {
-        // Convertir ObjectId a String para el findById
-        Aviso aviso = avisoRepository.findById(avisoId.toString())
+    public void enviarMensaje(String usuarioId, String contenido, String avisoId) {
+        // Convertir String a ObjectId para el findById
+        Aviso aviso = avisoRepository.findById(avisoId)
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado: " + avisoId));
         
         // Crear nuevo mensaje (notificación)
         Mensaje mensaje = new Mensaje();
-        mensaje.setIdUsuario(usuarioId);
+        mensaje.setIdUsuario(new ObjectId(usuarioId)); // Convertir usuarioId a ObjectId
         mensaje.setContenido(contenido);
         mensaje.setFechaMensaje(new Date());
         mensaje.setEstadoMensaje(false); // No leído
@@ -46,28 +48,28 @@ public class MensajeServiceImpl implements IMensajeService {
     }
     
     @Override
-    public void notificarNuevaCalificacion(ObjectId propietarioId, ObjectId espacioId, 
-                                          int puntuacion, ObjectId avisoId) {
+    public void notificarNuevaCalificacion(String propietarioId, String espacioId, 
+                                          int puntuacion, String avisoId) {
         String contenido = "Tu espacio ha recibido una nueva calificación de " + puntuacion + " estrellas.";
         enviarMensaje(propietarioId, contenido, avisoId);
     }
     
     @Override
-    public void notificarNuevoComentario(ObjectId propietarioId, String comentario, ObjectId avisoId) {
+    public void notificarNuevoComentario(String propietarioId, String comentario, String avisoId) {
         String contenido = "Nuevo comentario: \"" + comentario + "\"";
         enviarMensaje(propietarioId, contenido, avisoId);
     }
     
     @Override
-    public void notificarModeracionAviso(ObjectId propietarioId, ObjectId avisoId, 
+    public void notificarModeracionAviso(String propietarioId, String avisoId, 
                                         String motivo, String accion) {
         String contenido = "Tu aviso ha sido " + accion + ". Motivo: " + motivo;
         enviarMensaje(propietarioId, contenido, avisoId);
     }
     
     @Override
-    public List<Mensaje> obtenerMensajesUsuario(ObjectId usuarioId, ObjectId avisoId) {
-        Aviso aviso = avisoRepository.findById(avisoId.toString())
+    public List<Mensaje> obtenerMensajesUsuario(String usuarioId, String avisoId) {
+        Aviso aviso = avisoRepository.findById(avisoId)
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
         if (aviso.getMensaje() == null) {
@@ -77,7 +79,7 @@ public class MensajeServiceImpl implements IMensajeService {
         List<Mensaje> notificacionesUsuario = new ArrayList<>();
         
         for (Mensaje mensaje : aviso.getMensaje()) {
-            if (mensaje.getIdUsuario().equals(usuarioId)) {
+            if (mensaje.getIdUsuario().toHexString().equals(usuarioId)) { // Comparar como String
                 notificacionesUsuario.add(mensaje);
             }
         }
@@ -86,7 +88,7 @@ public class MensajeServiceImpl implements IMensajeService {
     }
     
     @Override
-    public List<Mensaje> obtenerMensajesNoLeidas(ObjectId usuarioId, ObjectId avisoId) {
+    public List<Mensaje> obtenerMensajesNoLeidas(String usuarioId, String avisoId) {
         List<Mensaje> todasNotificaciones = obtenerMensajesUsuario(usuarioId, avisoId);
         List<Mensaje> noLeidas = new ArrayList<>();
         
@@ -100,8 +102,8 @@ public class MensajeServiceImpl implements IMensajeService {
     }
     
     @Override
-    public void marcarComoLeida(ObjectId avisoId, int indiceMensaje) {
-        Aviso aviso = avisoRepository.findById(avisoId.toString())
+    public void marcarComoLeida(String avisoId, int indiceMensaje) {
+        Aviso aviso = avisoRepository.findById(avisoId)
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
         if (aviso.getMensaje() != null && indiceMensaje >= 0 && indiceMensaje < aviso.getMensaje().size()) {
@@ -116,15 +118,15 @@ public class MensajeServiceImpl implements IMensajeService {
     }
     
     @Override
-    public void marcarTodasComoLeidas(ObjectId usuarioId, ObjectId avisoId) {
-        Aviso aviso = avisoRepository.findById(avisoId.toString())
+    public void marcarTodasComoLeidas(String usuarioId, String avisoId) {
+        Aviso aviso = avisoRepository.findById(avisoId)
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
         if (aviso.getMensaje() != null) {
             boolean cambios = false;
             
             for (Mensaje mensaje : aviso.getMensaje()) {
-                if (mensaje.getIdUsuario().equals(usuarioId) && !mensaje.isEstadoMensaje()) {
+                if (mensaje.getIdUsuario().toHexString().equals(usuarioId) && !mensaje.isEstadoMensaje()) {
                     mensaje.setEstadoMensaje(true);
                     cambios = true;
                 }
@@ -139,13 +141,13 @@ public class MensajeServiceImpl implements IMensajeService {
     }
     
     @Override
-    public long contarMensajesNoLeidas(ObjectId usuarioId, ObjectId avisoId) {
+    public long contarMensajesNoLeidas(String usuarioId, String avisoId) {
         return obtenerMensajesNoLeidas(usuarioId, avisoId).size();
     }
     
     @Override
-    public void responderMensaje(ObjectId avisoId, int indiceMensaje, String contenidoRespuesta) {
-        Aviso aviso = avisoRepository.findById(avisoId.toString())
+    public void responderMensaje(String avisoId, int indiceMensaje, String contenidoRespuesta) {
+        Aviso aviso = avisoRepository.findById(avisoId)
             .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
         
         if (aviso.getMensaje() != null && indiceMensaje >= 0 && indiceMensaje < aviso.getMensaje().size()) {
@@ -153,7 +155,6 @@ public class MensajeServiceImpl implements IMensajeService {
             
             RespuestaMensaje respuesta = new RespuestaMensaje();
             respuesta.setFechaRespuesta(new Date());
-            // Asegúrate de que el método setContenido existe en RespuestaMensaje
             respuesta.setContenido(contenidoRespuesta);
             
             mensaje.setRespuestaMensaje(respuesta);
@@ -165,7 +166,6 @@ public class MensajeServiceImpl implements IMensajeService {
         }
     }
     
-    // Añadir estos métodos que se utilizan en AvisoServiceImpl
     @Override
     public void enviarMensajeAdministrador(String titulo, String mensaje) {
         log.info("Notificación al administrador - Título: {}, Mensaje: {}", titulo, mensaje);
