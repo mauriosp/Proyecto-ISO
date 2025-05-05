@@ -7,7 +7,7 @@ export interface AdvertisementDB {
   precio: number;
   estado: "Activo" | "Inactivo";
   fechaPublicacion: string; // ISO date string
-  imagenes: string; // Puede ser un string separado por comas o un solo string
+  imagenes: File; // Puede ser un string separado por comas o un solo string
   mensaje?: Array<{
     idUsuario: string;
     contenido: string;
