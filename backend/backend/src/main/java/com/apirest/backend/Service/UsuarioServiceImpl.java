@@ -61,14 +61,15 @@ public class UsuarioServiceImpl implements IUsuarioService {
         return usuarioRepository.findAll();
     }
 
+
     @Override
-    public String loginUsuario(String email, String contraseña) {
+    public Usuario loginUsuario(String email, String contraseña) throws IllegalArgumentException {
         try {
             Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
             if (usuarioOpt.isEmpty()) {
                 logger.warn("Intento de login con email no registrado: {}", email);
-                return "Usuario no encontrado";
+                throw new IllegalArgumentException("Usuario no encontrado");
             }
 
             Usuario usuario = usuarioOpt.get();
@@ -78,7 +79,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
             if (verificaciones == null || verificaciones.isEmpty() || 
                 !verificaciones.get(verificaciones.size() - 1).isVerificado()) {
                 logger.warn("Intento de login con correo no verificado: {}", email);
-                return "Correo no verificado. Por favor verifica tu cuenta.";
+                throw new IllegalArgumentException("Correo no verificado. Por favor verifica tu cuenta.");
             }
 
             // Verificación de bloqueo de cuenta
@@ -87,7 +88,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
                     long minutos = (new Date().getTime() - usuario.getFechaBloqueo().getTime()) / (60 * 1000);
                     if (minutos < TIEMPO_BLOQUEO) {
                         logger.warn("Intento de login en cuenta bloqueada: {}", email);
-                        return "Cuenta bloqueada. Intenta en " + (TIEMPO_BLOQUEO - minutos) + " minutos.";
+                        throw new IllegalArgumentException("Cuenta bloqueada. Intenta en " + (TIEMPO_BLOQUEO - minutos) + " minutos.");
                     } else {
                         usuario.setEstado(false);
                         usuario.setIntentosFallidos(0);
@@ -107,21 +108,28 @@ public class UsuarioServiceImpl implements IUsuarioService {
                     usuarioRepository.save(usuario);
                     
                     logger.error("Cuenta bloqueada por múltiples intentos fallidos: {}", email);
-                    return "Cuenta bloqueada por múltiples intentos fallidos.";
+                    throw new IllegalArgumentException("Cuenta bloqueada por múltiples intentos fallidos.");
                 }
 
                 usuarioRepository.save(usuario);
                 logger.warn("Contraseña incorrecta para usuario: {}. Intento {} de {}", email, intentos, MAX_INTENTOS);
-                return "Contraseña incorrecta. Intento " + intentos + " de " + MAX_INTENTOS + ".";
+                throw new IllegalArgumentException("Contraseña incorrecta. Intento " + intentos + " de " + MAX_INTENTOS + ".");
             }
 
             // Login exitoso
             usuario.setIntentosFallidos(0);
             usuarioRepository.save(usuario);
-            return "Login exitoso. Bienvenido, " + usuario.getNombre();
+            logger.info("Login exitoso para usuario: {}", email);
+            
+            // Limpiar información sensible antes de devolver
+            usuario.setContraseña(null); // No devolver la contraseña encriptada
+            
+            return usuario;
+        } catch (IllegalArgumentException e) {
+            throw e;
         } catch (Exception e) {
             logger.error("Error en el proceso de login: ", e);
-            return "Error en el proceso de login: " + e.getMessage();
+            throw new IllegalArgumentException("Error en el proceso de login: " + e.getMessage());
         }
     }
     

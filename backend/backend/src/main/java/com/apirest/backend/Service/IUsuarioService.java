@@ -14,7 +14,7 @@ public interface IUsuarioService {
     public String registrarUsuario(Usuario usuario);
     void actualizarPerfil(String id, String nombre, String telefono, MultipartFile fotoPerfil) throws Exception;
     void eliminarCuenta(String id);
-    String loginUsuario(String email, String contraseña);
+    Usuario loginUsuario(String email, String contraseña) throws IllegalArgumentException;
     void actualizarContraseña(String id, String nuevaContraseña);
     boolean existeUsuarioPorId(ObjectId idUsuario);
 }

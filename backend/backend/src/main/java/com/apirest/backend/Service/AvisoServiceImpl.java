@@ -1,23 +1,19 @@
 package com.apirest.backend.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.apirest.backend.Model.Aviso;
 import com.apirest.backend.Model.Espacio;
 import com.apirest.backend.Repository.AvisoRepository;
 import com.apirest.backend.Repository.EspacioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.math.BigDecimal;
-import org.bson.types.ObjectId;
-import java.util.stream.Collectors;
 
 @Service
 public class AvisoServiceImpl implements IAvisoService {
@@ -43,7 +39,9 @@ public class AvisoServiceImpl implements IAvisoService {
     }
 
     @Override
-    public void crearAviso(String descripcion, double precioMensual, List<MultipartFile> imagenes, String titulo, String tipoEspacio, String condicionesAdicionales, String direccion, BigDecimal area, String idUsuario) throws Exception {
+    public void crearAviso(String descripcion, double precioMensual, List<String> imagenes, 
+                      String titulo, String tipoEspacio, String condicionesAdicionales, 
+                      String direccion, BigDecimal area, String idUsuario) throws Exception {
         // Convertir String a ObjectId
         ObjectId idUsuarioObj = new ObjectId(idUsuario);
         
@@ -67,19 +65,18 @@ public class AvisoServiceImpl implements IAvisoService {
             throw new IllegalArgumentException("El precio mensual debe ser un valor numérico positivo.");
         }
 
-        // Validar las imágenes
-        for (MultipartFile imagen : imagenes) {
-            String contentType = imagen.getContentType();
-            if (!List.of("image/jpeg", "image/png").contains(contentType)) {
-                throw new IllegalArgumentException("Formato de imagen no permitido. Solo se permiten PNG y JPG.");
-            }
-            if (imagen.getSize() > 5 * 1024 * 1024) { // 5MB
-                throw new IllegalArgumentException("El tamaño de la imagen no debe exceder los 5MB.");
+        // Validar las imágenes (ahora son URLs strings)
+        if (imagenes != null && !imagenes.isEmpty()) {
+            for (String imagenUrl : imagenes) {
+                if (imagenUrl == null || imagenUrl.trim().isEmpty()) {
+                    throw new IllegalArgumentException("La URL de la imagen no puede estar vacía.");
+                }
+                // Validar formato básico de URL
+                if (!imagenUrl.startsWith("http://") && !imagenUrl.startsWith("https://")) {
+                    throw new IllegalArgumentException("La URL de la imagen debe comenzar con http:// o https://");
+                }
             }
         }
-
-        // Guardar las imágenes
-        List<String> rutasImagenes = guardarImagenes(imagenes);
 
         // Crear el espacio
         Espacio espacio = espacioService.crearEspacio(idUsuarioObj, tipoEspacio, condicionesAdicionales, direccion, area);
@@ -94,7 +91,7 @@ public class AvisoServiceImpl implements IAvisoService {
         aviso.setIdEspacio(espacio.getId()); // Usar el ID del espacio
         aviso.setDescripcion(descripcion);
         aviso.setPrecio((int) Math.round(precioMensual));
-        aviso.setImagenes(String.join(",", rutasImagenes));
+        aviso.setImagenes(imagenes != null ? String.join(",", imagenes) : "");
         aviso.setTitulo(titulo);
         aviso.setEstado("Activo");
         aviso.setFechaPublicacion(new Date());
@@ -104,8 +101,6 @@ public class AvisoServiceImpl implements IAvisoService {
         // Guardar el aviso en la base de datos
         avisoRepository.save(aviso);
 
-        // No se actualiza el espacio con el ID del aviso ya que no existe el método setIdAviso
-
         // Notificar al administrador
         mensajeService.enviarMensajeAdministrador("Nuevo aviso creado", "Se ha creado un nuevo aviso con el título: " + titulo);
 
@@ -114,7 +109,8 @@ public class AvisoServiceImpl implements IAvisoService {
     }
 
     @Override
-    public void editarAviso(String id, String titulo, String descripcion, Double precioMensual, List<MultipartFile> imagenes, String estado) throws Exception {
+    public void editarAviso(String id, String titulo, String descripcion, Double precioMensual, 
+                        List<String> imagenes, String estado) throws Exception {
         // Buscar el aviso por ID
         Aviso aviso = avisoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
@@ -134,20 +130,19 @@ public class AvisoServiceImpl implements IAvisoService {
             throw new IllegalArgumentException("El precio mensual debe ser un valor numérico positivo.");
         }
 
-        // Validar las imágenes
+        // Validar las imágenes (ahora son URLs strings)
         if (imagenes != null && !imagenes.isEmpty()) {
-            for (MultipartFile imagen : imagenes) {
-                String contentType = imagen.getContentType();
-                if (!List.of("image/jpeg", "image/png").contains(contentType)) {
-                    throw new IllegalArgumentException("Formato de imagen no permitido. Solo se permiten PNG y JPG.");
+            for (String imagenUrl : imagenes) {
+                if (imagenUrl == null || imagenUrl.trim().isEmpty()) {
+                    throw new IllegalArgumentException("La URL de la imagen no puede estar vacía.");
                 }
-                if (imagen.getSize() > 5 * 1024 * 1024) { // 5MB
-                    throw new IllegalArgumentException("El tamaño de la imagen no debe exceder los 5MB.");
+                // Validar formato básico de URL
+                if (!imagenUrl.startsWith("http://") && !imagenUrl.startsWith("https://")) {
+                    throw new IllegalArgumentException("La URL de la imagen debe comenzar con http:// o https://");
                 }
             }
-            // Guardar las nuevas imágenes
-            List<String> rutasImagenes = guardarImagenes(imagenes);
-            aviso.setImagenes(String.join(",", rutasImagenes));
+            // Actualizar las imágenes
+            aviso.setImagenes(String.join(",", imagenes));
         }
 
         // Actualizar los campos del aviso
@@ -235,18 +230,7 @@ public class AvisoServiceImpl implements IAvisoService {
         }
     }
 
-    private List<String> guardarImagenes(List<MultipartFile> imagenes) throws IOException {
-        List<String> rutas = new ArrayList<>();
-        for (MultipartFile imagen : imagenes) {
-            String ruta = "uploads/" + imagen.getOriginalFilename();
-            Path path = Paths.get(ruta);
-            Files.createDirectories(path.getParent());
-            Files.write(path, imagen.getBytes());
-            rutas.add(ruta);
-        }
-        return rutas;
-    }
-
+    
     @Override
     public void eliminarAvisosPorPropietario(String idPropietario) {
         // Convertir String a ObjectId

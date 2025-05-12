@@ -77,11 +77,11 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String contraseña) {
+    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String contraseña) {
         try {
             // Llamar al servicio para autenticar al usuario
-            String mensaje = usuarioService.loginUsuario(email, contraseña);
-            return new ResponseEntity<>(mensaje, HttpStatus.OK);
+            Usuario usuario = usuarioService.loginUsuario(email, contraseña);
+            return new ResponseEntity<>(usuario, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
