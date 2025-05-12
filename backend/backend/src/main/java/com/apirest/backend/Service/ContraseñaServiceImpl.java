@@ -66,7 +66,7 @@ public class ContraseñaServiceImpl implements IContraseñaService {
             // Intentar enviar correo HTML
             enviarCorreoHTML(email, usuario.getNombre(), link);
             log.info("Correo HTML de recuperación de contraseña enviado a {}", email);
-        } catch (Exception e) {
+        } catch (MessagingException e) {
             log.error("Error al enviar correo HTML de recuperación: {}", e.getMessage());
             try {
                 // Si falla el HTML, intentar con texto plano como respaldo
