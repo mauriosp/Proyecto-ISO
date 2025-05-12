@@ -26,6 +26,7 @@ export const AdvertisementContext = createContext<AdvertisementContextType>({
     property: null,
     images: [],
     owner: undefined,
+    extraInfo: [],
   },
   property: {
     type: "",

@@ -10,7 +10,7 @@ export function advertisementToDB(ad: Advertisement): AdvertisementDB {
     precio: ad.price,
     estado: ad.status === "available" ? "Activo" : "Inactivo",
     fechaPublicacion: ad.publicationDate.toISOString(),
-    imagenes: ad.images.join(","),
+    imagenes: ad.images,
     extraInfo: ad.extraInfo,
     // mensaje: se puede mapear si tienes mensajes en el frontend
   };

@@ -121,12 +121,18 @@ export const AdvertisementPicturesStage = () => {
   const { advertisement, setNextStage, setPrevStage } =
     useAdvertisementContext();
 
-  const [advertisementPictures, setAdvertisementPictures] = useState<File[]>(
-    []
-  );
-  const [imageUrls, setImageUrls] = useState<string[]>(
-    advertisement.images || []
-  );
+    const [advertisementPictures, setAdvertisementPictures] = useState<File[]>(
+      Array.isArray(advertisement.images)
+        ? advertisement.images.filter((img): img is File => img instanceof File)
+        : []
+    );
+    
+    const [imageUrls, setImageUrls] = useState<string[]>(
+      Array.isArray(advertisement.images)
+        ? advertisement.images.filter((img): img is string => typeof img === "string")
+        : []
+    );
+    
   const [isUploading, setIsUploading] = useState(false);
 
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
@@ -146,7 +152,7 @@ export const AdvertisementPicturesStage = () => {
         advertisementPictures.map((file) => uploadFileToFirebase(file))
       );
       const allUrls = [...imageUrls, ...urls];
-      setNextStage({ advertisement: { images: allUrls } });
+      setNextStage({ advertisement: { images: advertisementPictures } });
     } catch (error) {
       console.error("Error uploading images:", error);
     } finally {
@@ -641,6 +647,11 @@ export const AdvertisementPreviewStage = () => {
   const { id } = useParams();
   const isEdit = location.pathname.startsWith("/edit/");
 
+  const processedImages = advertisement.images.map((img) =>
+    img instanceof File ? URL.createObjectURL(img) : img
+  );
+  
+
   const handleConfirm = () => {
     if (!user) {
       console.error("No hay usuario autenticado para asignar como owner.");
@@ -661,6 +672,8 @@ export const AdvertisementPreviewStage = () => {
           console.error("Error al actualizar el anuncio:", error);
         });
     } else {
+      const data = advertisementWithOwnerAndStatus;
+      console.log("📤 Enviando al backend:", data);
       createAdvertisement(advertisementWithOwnerAndStatus)
         .then((response) => {
           redirect("/advertisement/" + response.id);
@@ -694,7 +707,7 @@ export const AdvertisementPreviewStage = () => {
           </div>
         </div>
       </div>
-      <AdvertisementPage advertisement={advertisement} demoPage />
+      <AdvertisementPage advertisement={{ ...advertisement, images: processedImages }} demoPage />
     </section>
   );
 };

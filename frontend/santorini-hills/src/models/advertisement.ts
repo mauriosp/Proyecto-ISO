@@ -10,6 +10,6 @@ export interface Advertisement {
     publicationDate: Date;
     property: Property | null;
     owner?: User;
-    images: string[];
+    images: (string | File)[];
     extraInfo: string[];
 }
