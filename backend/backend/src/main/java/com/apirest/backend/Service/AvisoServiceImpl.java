@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.apirest.backend.Model.Aviso;
 import com.apirest.backend.Model.Espacio;
+import com.apirest.backend.Model.ExtraInfo;
 import com.apirest.backend.Repository.AvisoRepository;
 import com.apirest.backend.Repository.EspacioRepository;
 
@@ -41,7 +42,7 @@ public class AvisoServiceImpl implements IAvisoService {
     @Override
     public void crearAviso(String descripcion, double precioMensual, List<String> imagenes, 
                       String titulo, String tipoEspacio, int habitaciones, int baños, 
-                      String direccion, BigDecimal area, String idUsuario) throws Exception {
+                      String direccion, BigDecimal area, String idUsuario, List<ExtraInfo> extraInfos) throws Exception {
         // Convertir String a ObjectId
         ObjectId idUsuarioObj = new ObjectId(idUsuario);
         
@@ -96,7 +97,7 @@ public class AvisoServiceImpl implements IAvisoService {
         aviso.setEstado("Activo");
         aviso.setFechaPublicacion(new Date());
         aviso.setMensaje(new ArrayList<>());
-        aviso.setExtraInfo(new ArrayList<>());
+        aviso.setExtraInfo(extraInfos);
 
         // Guardar el aviso en la base de datos
         avisoRepository.save(aviso);

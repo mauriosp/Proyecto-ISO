@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apirest.backend.Model.Aviso;
+import com.apirest.backend.Model.ExtraInfo;
 import com.apirest.backend.Service.IAvisoService;
 
 @RestController
@@ -36,7 +37,8 @@ public class AvisoController {
             @RequestParam String titulo,
             @RequestParam String direccion,
             @RequestParam BigDecimal area,
-            @RequestParam String idUsuario) {
+            @RequestParam String idUsuario,
+            @RequestParam List<ExtraInfo> extraInfo) {
         try {
             // Validaciones preliminares
             if (titulo.length() > 100) {
@@ -49,7 +51,7 @@ public class AvisoController {
                 return new ResponseEntity<>("El precio mensual debe ser un valor numérico positivo.", HttpStatus.BAD_REQUEST);
             }
 
-            avisoService.crearAviso(descripcion, precioMensual, imagenes, titulo, tipoEspacio, habitaciones, baños, direccion, area, idUsuario);
+            avisoService.crearAviso(descripcion, precioMensual, imagenes, titulo, tipoEspacio, habitaciones, baños, direccion, area, idUsuario, extraInfo);
             return new ResponseEntity<>("Aviso creado exitosamente", HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
