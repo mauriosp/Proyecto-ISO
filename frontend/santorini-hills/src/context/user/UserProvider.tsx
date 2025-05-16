@@ -11,7 +11,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const ownerUser: User = {
-    id: "1",
+    id: "6818e6d9e5af3367a7c74c13",
     name: "Juan Pérez",
     email: "juanperez@email.com",
     password: null,
@@ -50,7 +50,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       // Usuario por defecto si no hay nada guardado (solo para pruebas)
 
       // Solo para pruebas (owner)
-       setUser(ownerUser);
+      setUser(ownerUser);
 
       // Solo para pruebas (renter)
       // setUser(renterUser);
