@@ -72,7 +72,7 @@ public class AvisoController {
             @RequestParam String titulo,
             @RequestParam String direccion,
             @RequestParam BigDecimal area,
-            @RequestParam String estado) {
+            @RequestParam List<String> extraInfo) {
         try {
             // Validaciones preliminares
             if (titulo != null && titulo.length() > 100) {
@@ -84,9 +84,6 @@ public class AvisoController {
             if (precioMensual <= 0) {
                 return new ResponseEntity<>("El precio mensual debe ser un valor numérico positivo.", HttpStatus.BAD_REQUEST);
             }
-            if (estado != null && !List.of("Activo", "Inactivo").contains(estado)) {
-                return new ResponseEntity<>("Estado no válido. Valores permitidos: Activo, Inactivo", HttpStatus.BAD_REQUEST);
-            }
             if (direccion == null || direccion.trim().isEmpty()) {
                 return new ResponseEntity<>("La dirección no puede estar vacía.", HttpStatus.BAD_REQUEST);
             }
@@ -95,7 +92,7 @@ public class AvisoController {
             }
 
             // Llamar al servicio para editar el aviso
-            avisoService.editarAviso(id, titulo, descripcion, precioMensual, imagenes, estado, tipoEspacio, direccion, area, habitaciones, baños);
+            avisoService.editarAviso(id, titulo, descripcion, precioMensual, imagenes, tipoEspacio, direccion, area, habitaciones, baños, extraInfo);
             return new ResponseEntity<>("Aviso actualizado correctamente", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

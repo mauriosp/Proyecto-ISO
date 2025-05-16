@@ -11,7 +11,7 @@ public interface IAvisoService {
 
     void crearAviso(String descripcion, double precioMensual, List<String> imagenes, String titulo, String tipoEspacio, int habitaciones, int baños, String direccion, BigDecimal area, String idUsuario, List<String> extraInfos) throws Exception;
 
-    void editarAviso(String id, String titulo, String descripcion, Double precioMensual, List<String> imagenes, String estado, String tipoEspacio, String direccion, BigDecimal area, int habitaciones, int baños) throws Exception;
+    void editarAviso(String id, String titulo, String descripcion, Double precioMensual, List<String> imagenes, String tipoEspacio, String direccion, BigDecimal area, int habitaciones, int baños, List<String> extraInfo) throws Exception;
 
     void eliminarAviso(String id) throws Exception;
 

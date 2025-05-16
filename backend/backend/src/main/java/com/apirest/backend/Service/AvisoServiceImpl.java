@@ -111,8 +111,8 @@ public class AvisoServiceImpl implements IAvisoService {
 
     @Override
     public void editarAviso(String id, String titulo, String descripcion, Double precioMensual, 
-                        List<String> imagenes, String estado, String tipoEspacio, 
-                        String direccion, BigDecimal area, int habitaciones, int baños) throws Exception {
+                        List<String> imagenes, String tipoEspacio, 
+                        String direccion, BigDecimal area, int habitaciones, int baños, List<String> extraInfo) throws Exception {
         // Buscar el aviso por ID
         Aviso aviso = avisoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
@@ -151,11 +151,6 @@ public class AvisoServiceImpl implements IAvisoService {
             aviso.setImagenes(String.join(",", imagenes));
         }
 
-        // Validar el estado
-        if (estado != null && !List.of("Activo", "Inactivo").contains(estado)) {
-            throw new IllegalArgumentException("Estado no válido. Valores permitidos: Activo, Inactivo");
-        }
-
         // Validar el tipo de espacio
         if (tipoEspacio != null && tipoEspacio.trim().isEmpty()) {
             throw new IllegalArgumentException("El tipo de espacio no puede estar vacío.");
@@ -175,7 +170,6 @@ public class AvisoServiceImpl implements IAvisoService {
         if (titulo != null) aviso.setTitulo(titulo);
         if (descripcion != null) aviso.setDescripcion(descripcion);
         if (precioMensual != null) aviso.setPrecio((int) Math.round(precioMensual));
-        if (estado != null) aviso.setEstado(estado);
 
         // Actualizar los campos del espacio relacionado
         if (tipoEspacio != null) espacio.setTipoEspacio(tipoEspacio);
