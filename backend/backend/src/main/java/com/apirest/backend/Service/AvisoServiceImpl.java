@@ -177,6 +177,8 @@ public class AvisoServiceImpl implements IAvisoService {
         if (area != null) espacio.setArea(area.doubleValue());
         espacio.setHabitaciones(habitaciones);
         espacio.setBaños(baños);
+        aviso.setExtraInfo(extraInfo);
+
 
         // Guardar los cambios en el espacio
         espacioRepository.save(espacio);
