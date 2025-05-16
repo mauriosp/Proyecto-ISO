@@ -152,7 +152,7 @@ export const AdvertisementPicturesStage = () => {
         advertisementPictures.map((file) => uploadFileToFirebase(file))
       );
       const allUrls = [...imageUrls, ...urls];
-      setNextStage({ advertisement: { images: advertisementPictures } });
+      setNextStage({ advertisement: { images: allUrls } });
     } catch (error) {
       console.error("Error uploading images:", error);
     } finally {
