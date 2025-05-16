@@ -9,7 +9,7 @@ public interface IAvisoService {
     // Especificar las operaciones (CRUD)
     public List<Aviso> listarAvisos();
 
-    void crearAviso(String descripcion, double precioMensual, List<String> imagenes, String titulo, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area, String idUsuario) throws Exception;
+    void crearAviso(String descripcion, double precioMensual, List<String> imagenes, String titulo, String tipoEspacio, int habitaciones, int baños, String direccion, BigDecimal area, String idUsuario) throws Exception;
 
     void editarAviso(String id, String titulo, String descripcion, Double precioMensual, List<String> imagenes, String estado) throws Exception;
 

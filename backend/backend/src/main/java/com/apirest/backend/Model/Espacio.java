@@ -23,7 +23,8 @@ public class Espacio {
     private ObjectId idPropietario;
     private String direccion;
     private Double area;
-    private String caracteristicas;
+    private int habitaciones;
+    private int baños;
     private String tipoEspacio;
     private String estado;
     private int promCalificacion;

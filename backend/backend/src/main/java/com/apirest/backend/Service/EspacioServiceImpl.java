@@ -32,10 +32,7 @@ public class EspacioServiceImpl implements IEspacioService {
 
     @Override
     public Optional<Espacio> buscarEspacioPorDireccionYPropietario(String direccion, ObjectId idPropietario) {
-        // Convertir ObjectId a String para trabajar con el repositorio
         String idPropietarioStr = idPropietario.toHexString();
-        
-        // Llamar al método del repositorio con los parámetros adecuados
         return espacioRepository.findByDireccionAndIdPropietario(direccion, idPropietarioStr);
     }
 
@@ -50,7 +47,7 @@ public class EspacioServiceImpl implements IEspacioService {
     }
 
     @Override
-    public Espacio crearEspacio(ObjectId idUsuario, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area) {
+    public Espacio crearEspacio(ObjectId idUsuario, String tipoEspacio, int baños, int habitaciones, String direccion, BigDecimal area) {
         // Validar que el usuario exista
         if (!usuarioService.existeUsuarioPorId(idUsuario)) {
             throw new IllegalArgumentException("El usuario con el ID proporcionado no existe.");
@@ -64,11 +61,6 @@ public class EspacioServiceImpl implements IEspacioService {
         // Validar que el tipo de espacio no sea nulo o vacío
         if (tipoEspacio == null || tipoEspacio.trim().isEmpty()) {
             throw new IllegalArgumentException("El tipo de espacio no puede estar vacío.");
-        }
-
-        // Validar que las características no sean nulas o vacías
-        if (caracteristicas == null || caracteristicas.trim().isEmpty()) {
-            throw new IllegalArgumentException("Las características no pueden estar vacías.");
         }
 
         // Validar que la dirección no sea nula o vacía
@@ -85,7 +77,8 @@ public class EspacioServiceImpl implements IEspacioService {
         Espacio nuevoEspacio = new Espacio();
         nuevoEspacio.setIdPropietario(idUsuario); // Establecer el ID del propietario
         nuevoEspacio.setTipoEspacio(tipoEspacio); // Establecer el campo tipoEspacio
-        nuevoEspacio.setCaracteristicas(caracteristicas); // Establecer las características
+        nuevoEspacio.setHabitaciones(habitaciones); // Establecer el número de habitaciones
+        nuevoEspacio.setBaños(baños); // Establecer el número de baños
         nuevoEspacio.setDireccion(direccion); // Establecer la dirección
         nuevoEspacio.setArea(area.doubleValue()); // Establecer el área
         nuevoEspacio.setEstado("Disponible"); // Establecer el estado como "Disponible"
@@ -95,7 +88,7 @@ public class EspacioServiceImpl implements IEspacioService {
     }
 
     @Override
-    public Espacio editarEspacio(String idEspacio, String tipoEspacio, String caracteristicas, String direccion, BigDecimal area) {
+    public Espacio editarEspacio(String idEspacio, String tipoEspacio, int baños, int habitaciones, String direccion, BigDecimal area) {
         // Buscar el espacio por ID
         Optional<Espacio> espacioExistente = espacioRepository.findById(idEspacio);
         if (espacioExistente.isEmpty()) {
@@ -109,11 +102,6 @@ public class EspacioServiceImpl implements IEspacioService {
             throw new IllegalArgumentException("El tipo de espacio no puede estar vacío.");
         }
 
-        // Validar que las características no sean nulas o vacías
-        if (caracteristicas == null || caracteristicas.trim().isEmpty()) {
-            throw new IllegalArgumentException("Las características no pueden estar vacías.");
-        }
-
         // Validar que la dirección no sea nula o vacía
         if (direccion == null || direccion.trim().isEmpty()) {
             throw new IllegalArgumentException("La dirección no puede estar vacía.");
@@ -125,14 +113,13 @@ public class EspacioServiceImpl implements IEspacioService {
         }
 
         // Actualizar los datos del espacio
-
         espacio.setTipoEspacio(tipoEspacio);
-        espacio.setCaracteristicas(caracteristicas);
+        espacio.setHabitaciones(habitaciones); // Actualizar el número de habitaciones
+        espacio.setBaños(baños); // Actualizar el número de baños
         espacio.setDireccion(direccion);
         espacio.setArea(area.doubleValue());
 
         // Guardar los cambios en la base de datos
-        espacioRepository.save(espacio);
-        return espacio;
+        return espacioRepository.save(espacio);
     }
 }

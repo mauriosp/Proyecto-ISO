@@ -30,7 +30,8 @@ public class AvisoController {
             @RequestParam String tipoEspacio,
             @RequestParam String descripcion,
             @RequestParam double precioMensual,
-            @RequestParam(required = false) String condicionesAdicionales,
+            @RequestParam int baños,
+            @RequestParam int habitaciones,
             @RequestParam List<String> imagenes, // Cambiado de MultipartFile a String
             @RequestParam String titulo,
             @RequestParam String direccion,
@@ -48,7 +49,7 @@ public class AvisoController {
                 return new ResponseEntity<>("El precio mensual debe ser un valor numérico positivo.", HttpStatus.BAD_REQUEST);
             }
 
-            avisoService.crearAviso(descripcion, precioMensual, imagenes, titulo, tipoEspacio, condicionesAdicionales, direccion, area, idUsuario);
+            avisoService.crearAviso(descripcion, precioMensual, imagenes, titulo, tipoEspacio, habitaciones, baños, direccion, area, idUsuario);
             return new ResponseEntity<>("Aviso creado exitosamente", HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

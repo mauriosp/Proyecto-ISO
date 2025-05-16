@@ -40,7 +40,7 @@ public class AvisoServiceImpl implements IAvisoService {
 
     @Override
     public void crearAviso(String descripcion, double precioMensual, List<String> imagenes, 
-                      String titulo, String tipoEspacio, String condicionesAdicionales, 
+                      String titulo, String tipoEspacio, int habitaciones, int baños, 
                       String direccion, BigDecimal area, String idUsuario) throws Exception {
         // Convertir String a ObjectId
         ObjectId idUsuarioObj = new ObjectId(idUsuario);
@@ -79,7 +79,7 @@ public class AvisoServiceImpl implements IAvisoService {
         }
 
         // Crear el espacio
-        Espacio espacio = espacioService.crearEspacio(idUsuarioObj, tipoEspacio, condicionesAdicionales, direccion, area);
+        Espacio espacio = espacioService.crearEspacio(idUsuarioObj, tipoEspacio, habitaciones, baños, direccion, area);
 
         // Validar que el espacio haya sido creado o actualizado correctamente
         if (espacio == null || espacio.getId() == null) {
