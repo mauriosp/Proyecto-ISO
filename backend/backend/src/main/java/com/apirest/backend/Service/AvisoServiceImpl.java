@@ -111,10 +111,15 @@ public class AvisoServiceImpl implements IAvisoService {
 
     @Override
     public void editarAviso(String id, String titulo, String descripcion, Double precioMensual, 
-                        List<String> imagenes, String estado) throws Exception {
+                        List<String> imagenes, String estado, String tipoEspacio, 
+                        String direccion, BigDecimal area, int habitaciones, int baños) throws Exception {
         // Buscar el aviso por ID
         Aviso aviso = avisoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Aviso no encontrado"));
+
+        // Buscar el espacio relacionado con el aviso
+        Espacio espacio = espacioRepository.findById(aviso.getIdEspacio().toHexString())
+                .orElseThrow(() -> new IllegalArgumentException("Espacio relacionado con el aviso no encontrado"));
 
         // Validar el título
         if (titulo != null && titulo.length() > 100) {
@@ -146,21 +151,43 @@ public class AvisoServiceImpl implements IAvisoService {
             aviso.setImagenes(String.join(",", imagenes));
         }
 
+        // Validar el estado
+        if (estado != null && !List.of("Activo", "Inactivo").contains(estado)) {
+            throw new IllegalArgumentException("Estado no válido. Valores permitidos: Activo, Inactivo");
+        }
+
+        // Validar el tipo de espacio
+        if (tipoEspacio != null && tipoEspacio.trim().isEmpty()) {
+            throw new IllegalArgumentException("El tipo de espacio no puede estar vacío.");
+        }
+
+        // Validar la dirección
+        if (direccion != null && direccion.trim().isEmpty()) {
+            throw new IllegalArgumentException("La dirección no puede estar vacía.");
+        }
+
+        // Validar el área
+        if (area != null && area.doubleValue() <= 0) {
+            throw new IllegalArgumentException("El área debe ser mayor a 0.");
+        }
+
         // Actualizar los campos del aviso
         if (titulo != null) aviso.setTitulo(titulo);
         if (descripcion != null) aviso.setDescripcion(descripcion);
-        if (precioMensual != null) {
-            aviso.setPrecio((int) Math.round(precioMensual));
-        }
-        if (estado != null) {
-            // Asegurarse de que estado sea un valor válido
-            if (!List.of("Activo", "Inactivo").contains(estado)) {
-                throw new IllegalArgumentException("Estado no válido. Valores permitidos: Activo, Inactivo");
-            }
-            aviso.setEstado(estado);
-        }
+        if (precioMensual != null) aviso.setPrecio((int) Math.round(precioMensual));
+        if (estado != null) aviso.setEstado(estado);
 
-        // Guardar los cambios en la base de datos
+        // Actualizar los campos del espacio relacionado
+        if (tipoEspacio != null) espacio.setTipoEspacio(tipoEspacio);
+        if (direccion != null) espacio.setDireccion(direccion);
+        if (area != null) espacio.setArea(area.doubleValue());
+        espacio.setHabitaciones(habitaciones);
+        espacio.setBaños(baños);
+
+        // Guardar los cambios en el espacio
+        espacioRepository.save(espacio);
+
+        // Guardar los cambios en el aviso
         avisoRepository.save(aviso);
     }
 

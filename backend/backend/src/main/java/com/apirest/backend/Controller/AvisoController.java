@@ -63,11 +63,16 @@ public class AvisoController {
     @PutMapping("/editar/{id}")
     public ResponseEntity<String> editarAviso(
             @PathVariable String id,
-            @RequestParam(required = false) String titulo,
-            @RequestParam(required = false) String descripcion,
-            @RequestParam(required = false) Double precioMensual,
-            @RequestParam(required = false) List<String> imagenes, // Cambiado de MultipartFile a String
-            @RequestParam(required = false) String estado) {
+            @RequestParam String tipoEspacio,
+            @RequestParam String descripcion,
+            @RequestParam double precioMensual,
+            @RequestParam int baños,
+            @RequestParam int habitaciones,
+            @RequestParam List<String> imagenes, // Cambiado de MultipartFile a String
+            @RequestParam String titulo,
+            @RequestParam String direccion,
+            @RequestParam BigDecimal area,
+            @RequestParam String estado) {
         try {
             // Validaciones preliminares
             if (titulo != null && titulo.length() > 100) {
@@ -76,14 +81,21 @@ public class AvisoController {
             if (descripcion != null && descripcion.length() > 500) {
                 return new ResponseEntity<>("La descripción no puede exceder los 500 caracteres.", HttpStatus.BAD_REQUEST);
             }
-            if (precioMensual != null && precioMensual <= 0) {
+            if (precioMensual <= 0) {
                 return new ResponseEntity<>("El precio mensual debe ser un valor numérico positivo.", HttpStatus.BAD_REQUEST);
             }
             if (estado != null && !List.of("Activo", "Inactivo").contains(estado)) {
                 return new ResponseEntity<>("Estado no válido. Valores permitidos: Activo, Inactivo", HttpStatus.BAD_REQUEST);
             }
+            if (direccion == null || direccion.trim().isEmpty()) {
+                return new ResponseEntity<>("La dirección no puede estar vacía.", HttpStatus.BAD_REQUEST);
+            }
+            if (area == null || area.doubleValue() <= 0) {
+                return new ResponseEntity<>("El área debe ser mayor a 0.", HttpStatus.BAD_REQUEST);
+            }
 
-            avisoService.editarAviso(id, titulo, descripcion, precioMensual, imagenes, estado);
+            // Llamar al servicio para editar el aviso
+            avisoService.editarAviso(id, titulo, descripcion, precioMensual, imagenes, estado, tipoEspacio, direccion, area, habitaciones, baños);
             return new ResponseEntity<>("Aviso actualizado correctamente", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
