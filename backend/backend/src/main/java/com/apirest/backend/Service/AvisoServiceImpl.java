@@ -42,7 +42,7 @@ public class AvisoServiceImpl implements IAvisoService {
     @Override
     public void crearAviso(String descripcion, double precioMensual, List<String> imagenes, 
                       String titulo, String tipoEspacio, int habitaciones, int baños, 
-                      String direccion, BigDecimal area, String idUsuario, List<ExtraInfo> extraInfos) throws Exception {
+                      String direccion, BigDecimal area, String idUsuario, List<String> extraInfos) throws Exception {
         // Convertir String a ObjectId
         ObjectId idUsuarioObj = new ObjectId(idUsuario);
         

@@ -34,7 +34,7 @@ public class Aviso {
     private Date fechaPublicacion;
     private String imagenes;
     private List <Mensaje> mensaje;
-    private List<ExtraInfo> extraInfo;
+    private List<String> extraInfo;
 
 
     // Serializa el campo "id" como String

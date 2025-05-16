@@ -38,7 +38,7 @@ public class AvisoController {
             @RequestParam String direccion,
             @RequestParam BigDecimal area,
             @RequestParam String idUsuario,
-            @RequestParam List<ExtraInfo> extraInfo) {
+            @RequestParam List<String> extraInfo) {
         try {
             // Validaciones preliminares
             if (titulo.length() > 100) {
