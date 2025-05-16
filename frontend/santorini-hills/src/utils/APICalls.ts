@@ -14,25 +14,21 @@ export async function getUserById(id: string) {
 }
 
 // GET propiedad por id
-export async function getPropertyById(id: string): Promise<Property> {
+export async function getPropertyById(id: string): Promise<PropertyDB> {
   const res = await axios.get(`${API_URL}Espacio/buscar/${id}`);
-  // Aquí puedes importar y usar propertyFromDB si necesitas composición
-  // pero para evitar dependencias circulares, solo retorna el objeto plano
   return {
-    id: res.data._id,
-    type: res.data.tipoEspacio === "Apartamento" ? "apartment" :
-          res.data.tipoEspacio === "Casa" ? "house" :
-          res.data.tipoEspacio === "Habitación" ? "room" :
-          res.data.tipoEspacio === "Bodega" ? "cabin" :
-          res.data.tipoEspacio === "Parqueo" ? "lot" : "apartment",
-    location: null,
-    address: res.data.direccion,
+    _id: res.data._id,
+    idPropietario: res.data.idPropietario,
+    tipoEspacio: res.data.tipoEspacio,
+    direccion: res.data.direccion,
+    estado: res.data.estado,
     area: res.data.area,
-    bathrooms: 0,
-    bedrooms: 0,
-    // El owner se compone en el presenter
+    caracteristicas: res.data.caracteristicas,
+    promCalificacion: res.data.promCalificacion,
+    arrendamiento: res.data.arrendamiento,
   };
 }
+
 
 // GET aviso por id
 export async function getAdvertisementById(id: string): Promise<AdvertisementDB> {
@@ -40,11 +36,15 @@ export async function getAdvertisementById(id: string): Promise<AdvertisementDB>
   return res.data;
 }
 
-// GET lista de avisos
+// GET lista de avisos (normalizando el _id)
 export async function listAdvertisements(): Promise<AdvertisementDB[]> {
   const res = await axios.get(`${API_URL}Aviso/listar`);
-  return res.data;
+  return res.data.map((ad: any) => ({
+    ...ad,
+    _id: typeof ad._id === "object" && ad._id.$oid ? ad._id.$oid : ad._id,
+  }));
 }
+
 
 // GET lista de propiedades
 export async function listProperties(): Promise<PropertyDB[]> {

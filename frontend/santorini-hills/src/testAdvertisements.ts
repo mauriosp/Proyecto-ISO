@@ -28,7 +28,7 @@ export const testAdvertisements: Advertisement[] = [
       "https://cdn2.infocasas.com.uy/repo/img/th.outside1504x596.678f0d612c4e9_infocdn__muaih5abm5kjpovrqkebedrujwzgnhp5iwosl3jyjpg.jpg",
     ],
     owner: {
-      id: "1",
+      id: "6818e6d9e5af3367a7c74c13",
       name: "Maria Papadopoulos",
       email: "maria@example.com",
       password: "securepassword1",

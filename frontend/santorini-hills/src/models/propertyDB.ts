@@ -1,6 +1,6 @@
 // Modelo que representa la estructura de la colección "Espacio" en MongoDB
 export interface PropertyDB {
-  _id?: string;
+  _id: string;
   idPropietario: string;
   direccion: string;
   area: number;
@@ -8,7 +8,7 @@ export interface PropertyDB {
   tipoEspacio: "Apartamento" | "Casa" | "Habitación" | "Parqueo" | "Bodega";
   estado: "Disponible" | "Ocupado" | "Mantenimiento" | "Reservado";
   promCalificacion?: number;
-  Arrendamiento?: Array<{
+  arrendamiento?: Array<{
     idUsuario: string;
     fechaSalida: string;
     fechaInicio: string;
