@@ -17,13 +17,14 @@ export async function getUserById(id: string) {
 export async function getPropertyById(id: string): Promise<PropertyDB> {
   const res = await axios.get(`${API_URL}Espacio/buscar/${id}`);
   return {
-    _id: res.data._id,
+    _id: res.data.id,
     idPropietario: res.data.idPropietario,
     tipoEspacio: res.data.tipoEspacio,
     direccion: res.data.direccion,
     estado: res.data.estado,
     area: res.data.area,
-    caracteristicas: res.data.caracteristicas,
+    habitaciones: res.data.habitaciones,
+    baños: res.data.baños,
     promCalificacion: res.data.promCalificacion,
     arrendamiento: res.data.arrendamiento,
   };
@@ -126,6 +127,6 @@ export async function updateAdvertisement(id: string, ad: Advertisement) {
   if (ad.property?.bedrooms) formData.append("habitaciones", ad.property.bedrooms.toString());
   if (ad.property?.bathrooms) formData.append("baños", ad.property.bathrooms.toString());
   
-  const res = await axios.put(`${API_URL}Aviso/actualizar/${id}`, formData);
+  const res = await axios.put(`${API_URL}Aviso/editar/${id}`, formData);
   return res.data;
 }

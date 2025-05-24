@@ -26,15 +26,15 @@ const AdvertisementCard: React.FC<{ advertisement: Advertisement }> = ({ adverti
         <div className="flex gap-4 items-center">
           <div className="flex items-center gap-1 text-accent">
             <MdOutlineBed size={20} />
-            <p className="font-medium text-sm">{property?.bedrooms || 0}</p>
+            <p className="font-medium text-sm">{property.bedrooms || 0}</p>
           </div>
           <div className="flex items-center gap-1 text-accent">
             <TbBath size={20} />
-            <p className="font-medium text-sm">{property?.bathrooms || 0}</p>
+            <p className="font-medium text-sm">{property.bathrooms || 0}</p>
           </div>
           <div className="flex items-center gap-1 text-accent">
             <TbMeterSquare size={20} />
-            <p className="font-medium text-sm">{property?.area || 0}</p>
+            <p className="font-medium text-sm">{property.area || 0}</p>
           </div>
         </div>
         <h3 className="font-semibold text-neutral-600 mt-2">{title}</h3>
