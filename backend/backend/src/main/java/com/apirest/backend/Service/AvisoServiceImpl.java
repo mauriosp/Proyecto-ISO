@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.apirest.backend.Model.Aviso;
 import com.apirest.backend.Model.Espacio;
-import com.apirest.backend.Model.ExtraInfo;
 import com.apirest.backend.Repository.AvisoRepository;
 import com.apirest.backend.Repository.EspacioRepository;
 
@@ -254,7 +253,6 @@ public class AvisoServiceImpl implements IAvisoService {
         }
     }
 
-    
     @Override
     public void eliminarAvisosPorPropietario(String idPropietario) {
         // Convertir String a ObjectId
@@ -323,5 +321,10 @@ public class AvisoServiceImpl implements IAvisoService {
         }
 
         return avisos;
+    }
+
+    @Override
+    public Aviso buscarAvisoPorId(String id) {
+        return avisoRepository.findById(id).orElse(null);
     }
 }
