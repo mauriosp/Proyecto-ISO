@@ -33,7 +33,7 @@ const PropertiesSettings = () => {
                             const property = await getPropertyById(ad.idEspacio);
                             return { ad, property };
                         } catch (error) {
-                            console.error(`Error cargando propiedad del anuncio ${ad._id}`, error);
+                            console.error(`Error cargando propiedad del anuncio ${ad.id}`, error);
                             return { ad, property: null };
                         }
                     })

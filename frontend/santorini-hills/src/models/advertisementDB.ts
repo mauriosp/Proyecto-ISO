@@ -1,7 +1,7 @@
 // Modelo que representa la estructura de la colección "Aviso" en MongoDB
 export interface AdvertisementDB {
-  id: string; // objectId como string
-  idEspacio: string; // objectId como string
+  _id: string; // objectId como string
+  idEspacio: any; // objectId como string
   titulo: string;
   descripcion: string;
   precio: number;
@@ -18,5 +18,5 @@ export interface AdvertisementDB {
       contenido: string;
     };
   }>;
-  extraInfo?: Array<string>;
+  extraInfo: string[] | string;
 }
