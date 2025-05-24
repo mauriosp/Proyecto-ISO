@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apirest.backend.Model.Aviso;
-import com.apirest.backend.Model.ExtraInfo;
 import com.apirest.backend.Service.IAvisoService;
 
 @RestController

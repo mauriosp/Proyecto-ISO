@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.apirest.backend.Model.Aviso;
 import com.apirest.backend.Model.Espacio;
-import com.apirest.backend.Model.ExtraInfo;
 import com.apirest.backend.Repository.AvisoRepository;
 import com.apirest.backend.Repository.EspacioRepository;
 
