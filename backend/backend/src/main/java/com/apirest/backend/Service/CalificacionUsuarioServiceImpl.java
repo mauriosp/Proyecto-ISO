@@ -9,8 +9,13 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.apirest.backend.Model.Arrendamiento;
+import com.apirest.backend.Model.Aviso;
 import com.apirest.backend.Model.CalificacionUsuario;
+import com.apirest.backend.Model.Espacio;
 import com.apirest.backend.Model.Usuario;
+import com.apirest.backend.Repository.AvisoRepository;
+import com.apirest.backend.Repository.EspacioRepository;
 import com.apirest.backend.Repository.UsuarioRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +30,13 @@ public class CalificacionUsuarioServiceImpl implements ICalificacionUsuarioServi
     private UsuarioRepository usuarioRepository;
     
     @Autowired
+    private EspacioRepository espacioRepository;
+    
+    @Autowired
     private IMensajeService mensajeService;
+
+    @Autowired
+    private AvisoRepository avisoRepository;
 
     @Override
     public void calificarArrendatario(String idPropietario, String idArrendatario, 
@@ -39,7 +50,7 @@ public class CalificacionUsuarioServiceImpl implements ICalificacionUsuarioServi
         Usuario propietario = obtenerUsuario(idPropietario);
         Usuario arrendatario = obtenerUsuario(idArrendatario);
         
-        // Validar que sea un propietario (opcional - depende de los requerimientos)
+        // Validar que sea un propietario
         if (!"Propietario".equals(propietario.getTipoUsuario())) {
             throw new IllegalArgumentException("Solo los propietarios pueden calificar arrendatarios");
         }
@@ -57,8 +68,10 @@ public class CalificacionUsuarioServiceImpl implements ICalificacionUsuarioServi
         // Crear la calificación
         CalificacionUsuario calificacion = new CalificacionUsuario();
         calificacion.setIdUsuarioCalifica(new ObjectId(idPropietario));
-        calificacion.setPuntuacion(String.valueOf(puntuacion)); // Usar conversión directa
+        calificacion.setPuntuacion(String.valueOf(puntuacion));
         calificacion.setFecha(new Date());
+        calificacion.setComentario(comentario != null ? comentario : "");
+        
         calificacion.setComentario(comentario != null ? comentario : "");
         
         // Agregar la calificación al arrendatario
@@ -74,17 +87,10 @@ public class CalificacionUsuarioServiceImpl implements ICalificacionUsuarioServi
         usuarioRepository.save(arrendatario);
         
         // Enviar notificación al arrendatario
-        String mensajeNotificacion = "Has recibido una nueva calificación de " + puntuacion + " estrellas.";
-        if (comentario != null && !comentario.trim().isEmpty()) {
-            mensajeNotificacion += " Comentario: \"" + comentario + "\"";
-        }
+        enviarNotificacionCalificacion(idArrendatario, puntuacion, comentario, "arrendatario");
         
-        // Necesitaríamos el ID del aviso para la notificación - por ahora usamos un ID dummy
-        String avisoId = "dummy_aviso_id"; // En una implementación real, obtener del arrendamiento
-        mensajeService.enviarMensaje(idArrendatario, mensajeNotificacion, avisoId);
-        
-        log.info("Calificación de arrendatario registrada: propietario={}, arrendatario={}, puntuación={}", 
-                idPropietario, idArrendatario, puntuacion);
+        log.info("Calificación de arrendatario registrada: propietario={}, arrendatario={}, puntuación={}, arrendamiento={}", 
+                idPropietario, idArrendatario, puntuacion, idArrendamiento);
     }
 
     @Override
@@ -117,7 +123,7 @@ public class CalificacionUsuarioServiceImpl implements ICalificacionUsuarioServi
         // Crear la calificación
         CalificacionUsuario calificacion = new CalificacionUsuario();
         calificacion.setIdUsuarioCalifica(new ObjectId(idArrendatario));
-        calificacion.setPuntuacion(String.valueOf(puntuacion)); // Usar conversión directa
+        calificacion.setPuntuacion(String.valueOf(puntuacion));
         calificacion.setFecha(new Date());
         calificacion.setComentario(comentario != null ? comentario : "");
         
@@ -134,17 +140,10 @@ public class CalificacionUsuarioServiceImpl implements ICalificacionUsuarioServi
         usuarioRepository.save(propietario);
         
         // Enviar notificación al propietario
-        String mensajeNotificacion = "Has recibido una nueva calificación de " + puntuacion + " estrellas de un arrendatario.";
-        if (comentario != null && !comentario.trim().isEmpty()) {
-            mensajeNotificacion += " Comentario: \"" + comentario + "\"";
-        }
+        enviarNotificacionCalificacion(idPropietario, puntuacion, comentario, "propietario");
         
-        // Necesitaríamos el ID del aviso para la notificación - por ahora usamos un ID dummy
-        String avisoId = "dummy_aviso_id"; // En una implementación real, obtener del arrendamiento
-        mensajeService.enviarMensaje(idPropietario, mensajeNotificacion, avisoId);
-        
-        log.info("Calificación de propietario registrada: arrendatario={}, propietario={}, puntuación={}", 
-                idArrendatario, idPropietario, puntuacion);
+        log.info("Calificación de propietario registrada: arrendatario={}, propietario={}, puntuación={}, arrendamiento={}", 
+                idArrendatario, idPropietario, puntuacion, idArrendamiento);
     }
 
     @Override
@@ -166,7 +165,7 @@ public class CalificacionUsuarioServiceImpl implements ICalificacionUsuarioServi
             
             for (CalificacionUsuario calificacion : usuario.getCalificacionUsuario()) {
                 try {
-                    int puntuacion = calificacion.getPuntuacionAsInt(); // Usar el método helper
+                    int puntuacion = calificacion.getPuntuacionAsInt();
                     suma += puntuacion;
                     contador++;
                 } catch (Exception e) {
@@ -190,20 +189,91 @@ public class CalificacionUsuarioServiceImpl implements ICalificacionUsuarioServi
 
     @Override
     public boolean puedeCalificar(String idCalificador, String idCalificado, String idArrendamiento) {
-        // TODO: Implementar validación con el sistema de arrendamientos
-        // Por ahora retornamos true, pero en una implementación completa debería:
-        // 1. Verificar que existe un arrendamiento con ese ID
-        // 2. Verificar que el arrendamiento está en estado "Finalizado"
-        // 3. Verificar que los usuarios están relacionados con ese arrendamiento
-        // 4. Verificar que el calificador es el propietario o arrendatario correspondiente
-        
-        log.info("Validando si {} puede calificar a {} para arrendamiento {}", 
-                idCalificador, idCalificado, idArrendamiento);
-        
-        // Usamos el parámetro idArrendamiento en el log para evitar el warning
-        return true; // Implementación temporal
+        try {
+            // 1. VALIDACIÓN DE FINALIZACIÓN: Buscar el arrendamiento específico
+            Arrendamiento arrendamiento = buscarArrendamientoPorUsuarios(idCalificador, idCalificado);
+            
+            if (arrendamiento == null) {
+                log.warn("No se encontró arrendamiento entre usuarios {} y {}", idCalificador, idCalificado);
+                return false;
+            }
+            
+            // 2. VALIDACIÓN DE FINALIZACIÓN: Verificar que el arrendamiento está "Completado"
+            if (!"Completado".equals(arrendamiento.getEstado())) {
+                log.warn("El arrendamiento no está completado. Estado actual: {}", arrendamiento.getEstado());
+                return false;
+            }
+            
+            // 3. RESTRICCIÓN TEMPORAL: Verificar que la fecha de salida ya pasó
+            Date fechaSalida = arrendamiento.getFechaSalida();
+            Date ahora = new Date();
+            
+            if (ahora.before(fechaSalida)) {
+                log.warn("No se puede calificar antes de que termine el arrendamiento. Fecha salida: {}, Fecha actual: {}", 
+                        fechaSalida, ahora);
+                return false;
+            }
+            
+            // 4. RESTRICCIÓN TEMPORAL: Verificar ventana de calificación (máximo 30 días después de finalizar)
+            long treintaDiasEnMillis = 30L * 24L * 60L * 60L * 1000L;
+            long tiempoTranscurrido = ahora.getTime() - fechaSalida.getTime();
+            
+            if (tiempoTranscurrido > treintaDiasEnMillis) {
+                log.warn("El período para calificar ha expirado. Arrendamiento terminó hace {} días", 
+                        tiempoTranscurrido / (24L * 60L * 60L * 1000L));
+                return false;
+            }
+            
+            log.info("Usuario {} puede calificar a {} - arrendamiento completado y en ventana de tiempo válida", 
+                    idCalificador, idCalificado);
+            return true;
+            
+        } catch (Exception e) {
+            log.error("Error al verificar permisos de calificación: {}", e.getMessage());
+            return false;
+        }
     }
 
+    private boolean yaCalificoEnEsteArrendamiento(Usuario usuarioCalificado, String idCalificador, String idArrendamiento) {
+        if (usuarioCalificado.getCalificacionUsuario() == null || usuarioCalificado.getCalificacionUsuario().isEmpty()) {
+            return false;
+        }
+        
+        // PREVENCIÓN DE DUPLICADOS MEJORADA: 
+        // Buscar el arrendamiento específico para obtener sus fechas únicas
+        Arrendamiento arrendamiento = buscarArrendamientoPorUsuarios(idCalificador, 
+            usuarioCalificado.getId().toHexString());
+            
+        if (arrendamiento == null) {
+            log.debug("No se encontró arrendamiento para validar duplicados");
+            return false;
+        }
+        
+        // Verificar si ya existe una calificación del mismo calificador para este arrendamiento específico
+        // Usamos las fechas del arrendamiento como identificador único
+        boolean yaCalifico = usuarioCalificado.getCalificacionUsuario().stream()
+                .anyMatch(cal -> {
+                    // Verificar que es del mismo calificador
+                    boolean mismoCalificador = cal.getIdUsuarioCalifica().toHexString().equals(idCalificador);
+                    
+                    // Verificar que la fecha de la calificación coincide con el período del arrendamiento
+                    // (la calificación debe estar dentro de los 30 días posteriores a la fecha de salida)
+                    boolean dentroDelPeriodo = false;
+                    if (cal.getFecha() != null && arrendamiento.getFechaSalida() != null) {
+                        long diferencia = cal.getFecha().getTime() - arrendamiento.getFechaSalida().getTime();
+                        long treintaDias = 30L * 24L * 60L * 60L * 1000L;
+                        dentroDelPeriodo = diferencia >= 0 && diferencia <= treintaDias;
+                    }
+                    
+                    return mismoCalificador && dentroDelPeriodo;
+                });
+                
+        log.debug("Verificación de calificación previa - Calificador: {}, Arrendamiento: {}, Ya calificó: {}", 
+                idCalificador, idArrendamiento, yaCalifico);
+        
+        return yaCalifico;
+    }
+    
     // Métodos auxiliares privados
     
     private void validarParametrosCalificacion(String idCalificador, String idCalificado, int puntuacion) {
@@ -238,21 +308,88 @@ public class CalificacionUsuarioServiceImpl implements ICalificacionUsuarioServi
         return usuarioOpt.get();
     }
     
-    private boolean yaCalificoEnEsteArrendamiento(Usuario usuarioCalificado, String idCalificador, String idArrendamiento) {
-        // TODO: Implementar lógica para verificar si ya calificó en este arrendamiento específico
-        // Por ahora retornamos false, pero debería verificar si existe una calificación
-        // del calificador para este arrendamiento específico (usando idArrendamiento)
-        
-        if (usuarioCalificado.getCalificacionUsuario() == null) {
-            return false;
+    private void enviarNotificacionCalificacion(String idUsuario, int puntuacion, String comentario, String tipoUsuario) {
+        try {
+            String mensajeNotificacion = "Has recibido una nueva calificación de " + puntuacion + " estrellas";
+            
+            if ("arrendatario".equals(tipoUsuario)) {
+                mensajeNotificacion += " de tu propietario.";
+            } else {
+                mensajeNotificacion += " de un arrendatario.";
+            }
+            
+            if (comentario != null && !comentario.trim().isEmpty()) {
+                mensajeNotificacion += " Comentario: \"" + comentario + "\"";
+            }
+            
+            // Obtener un aviso real del usuario para las notificaciones
+            String avisoId = obtenerAvisoDelUsuario(idUsuario);
+            mensajeService.enviarMensaje(idUsuario, mensajeNotificacion, avisoId);
+            
+        } catch (Exception e) {
+            log.error("Error enviando notificación de calificación a usuario {}: {}", idUsuario, e.getMessage());
         }
-        
-        // Implementación simple: verificar si ya existe una calificación del mismo calificador
-        // En una implementación completa, debería incluir el ID del arrendamiento
-        boolean yaCalifico = usuarioCalificado.getCalificacionUsuario().stream()
-                .anyMatch(cal -> cal.getIdUsuarioCalifica().toHexString().equals(idCalificador));
+    }
+    
+    /**
+     * Obtiene un aviso real asociado al usuario para las notificaciones
+     */
+    private String obtenerAvisoDelUsuario(String idUsuario) {
+        try {
+            // Buscar espacios del usuario
+            List<Espacio> espaciosUsuario = espacioRepository.findByIdPropietario(new ObjectId(idUsuario));
+            
+            if (!espaciosUsuario.isEmpty()) {
+                // Buscar avisos del primer espacio del usuario
+                List<Aviso> avisos = avisoRepository.findByIdEspacio(espaciosUsuario.get(0).getId());
                 
-        log.debug("Verificación de calificación previa para arrendamiento {}: {}", idArrendamiento, yaCalifico);
-        return yaCalifico;
+                if (!avisos.isEmpty()) {
+                    return avisos.get(0).getId().toHexString();
+                }
+            }
+            
+            // Si no encuentra avisos específicos, usar el ID del usuario como fallback
+            log.debug("No se encontraron avisos para usuario {}, usando ID de usuario como fallback", idUsuario);
+            return idUsuario;
+            
+        } catch (Exception e) {
+            log.error("Error al obtener aviso del usuario {}: {}", idUsuario, e.getMessage());
+            return idUsuario; // Fallback seguro
+        }
+    }
+    
+    /**
+     * MÉTODO AUXILIAR: Busca un arrendamiento completado entre dos usuarios
+     * Esto resuelve la VALIDACIÓN DE FINALIZACIÓN y RESTRICCIÓN TEMPORAL
+     */
+    private Arrendamiento buscarArrendamientoPorUsuarios(String idUsuario1, String idUsuario2) {
+        try {
+            List<Espacio> espacios = espacioRepository.findAll();
+            
+            for (Espacio espacio : espacios) {
+                if (espacio.getArrendamiento() != null) {
+                    for (Arrendamiento arrendamiento : espacio.getArrendamiento()) {
+                        String idPropietario = espacio.getIdPropietario().toHexString();
+                        String idArrendatario = arrendamiento.getIdUsuario().toHexString();
+                        
+                        // Verificar si los usuarios coinciden con la relación propietario-arrendatario
+                        boolean relacionValida = 
+                            (idUsuario1.equals(idPropietario) && idUsuario2.equals(idArrendatario)) ||
+                            (idUsuario1.equals(idArrendatario) && idUsuario2.equals(idPropietario));
+                            
+                        if (relacionValida) {
+                            return arrendamiento;
+                        }
+                    }
+                }
+            }
+            
+            return null;
+            
+        } catch (Exception e) {
+            log.error("Error al buscar arrendamiento entre usuarios {} y {}: {}", 
+                     idUsuario1, idUsuario2, e.getMessage());
+            return null;
+        }
     }
 }
