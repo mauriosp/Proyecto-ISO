@@ -253,7 +253,6 @@ public class AvisoServiceImpl implements IAvisoService {
         }
     }
 
-    
     @Override
     public void eliminarAvisosPorPropietario(String idPropietario) {
         // Convertir String a ObjectId
@@ -322,5 +321,10 @@ public class AvisoServiceImpl implements IAvisoService {
         }
 
         return avisos;
+    }
+
+    @Override
+    public Aviso buscarAvisoPorId(String id) {
+        return avisoRepository.findById(id).orElse(null);
     }
 }

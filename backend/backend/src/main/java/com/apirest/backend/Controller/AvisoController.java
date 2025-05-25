@@ -175,4 +175,17 @@ public class AvisoController {
         List<Aviso> avisosFiltrados = avisoService.filtrarAvisos(tipoEspacio, precioMin, precioMax, disponibilidad);
         return ResponseEntity.ok(avisosFiltrados);
     }
+
+    @GetMapping("/buscar/{id}")
+    public ResponseEntity<Aviso> buscarAvisoPorId(@PathVariable String id) {
+        try {
+            Aviso aviso = avisoService.buscarAvisoPorId(id);
+            if (aviso == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(aviso, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

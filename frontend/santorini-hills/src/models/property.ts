@@ -4,14 +4,14 @@ export type PropertyType =
   | "house"
   | "apartment"
   | "studio-apartment"
-  | "cabin"
+  | "parking"
   | "lot"
-  | "farm"
+  | "storage"
   | "room"
   | "";
 
 export interface Property {
-  id?: string;
+  id: string;
   type: PropertyType;
   location: { latitude: number; longitude: number } | null;
   address: string;

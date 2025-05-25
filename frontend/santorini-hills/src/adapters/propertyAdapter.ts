@@ -10,7 +10,7 @@ export function propertyToDB(property: Property): PropertyDB {
     tipoEspacio: property.type === "apartment" ? "Apartamento" :
                 property.type === "house" ? "Casa" :
                 property.type === "room" ? "Habitación" :
-                property.type === "cabin" ? "Bodega" :
+                property.type === "storage" ? "Bodega" :
                 property.type === "lot" ? "Parqueo" : "Apartamento",
     estado: "Disponible",
     // caracteristicas, promCalificacion, Arrendamiento pueden ser agregados si se requiere

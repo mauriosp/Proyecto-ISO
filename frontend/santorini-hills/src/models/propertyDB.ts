@@ -8,6 +8,8 @@ export interface PropertyDB {
   tipoEspacio: "Apartamento" | "Casa" | "Habitación" | "Parqueo" | "Bodega";
   estado: "Disponible" | "Ocupado" | "Mantenimiento" | "Reservado";
   promCalificacion?: number;
+  habitaciones: number;
+  baños: number;
   arrendamiento?: Array<{
     idUsuario: string;
     fechaSalida: string;
