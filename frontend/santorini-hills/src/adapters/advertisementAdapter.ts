@@ -56,7 +56,7 @@ export function advertisementFromDBWithProperty(
     price: ad.precio,
     status: ad.estado === "Activo" ? "available" : "taken",
     publicationDate: new Date(ad.fechaPublicacion),
-    images: Array.isArray(ad.imagenes) ? ad.imagenes : [ad.imagenes],
+    images: typeof ad.imagenes === "string" ? ad.imagenes.split(",") : ad.imagenes,
     extraInfo: Array.isArray(ad.extraInfo)
       ? ad.extraInfo
       : typeof ad.extraInfo === "string"

@@ -31,14 +31,11 @@ const Home = () => {
                 : ad.idEspacio;
 
             const property = await getPropertyById(propertyId);
-            console.log("Property obtenida:", property);
-            console.log("Ad crudo:", ad);
             return advertisementFromDBWithProperty(ad, property);
           })
         );
 
         setAdvertisements(adsWithProperties);
-        console.log("Ads con propiedades:", adsWithProperties);
       } catch (error) {
         console.error("Error al obtener avisos o propiedades:", error);
       } finally {

@@ -32,6 +32,9 @@ const SettingsPage = () => {
   const { user } = useUserContext();
   const filteredSettingOptions = settingOptions.filter(option => {
     if (option === "properties" && user?.profile === "renter") return false;
+    if (option === "security" && (user?.profile === "owner" || user?.profile === "renter")) {
+      return false; // Oculta la opción "security" para "owner" y "renter"
+    }
     return true;
   });
 

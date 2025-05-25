@@ -4,6 +4,9 @@ import { FormInput } from "./FormInput";
 import { useUserContext } from "../context/user/UserContext";
 import { useModalContext } from "../context/modal/ModalContext";
 import { countriesList } from "../assets/countries";
+import { eliminarCuenta } from "../utils/APICalls";
+import { actualizarPerfil } from "../utils/APICalls";
+import { uploadFileToFirebase } from "../utils/UploadFileToFirebase";
 
 type EditProfileForm = {
   name: string;
@@ -16,6 +19,9 @@ type EditProfileForm = {
 const ProfileSettings = () => {
   const { user, setUser } = useUserContext();
   const { closeModal } = useModalContext();
+
+  const storedUser = localStorage.getItem("loggedUser");
+  const idUsuario = storedUser ? JSON.parse(storedUser).id : "";
 
   const {
     register,
@@ -52,26 +58,47 @@ const ProfileSettings = () => {
     }
   }, [user, reset]);
 
-  const onSubmit = (data: EditProfileForm) => {
+  const onSubmit = async (data: EditProfileForm) => {
     if (!user?.email) return;
 
-    // Si se sube una nueva foto, se genera un URL de objeto para previsualización
     let photoURL = user.photo;
+
+    // Subir nueva imagen si se seleccionó
     if (data.profilePhoto && data.profilePhoto.length > 0) {
       const file = data.profilePhoto[0];
-      photoURL = URL.createObjectURL(file);
+      photoURL = await uploadFileToFirebase(file); // Subir a Firebase y obtener URL
     }
 
-    const updatedUser = {
-      ...user,
-      name: `${data.name} ${data.surname}`,
-      phone: `${data.dialCode}${data.phone}`,
-      email: user.email,
-      photo: photoURL,
-    };
+    const nombreCompleto = `${data.name} ${data.surname}`;
+    const telefonoCompleto = data.phone;
 
-    setUser(updatedUser);
-    closeModal();
+    try {
+      await actualizarPerfil({
+        id: idUsuario,
+        nombre: nombreCompleto,
+        telefono: telefonoCompleto,
+        fotoPerfil: photoURL, // URL como string
+      });
+
+      const updatedUser = {
+        ...user,
+        name: nombreCompleto,
+        phone: telefonoCompleto,
+        email: user.email,
+        photo: photoURL,
+      };
+
+      setUser(updatedUser);
+      closeModal();
+
+      // Opcional: feedback visual
+      setTimeout(() => {
+        alert("Perfil actualizado correctamente");
+      }, 300);
+    } catch (error) {
+      console.error("Error al actualizar el perfil:", error);
+      alert("Hubo un problema al actualizar el perfil.");
+    }
   };
 
   const handleDeleteAccount = () => {
@@ -80,7 +107,8 @@ const ProfileSettings = () => {
       setUser(null);
       localStorage.removeItem("loggedUser");
       // Llamado a la API para eliminar la cuenta
-      
+      eliminarCuenta(idUsuario);
+
       window.location.href = "/";
     }
   };
