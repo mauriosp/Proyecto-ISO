@@ -23,7 +23,7 @@ public class ContraseñaServiceImpl implements IContraseñaService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailBrevoServiceImpl emailBrevoService; // ← NUEVA DEPENDENCIA
+    private final EmailBrevoServiceImpl emailBrevoService; // NUEVA DEPENDENCIA
 
     @Override
     public void enviarCorreoResetContraseña(String email) {
@@ -54,7 +54,6 @@ public class ContraseñaServiceImpl implements IContraseñaService {
         String link = "http://localhost:8080/UAO/apirest/password/formulario?token=" + token;
         String htmlContent = emailBrevoService.crearEmailRecuperacion(usuario.getNombre(), link);
 
-        // ✅ CAMBIO PRINCIPAL: Ahora usa Brevo en lugar de Gmail
         boolean enviado = emailBrevoService.enviarEmail(
             email,
             "🔑 Recuperar contraseña - Santorini Hills",
@@ -66,7 +65,7 @@ public class ContraseñaServiceImpl implements IContraseñaService {
             throw new RuntimeException("Error al enviar el correo de recuperación");
         }
 
-        log.info("📧 Correo de recuperación enviado exitosamente a {}", email);
+        log.info("Correo de recuperación enviado exitosamente a {}", email);
     }
 
     @Override
@@ -108,7 +107,7 @@ public class ContraseñaServiceImpl implements IContraseñaService {
         ve.setVerificado(true);
 
         usuarioRepository.save(usuario);
-        log.info("✅ Contraseña actualizada correctamente para: {}", usuario.getEmail());
+        log.info(" Contraseña actualizada correctamente para: {}", usuario.getEmail());
 
         return true;
     }

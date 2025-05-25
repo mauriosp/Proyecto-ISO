@@ -25,9 +25,9 @@ public class EmailBrevoServiceImpl {
 
     public boolean enviarEmail(String emailDestino, String asunto, String contenidoHtml) {
         try {
-            log.info("🔧 Iniciando configuración de Brevo...");
-            log.info("📧 Username: {}", brevoUsername);
-            log.info("🔑 Password: {}***", brevoPassword.substring(0, Math.min(4, brevoPassword.length())));
+            log.info("Iniciando configuración de Brevo...");
+            log.info("Username: {}", brevoUsername);
+            log.info("Password: {}***", brevoPassword.substring(0, Math.min(4, brevoPassword.length())));
             
             JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
             
@@ -53,7 +53,7 @@ public class EmailBrevoServiceImpl {
             props.put("mail.smtp.timeout", "10000");
             props.put("mail.smtp.writetimeout", "10000");
 
-            log.info("🌐 Conectando a: smtp-relay.brevo.com:587");
+            log.info("Conectando a: smtp-relay.brevo.com:587");
             
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -63,16 +63,16 @@ public class EmailBrevoServiceImpl {
             helper.setSubject(asunto);
             helper.setText(contenidoHtml, true);
 
-            log.info("📤 Enviando email a: {}", emailDestino);
+            log.info("Enviando email a: {}", emailDestino);
             mailSender.send(message);
-            log.info("✅ Email enviado exitosamente con Brevo a: {}", emailDestino);
+            log.info("Email enviado exitosamente con Brevo a: {}", emailDestino);
             return true;
 
         } catch (MessagingException | UnsupportedEncodingException | MailException e) {
-            log.error("❌ Error detallado enviando email con Brevo: {}", e.getMessage());
-            log.error("🐛 Tipo de excepción: {}", e.getClass().getSimpleName());
+            log.error(" Error detallado enviando email con Brevo: {}", e.getMessage());
+            log.error("Tipo de excepción: {}", e.getClass().getSimpleName());
             if (e.getCause() != null) {
-                log.error("🔍 Causa: {}", e.getCause().getMessage());
+                log.error(" Causa: {}", e.getCause().getMessage());
             }
             return false;
         }
