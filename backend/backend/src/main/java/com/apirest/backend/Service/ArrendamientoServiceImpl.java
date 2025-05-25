@@ -68,6 +68,7 @@ public class ArrendamientoServiceImpl implements IArrendamientoService {
         
         // 5. Crear el arrendamiento
         Arrendamiento arrendamiento = new Arrendamiento();
+        arrendamiento.setId(new ObjectId());
         arrendamiento.setIdUsuario(new ObjectId(dto.getIdArrendatario()));
         arrendamiento.setFechaInicio(dto.getFechaInicio());
         arrendamiento.setFechaSalida(dto.getFechaSalida());

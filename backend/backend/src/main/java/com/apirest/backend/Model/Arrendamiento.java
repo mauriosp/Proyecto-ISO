@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class Arrendamiento {
+    private ObjectId id;
     private ObjectId idUsuario; 
     private Date fechaSalida;
     private Date fechaInicio;
