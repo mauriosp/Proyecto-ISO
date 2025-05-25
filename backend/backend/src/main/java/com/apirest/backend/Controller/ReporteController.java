@@ -20,7 +20,7 @@ import com.apirest.backend.Model.Reporte;
 import com.apirest.backend.Service.IReporteService;
 
 @RestController
-@RequestMapping("/UAO/api/reportes")
+@RequestMapping("/UAO/apirest/reportes")
 @CrossOrigin(origins = "*")
 public class ReporteController {
 

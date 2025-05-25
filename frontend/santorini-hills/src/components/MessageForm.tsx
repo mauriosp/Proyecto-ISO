@@ -1,28 +1,42 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { sendMessage } from "../utils/APICalls";
+import { useModalContext } from "../context/modal/ModalContext";
 
-interface MessageFormProps {
-  idAviso: string;
-  idUsuario: string;
-}
+export default function MessageForm() {
+  const [contenido, setContenido] = useState("");
+  const [mensajeEnviado, setMensajeEnviado] = useState(false);
 
-export default function MessageForm({ idAviso, idUsuario }: MessageFormProps) {
-  const [mensaje, setMensaje] = useState("");
+  const { id } = useParams<{ id: string }>();
+  const avisoId = id || "";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const storedUser = localStorage.getItem("loggedUser");
+  const usuarioId = storedUser ? JSON.parse(storedUser).id : "";
+
+  const { closeModal } = useModalContext();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const jsonPreview = {
-      idAviso,
-      idUsuario,
-      mensaje,
-      fechaMensaje: new Date().toISOString(),
-    };
+    console.log("📤 Enviando mensaje:", {
+      usuarioId,
+      avisoId,
+      contenido,
+    });
 
-    console.log("📤 JSON del mensaje:");
-    console.log(JSON.stringify(jsonPreview, null, 2));
+    try {
+      await sendMessage(usuarioId, avisoId, contenido);
+      console.log("✅ Mensaje enviado correctamente.");
+      setContenido("");
+      setMensajeEnviado(true);
 
-    // Opcional: limpiar campo
-    setMensaje("");
+      // Esperar 2 segundos y cerrar el modal
+      setTimeout(() => {
+        closeModal();
+      }, 1500);
+    } catch (error) {
+      console.error("❌ Error enviando el mensaje:", error);
+    }
   };
 
   return (
@@ -33,8 +47,8 @@ export default function MessageForm({ idAviso, idUsuario }: MessageFormProps) {
 
       <textarea
         placeholder="Escribe tu mensaje aquí..."
-        value={mensaje}
-        onChange={(e) => setMensaje(e.target.value)}
+        value={contenido}
+        onChange={(e) => setContenido(e.target.value)}
         className="w-full p-2 bg-white text-sm rounded border border-gray-300"
         rows={4}
       />
@@ -42,12 +56,18 @@ export default function MessageForm({ idAviso, idUsuario }: MessageFormProps) {
       <div className="flex justify-center">
         <button
           type="submit"
-          disabled={!mensaje.trim()}
+          disabled={!contenido.trim()}
           className="form-button bg-accent text-white px-6 py-2 font-semibold w-full max-w-xs hover:bg-slate800 disabled:opacity-50"
         >
           Enviar mensaje
         </button>
       </div>
+
+      {mensajeEnviado && (
+        <p className="text-center text-green-600 font-medium">
+          ✅ Mensaje enviado. Cerrando...
+        </p>
+      )}
     </form>
   );
 }

@@ -1,9 +1,7 @@
 import { useState } from "react";
-
-interface ReportFormProps {
-  idAviso: string;
-  idUsuario: string;
-}
+import { useParams } from "react-router-dom";
+import { crearReporte } from "../utils/APICalls"; // Asegúrate que la ruta sea correcta
+import { useModalContext } from "../context/modal/ModalContext";
 
 const motivosPredefinidos = [
   "Información falsa",
@@ -13,10 +11,18 @@ const motivosPredefinidos = [
   "Propiedad ya no disponible",
 ];
 
-export default function ReportForm({ idAviso, idUsuario }: ReportFormProps) {
+export default function ReportForm() {
+  const { id } = useParams<{ id: string }>();
+  const idAviso = id || "";
+  const storedUser = localStorage.getItem("loggedUser");
+  const idUsuario = storedUser ? JSON.parse(storedUser).id : "";
+
   const [motivo, setMotivo] = useState("");
   const [otroMotivo, setOtroMotivo] = useState("");
   const [detalles, setDetalles] = useState("");
+  const [enviado, setEnviado] = useState(false);
+
+  const { closeModal } = useModalContext();
 
   const handleMotivoClick = (value: string) => {
     setMotivo(value);
@@ -25,21 +31,40 @@ export default function ReportForm({ idAviso, idUsuario }: ReportFormProps) {
 
   const motivoFinal = motivo === "Otro" ? otroMotivo : motivo;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const jsonPreview = {
+    if (!idAviso || !idUsuario || !motivoFinal.trim() || !detalles.trim()) return;
+
+    const nuevoReporte = {
       idAviso,
       idUsuario,
-      descripcion: detalles, // puedes agregar lógica para esto si lo usas
-      motivoReporte: motivoFinal,
-      comentarioAdicional: null,
+      descripcion: detalles,
+      motivoEReporte: motivoFinal,
+      comentarioAdicional: "",
       fechaReporte: new Date().toISOString(),
       estado: "abierto",
     };
 
-    console.log(JSON.stringify(jsonPreview, null, 2));
+    try {
+      await crearReporte(nuevoReporte);
+      setEnviado(true);
+      setTimeout(() => {
+        closeModal();
+      }, 1500);
+    
+    } catch (error) {
+      console.error("Error al enviar el reporte:", error);
+    }
   };
+
+  if (enviado) {
+    return (
+      <div className="text-center text-green-600 font-semibold p-4">
+        ✅ ¡Reporte enviado correctamente!
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
