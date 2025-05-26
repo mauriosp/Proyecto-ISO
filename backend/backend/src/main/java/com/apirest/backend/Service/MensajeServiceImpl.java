@@ -177,4 +177,20 @@ public class MensajeServiceImpl implements IMensajeService {
         log.info("Notificación al propietario - Título: {}, Mensaje: {}", titulo, mensaje);
         // Implementar lógica para enviar notificación al propietario
     }
+
+    @Override
+    public List<Mensaje> obtenerTodosMensajesPorUsuario(String usuarioId) {
+        List<Mensaje> mensajesUsuario = new ArrayList<>();
+        List<Aviso> avisos = avisoRepository.findAll();
+        for (Aviso aviso : avisos) {
+            if (aviso.getMensaje() != null) {
+                for (Mensaje mensaje : aviso.getMensaje()) {
+                    if (mensaje.getIdUsuario().toHexString().equals(usuarioId)) {
+                        mensajesUsuario.add(mensaje);
+                    }
+                }
+            }
+        }
+        return mensajesUsuario;
+    }
 }

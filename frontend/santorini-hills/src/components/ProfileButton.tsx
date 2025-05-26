@@ -5,6 +5,7 @@ import Separator from "./Separator";
 import { useModalContext } from "../context/modal/ModalContext";
 import { FaExclamationCircle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import Notifications from "./Notifications"; // Importa el componente de notificaciones
 
 const UserButtons = () => {
   const { user, logout } = useUserContext();
@@ -35,9 +36,8 @@ const UserButtons = () => {
         <div className="flex flex-col gap-1">
           <h2 className="text-lg font-semibold">Notificaciones</h2>
           <Separator />
-          <div className="flex flex-col items-center justify-center gap-4 text-neutral-500 text-center py-20">
-            <FaInbox size={32} />
-            <p className="text-sm">Nada por aquí...</p>
+          <div className="flex flex-col gap-4 text-neutral-500 py-4 px-2 w-full">
+            <Notifications />
           </div>
         </div>
       </NavbarModalSwitch>

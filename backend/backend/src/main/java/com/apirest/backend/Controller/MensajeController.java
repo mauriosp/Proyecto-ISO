@@ -112,4 +112,11 @@ public class MensajeController {
             return ResponseEntity.status(500).body("Error al enviar el mensaje: " + e.getMessage());
         }
     }
+
+    @GetMapping("/usuario/{usuarioId}/todos")
+    public ResponseEntity<List<Mensaje>> obtenerTodosMensajesUsuario(
+            @PathVariable String usuarioId) {
+        List<Mensaje> mensajes = notificacionService.obtenerTodosMensajesPorUsuario(usuarioId);
+        return ResponseEntity.ok(mensajes);
+    }
 }

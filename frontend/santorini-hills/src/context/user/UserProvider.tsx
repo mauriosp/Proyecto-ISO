@@ -11,7 +11,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const ownerUser: User = {
-    id: "6818e6d9e5af3367a7c74c13",
+    id: "68349895538ca63662c983e4",
     name: "Juan Pérez",
     email: "juanperez@email.com",
     password: null,
@@ -22,7 +22,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const renterUser: User = {
-    id: "6823ed3bc8684975706e4a7e",
+    id: "68349a0a538ca63662c983e5",
     name: "Santiago Si",
     email: "santiago.colonia@uao.edu.co",
     password: null,
@@ -33,7 +33,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const adminUser: User = {
-    id: "2",
+    id: "68349dd8538ca63662c983e9",
     name: "Admin",
     email: "admin@santorini.com",
     password: null,
@@ -50,10 +50,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       // Usuario por defecto si no hay nada guardado (solo para pruebas)
 
       // Solo para pruebas (owner)
-      //setUser(ownerUser);
+      setUser(ownerUser);
 
       // Solo para pruebas (renter)
-      setUser(renterUser);
+      //setUser(renterUser);
       
       // Solo para pruebas (admin)
       //setUser(adminUser);

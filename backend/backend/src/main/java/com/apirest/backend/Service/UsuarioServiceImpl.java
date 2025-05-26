@@ -178,7 +178,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
         // Guardar el usuario
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
         usuarioRepository.save(usuario);
-        return "Usuario registrado con éxito: " + usuario.getNombre();
+        return usuario.getIdAsString() + "," + usuario.getEmail();
     }
 
     @Override

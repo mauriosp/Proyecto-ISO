@@ -19,4 +19,5 @@ public interface IMensajeService {
     // Estos métodos son necesarios para AvisoServiceImpl
     void enviarMensajeAdministrador(String titulo, String mensaje);
     void enviarMensajePropietario(String titulo, String mensaje);
+    List<Mensaje> obtenerTodosMensajesPorUsuario(String usuarioId);
 }

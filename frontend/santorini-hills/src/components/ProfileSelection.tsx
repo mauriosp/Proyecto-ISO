@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaHouseChimney, FaHouseChimneyUser } from "react-icons/fa6";
 import { useRegisterContext } from "../context/registerForm/RegisterContext";
-import { createUser } from "../utils/APICalls";
+import { createUser, enviarCorreoVerificacion } from "../utils/APICalls";
 import { User } from "../models/user";
 import FormRadioOption from "./FormRadioOption";
 import { useModalContext } from "../context/modal/ModalContext";
@@ -47,13 +47,28 @@ const ProfileSelection: React.FC<ProfileSelectionProps> = () => {
 
   const { user, setUser } = useRegisterContext();
 
-  const handleContinue = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleContinue = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const updatedUser : User = { ...user, profile, isVerified: false };
+    const updatedUser: User = { ...user, profile, isVerified: false };
     setUser(updatedUser);
-    createUser(updatedUser);
-    openModal("login");
+
+    try {
+      const response: string = await createUser(updatedUser);
+
+      // Dividir el string retornado por la coma
+      const [id, email] = response.split(",");
+
+      // Enviar correo de verificación con los datos extraídos
+      await enviarCorreoVerificacion(id, email);
+
+      openModal("login");
+    } catch (error) {
+      console.error("Error al crear usuario o enviar verificación:", error);
+      // Aquí podrías mostrar una alerta o mensaje al usuario
+    }
   };
+
+
 
   return (
     <form className="flex flex-col space-y-2" onSubmit={handleContinue}>

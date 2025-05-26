@@ -57,6 +57,7 @@ export async function listProperties(): Promise<PropertyDB[]> {
 export async function createUser(user: User) {
   const userData = userPresenter(user);
   const res = await axios.post(`${API_URL}Usuario/registro`, userData);
+  console.log("Usuario creado:", res.data);
   return res.data;
 }
 
@@ -182,11 +183,6 @@ export async function crearReporte(reporte: Reporte): Promise<Reporte> {
   return res.data;
 }
 
-export async function obtenerTodosReportes(): Promise<Reporte[]> {
-  const res = await axios.get(`${API_URL}reportes`);
-  return res.data;
-}
-
 export async function eliminarCuenta(id: string): Promise<string> {
   try {
     const response = await axios.delete(`${API_URL}Usuario/eliminar/${id}`);
@@ -218,3 +214,45 @@ export const actualizarPerfil = async ({ id, nombre, telefono, fotoPerfil }: Per
     formData
   );
 };
+
+export async function getAllReportes() {
+  const res = await axios.get(`${API_URL}reportes`);
+  return res.data; // o res.data.map(reporteAdapter) si usas un adapter
+}
+
+export async function getReporteById(id: string) {
+  const res = await axios.get(`${API_URL}reportes/${id}`);
+  return res.data; // o reporteAdapter(res.data)
+}
+
+export async function updateReporteEstado(id: string, estado: string) {
+  const res = await axios.put(`${API_URL}reportes/${id}/estado`, null, {
+    params: { estado },
+  });
+  return res.data; // o reporteAdapter(res.data)
+}
+
+export async function deleteReporte(id: string) {
+  await axios.delete(`${API_URL}reportes/${id}`);
+}
+
+export async function getReportesByAviso(idAviso: string) {
+  const res = await axios.get(`${API_URL}reportes/aviso/${idAviso}`);
+  return res.data; // o res.data.map(reporteAdapter)
+}
+
+export async function getMensajesByUsuario(usuarioId: string) {
+  const res = await axios.get(`${API_URL}Notificaciones/usuario/${usuarioId}/todos`);
+  return res.data;
+}
+
+export async function enviarCorreoVerificacion(userId: string, email: string) {
+  try {
+    const res = await axios.post(
+      `${API_URL}VerificacionEmail/enviar?userId=${userId}&email=${encodeURIComponent(email)}`
+    );
+    return res.data;
+  } catch (error) {
+    throw new Error("Ha ocurrido un error inesperado: ");
+  }
+}

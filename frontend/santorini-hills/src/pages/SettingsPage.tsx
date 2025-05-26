@@ -3,9 +3,10 @@ import ProfileSettings from "../components/ProfileSettings";
 import { JSX } from "react";
 import PropertiesSettings from "../components/PropertiesSettings";
 import { useUserContext } from "../context/user/UserContext";
+import  ReportsSettings from "../components/ReportsSettings"
 
 const SettingsPage = () => {
-  type Settings = "profile" | "properties" | "notifications" | "security";
+  type Settings = "profile" | "properties" | "notifications" | "reportes";
   const { setting } = useParams<{ setting: string }>();
 
   // Mapeo de nombres técnicos a nombres amigables para el usuario
@@ -13,7 +14,7 @@ const SettingsPage = () => {
     profile: "Perfil",
     properties: "Propiedades",
     notifications: "Notificaciones",
-    security: "Seguridad"
+    reportes: "Reportes"
   };
 
   // cada uno de los settings tiene su propio componente
@@ -21,7 +22,7 @@ const SettingsPage = () => {
     profile: <ProfileSettings />,
     properties: <PropertiesSettings />,
     notifications: <ProfileSettings />,
-    security: <ProfileSettings />,
+    reportes: <ReportsSettings />,
   };
   const selectedSetting = settingsComponents[setting as Settings] || <ProfileSettings />;
 
@@ -32,8 +33,8 @@ const SettingsPage = () => {
   const { user } = useUserContext();
   const filteredSettingOptions = settingOptions.filter(option => {
     if (option === "properties" && user?.profile === "renter") return false;
-    if (option === "security" && (user?.profile === "owner" || user?.profile === "renter")) {
-      return false; // Oculta la opción "security" para "owner" y "renter"
+    if (option === "reportes" && (user?.profile === "owner" || user?.profile === "renter")) {
+      return false; // Oculta la opción "reportes" para "owner" y "renter"
     }
     return true;
   });
