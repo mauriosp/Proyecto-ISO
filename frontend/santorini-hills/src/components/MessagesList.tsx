@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useModalContext } from "../context/modal/ModalContext";
+import { getAdvertisementById } from "../utils/APICalls"; // Ajusta el path si es necesario
+import { responderMensaje } from "../utils/APICalls";
 
 interface Mensaje {
-  idUsuario: string;
+  usuarioId: string;
+  avisoId: string;
   contenido: string;
   fechaMensaje: string;
   estadoMensaje: boolean;
@@ -11,21 +15,51 @@ interface Mensaje {
   };
 }
 
-interface MessagesListProps {
-  mensajes: Mensaje[];
-  onResponder: (index: number, respuesta: string) => void;
-}
-
-export default function MessagesList({ mensajes, onResponder }: MessagesListProps) {
+export default function MessagesList() {
+  const { currentAdId } = useModalContext();
+  const [mensajes, setMensajes] = useState<Mensaje[]>([]);
   const [mensajeSeleccionado, setMensajeSeleccionado] = useState<number | null>(null);
   const [respuesta, setRespuesta] = useState("");
 
-  const handleResponder = () => {
-    if (mensajeSeleccionado !== null) {
-      onResponder(mensajeSeleccionado, respuesta);
+  // Obtener los mensajes del aviso al cargar el componente
+  useEffect(() => {
+    const fetchMensajes = async () => {
+      if (!currentAdId) return;
+      try {
+        const aviso = await getAdvertisementById(currentAdId);
+        setMensajes(aviso.mensaje || []);
+      } catch (error) {
+        console.error("Error al cargar los mensajes:", error);
+      }
+    };
+
+    fetchMensajes();
+  }, [currentAdId]);
+
+  const handleResponder = async () => {
+    if (mensajeSeleccionado === null || !respuesta.trim()) return;
+
+    const index = mensajeSeleccionado;
+    const avisoId = currentAdId;
+
+    try {
+      // Llamada real al backend para responder el mensaje
+      await responderMensaje(avisoId, index, respuesta);
+
+      // Actualización local para reflejar la respuesta inmediatamente en la UI
+      const updated = [...mensajes];
+      updated[index].respuestaMensaje = {
+        contenido: respuesta,
+        fechaRespuesta: new Date().toISOString(),
+      };
+      updated[index].estadoMensaje = true;
+      setMensajes(updated);
       setRespuesta("");
+    } catch (error) {
+      console.error("Error al responder el mensaje:", error);
     }
   };
+
 
   return (
     <div className="space-y-6">
@@ -64,7 +98,9 @@ export default function MessagesList({ mensajes, onResponder }: MessagesListProp
               <p>{mensajes[mensajeSeleccionado].respuestaMensaje.contenido}</p>
               <div className="text-sm text-gray-500">
                 Respondido el:{" "}
-                {new Date(mensajes[mensajeSeleccionado].respuestaMensaje.fechaRespuesta).toLocaleString()}
+                {new Date(
+                  mensajes[mensajeSeleccionado].respuestaMensaje.fechaRespuesta
+                ).toLocaleString()}
               </div>
             </div>
           ) : (

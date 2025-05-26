@@ -17,13 +17,14 @@ export async function getUserById(id: string) {
 export async function getPropertyById(id: string): Promise<PropertyDB> {
   const res = await axios.get(`${API_URL}Espacio/buscar/${id}`);
   return {
-    _id: res.data._id,
+    _id: res.data.id,
     idPropietario: res.data.idPropietario,
     tipoEspacio: res.data.tipoEspacio,
     direccion: res.data.direccion,
     estado: res.data.estado,
     area: res.data.area,
-    caracteristicas: res.data.caracteristicas,
+    habitaciones: res.data.habitaciones,
+    baños: res.data.baños,
     promCalificacion: res.data.promCalificacion,
     arrendamiento: res.data.arrendamiento,
   };
@@ -126,6 +127,94 @@ export async function updateAdvertisement(id: string, ad: Advertisement) {
   if (ad.property?.bedrooms) formData.append("habitaciones", ad.property.bedrooms.toString());
   if (ad.property?.bathrooms) formData.append("baños", ad.property.bathrooms.toString());
   
-  const res = await axios.put(`${API_URL}Aviso/actualizar/${id}`, formData);
+  const res = await axios.put(`${API_URL}Aviso/editar/${id}`, formData);
   return res.data;
 }
+
+export async function sendMessage(usuarioId: string, avisoId: string, contenido: string) {
+  const formData = new FormData();
+  formData.append("usuarioId", usuarioId);
+  formData.append("avisoId", avisoId);
+  formData.append("contenido", contenido);
+
+  const res = await axios.post(`${API_URL}Notificaciones/enviar`, formData);
+  return res.data;
+}
+
+export async function getMessagesByUserAndAd(usuarioId: string, avisoId: string) {
+  const res = await axios.get(`${API_URL}Notificaciones/usuario/${usuarioId}/aviso/${avisoId}`);
+  return res.data;
+}
+
+export async function responderMensaje(avisoId: string, indiceMensaje: number, contenido: string) {
+  const payload = { contenido };
+
+  const res = await axios.post(
+    `${API_URL}Notificaciones/aviso/${avisoId}/mensaje/${indiceMensaje}/responder`,
+    payload,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return res.data;
+}
+
+export interface Reporte {
+  id?: string; // El backend usa ObjectId, lo manejamos como string aquí
+  descripcion: string;
+  idAviso: string;
+  idUsuario: string;
+  motivoEReporte: string;
+  comentarioAdicional: string;
+  fechaReporte?: string; // opcional si el backend lo autogenera
+  estado?: string;       // opcional si el backend lo asigna
+}
+
+export async function crearReporte(reporte: Reporte): Promise<Reporte> {
+  const res = await axios.post(`${API_URL}reportes`, reporte, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return res.data;
+}
+
+export async function obtenerTodosReportes(): Promise<Reporte[]> {
+  const res = await axios.get(`${API_URL}reportes`);
+  return res.data;
+}
+
+export async function eliminarCuenta(id: string): Promise<string> {
+  try {
+    const response = await axios.delete(`${API_URL}Usuario/eliminar/${id}`);
+    return response.data; // "Cuenta eliminada correctamente"
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data); // Error controlado desde el backend
+    } else {
+      throw new Error("Error al conectar con el servidor.");
+    }
+  }
+}
+
+interface PerfilUpdatePayload {
+  id: string;
+  nombre?: string;
+  telefono?: string;
+  fotoPerfil?: string; // ya es URL string, no archivo
+}
+
+export const actualizarPerfil = async ({ id, nombre, telefono, fotoPerfil }: PerfilUpdatePayload) => {
+  const formData = new FormData();
+  if (nombre) formData.append("nombre", nombre);
+  if (telefono) formData.append("telefono", telefono);
+  if (fotoPerfil) formData.append("fotoPerfil", fotoPerfil); // string
+
+  return await axios.put(
+    `${API_URL}Usuario/actualizarPerfil/${id}`,
+    formData
+  );
+};

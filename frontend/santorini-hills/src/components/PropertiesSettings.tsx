@@ -13,11 +13,12 @@ interface AdWithProperty {
 }
 
 const PropertiesSettings = () => {
-    const { openModal } = useModalContext();
+    const { openModal, setCurrentAdId } = useModalContext();
     const { user } = useUserContext();
     const [adsWithProperties, setAdsWithProperties] = useState<AdWithProperty[]>([]);
 
-    const handleClick = (view: ModalView) => {
+    const handleClick = (view: ModalView, adId: string) => {
+        setCurrentAdId(adId); // 👈 Guardamos el ID en el contexto
         openModal(view);
     };
 
@@ -33,7 +34,7 @@ const PropertiesSettings = () => {
                             const property = await getPropertyById(ad.idEspacio);
                             return { ad, property };
                         } catch (error) {
-                            console.error(`Error cargando propiedad del anuncio ${ad._id}`, error);
+                            console.error(`Error cargando propiedad del anuncio ${ad.id}`, error);
                             return { ad, property: null };
                         }
                     })
@@ -101,7 +102,7 @@ const PropertiesSettings = () => {
                                     Editar
                                 </Link>
                                 <button
-                                    onClick={() => handleClick("list")}
+                                    onClick={() => handleClick("list", ad.id)}
                                     className="flex items-center gap-1 px-3 py-1 bg-accent hover:bg-slate-800 hover:cursor-pointer text-white rounded transition"
                                 >
                                     Mensajes

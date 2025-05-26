@@ -21,10 +21,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  /*const renterUser: User = {
-    id: "4",
-    name: "María López",
-    email: "maria@email.com",
+  const renterUser: User = {
+    id: "6823ed3bc8684975706e4a7e",
+    name: "Santiago Si",
+    email: "santiago.colonia@uao.edu.co",
     password: null,
     phone: "+573001112244",
     profile: "renter",
@@ -32,7 +32,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
- /* const adminUser: User = {
+  const adminUser: User = {
     id: "2",
     name: "Admin",
     email: "admin@santorini.com",
@@ -40,7 +40,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     phone: "+573001112233",
     profile: "admin",
     isVerified: true,
-  }; */
+  };
 
   useEffect(() => {
     const storedUser = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -50,16 +50,16 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       // Usuario por defecto si no hay nada guardado (solo para pruebas)
 
       // Solo para pruebas (owner)
-      setUser(ownerUser);
+      //setUser(ownerUser);
 
       // Solo para pruebas (renter)
-      // setUser(renterUser);
+      setUser(renterUser);
       
       // Solo para pruebas (admin)
       //setUser(adminUser);
 
       // No logeado por defecto
-      // setUser(null);
+      //setUser(null);
     }
   }, []);
   /*

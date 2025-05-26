@@ -13,8 +13,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class CalificacionUsuario {
-    private ObjectId idUsuarioCalifiaca;
+    private ObjectId idUsuarioCalifica;
     private String puntuacion;
     private Date fecha;
     private String comentario;
+
+
+ public int getPuntuacionAsInt() {
+        try {
+            return Integer.parseInt(puntuacion);
+        } catch (NumberFormatException e) {
+            return 0; // Valor por defecto en caso de error
+        }
+    }
+
+public void setPuntuacionFromInt(String puntuacionInt) {
+    this.puntuacion = String.valueOf(puntuacionInt);
+    }
 }

@@ -64,10 +64,9 @@ public class VerificacionEmailServiceBrevoImpl implements IVerificacionEmailServ
         String link = "http://localhost:8080/UAO/apirest/VerificacionEmail/verificar?token=" + token;
         String htmlContent = emailBrevoService.crearEmailVerificacion(usuario.getNombre(), link);
 
-        // ✅ CAMBIO PRINCIPAL: Ahora usa Brevo en lugar de Gmail
         boolean enviado = emailBrevoService.enviarEmail(
             email,
-            "✅ Verifica tu cuenta - Santorini Hills",
+            "Verifica tu cuenta - Santorini Hills",
             htmlContent
         );
 
@@ -76,7 +75,7 @@ public class VerificacionEmailServiceBrevoImpl implements IVerificacionEmailServ
             throw new RuntimeException("Error al enviar el correo de verificación");
         }
 
-        log.info("📧 Correo de verificación enviado exitosamente a {}", email);
+        log.info("Correo de verificación enviado exitosamente a {}", email);
     }
 
     @Override
@@ -128,10 +127,10 @@ public class VerificacionEmailServiceBrevoImpl implements IVerificacionEmailServ
 
         try {
             usuarioRepository.save(usuario);
-            log.info("✅ Cuenta verificada exitosamente para el usuario: {}", usuario.getId());
+            log.info("Cuenta verificada exitosamente para el usuario: {}", usuario.getId());
             return true;
         } catch (Exception e) {
-            log.error("❌ Error al guardar verificación: {}", e.getMessage());
+            log.error("Error al guardar verificación: {}", e.getMessage());
             return false;
         }
     }
