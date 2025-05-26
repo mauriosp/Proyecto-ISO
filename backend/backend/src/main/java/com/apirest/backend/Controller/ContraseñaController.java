@@ -34,10 +34,33 @@ public class ContraseñaController {
     private final IContraseñaService contraseñaService;
     private final UsuarioRepository usuarioRepository;
 
-    @PostMapping(value = "/reset", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity<?> actualizarContraseña(@RequestBody CambioContraseñaDTO cambioContraseñaDTO) {
+    // ENDPOINT PARA JSON (APIs como Postman)
+    @PostMapping(value = "/reset", 
+                 consumes = MediaType.APPLICATION_JSON_VALUE,
+                 produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<?> actualizarContraseñaJSON(@RequestBody CambioContraseñaDTO cambioContraseñaDTO) {
+        return procesarCambioContraseña(
+            cambioContraseñaDTO.getToken(),
+            cambioContraseñaDTO.getNuevaContraseña(),
+            cambioContraseñaDTO.getConfirmarContraseña()
+        );
+    }
+
+    // ENDPOINT PARA FORM DATA (Formularios web)
+    @PostMapping(value = "/reset", 
+                 consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+                 produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<?> actualizarContraseñaForm(
+            @RequestParam String token,
+            @RequestParam String nuevaContraseña,
+            @RequestParam String confirmarContraseña) {
+        return procesarCambioContraseña(token, nuevaContraseña, confirmarContraseña);
+    }
+
+    // MÉTODO AUXILIAR: Procesa el cambio de contraseña
+    private ResponseEntity<?> procesarCambioContraseña(String token, String nuevaContraseña, String confirmarContraseña) {
         // Validar que las contraseñas coincidan
-        if (!cambioContraseñaDTO.getNuevaContraseña().equals(cambioContraseñaDTO.getConfirmarContraseña())) {
+        if (!nuevaContraseña.equals(confirmarContraseña)) {
             return crearRespuestaHTML(
                 "Error de validación",
                 "Las contraseñas no coinciden",
@@ -48,7 +71,7 @@ public class ContraseñaController {
         }
 
         // Validar complejidad de la contraseña
-        if (!validarComplejidadContraseña(cambioContraseñaDTO.getNuevaContraseña())) {
+        if (!validarComplejidadContraseña(nuevaContraseña)) {
             return crearRespuestaHTML(
                 "Contraseña no válida",
                 "La contraseña no cumple con los requisitos de seguridad",
@@ -59,10 +82,7 @@ public class ContraseñaController {
         }
 
         // Intentar actualizar la contraseña
-        boolean actualizado = contraseñaService.actualizarContraseña(
-                cambioContraseñaDTO.getToken(),
-                cambioContraseñaDTO.getNuevaContraseña()
-        );
+        boolean actualizado = contraseñaService.actualizarContraseña(token, nuevaContraseña);
 
         if (actualizado) {
             return crearRespuestaHTML(
@@ -362,6 +382,7 @@ public class ContraseñaController {
             "            border-radius: 6px;" +
             "            font-size: 16px;" +
             "            transition: border-color 0.3s;" +
+            "            box-sizing: border-box;" +
             "        }" +
             "        input[type='password']:focus {" +
             "            outline: none;" +
@@ -461,33 +482,7 @@ public class ContraseñaController {
             "                return false;" +
             "            }" +
             "            " +
-            "            // Submit as JSON" +
-            "            e.preventDefault();" +
-            "            const formData = {" +
-            "                token: document.querySelector('[name=\"token\"]').value," +
-            "                nuevaContraseña: nuevaContraseña," +
-            "                confirmarContraseña: confirmarContraseña" +
-            "            };" +
-            "            " +
-            "            fetch('/UAO/apirest/password/reset', {" +
-            "                method: 'POST'," +
-            "                headers: {" +
-            "                    'Content-Type': 'application/json'," +
-            "                    'Accept': 'text/html'" +
-            "                }," +
-            "                body: JSON.stringify(formData)" +
-            "            })" +
-            "            .then(response => response.text())" +
-            "            .then(html => {" +
-            "                document.open();" +
-            "                document.write(html);" +
-            "                document.close();" +
-            "            })" +
-            "            .catch(error => {" +
-            "                console.error('Error:', error);" +
-            "                errorMessage.textContent = 'Error al procesar la solicitud';" +
-            "                errorMessage.style.display = 'block';" +
-            "            });" +
+            "            errorMessage.style.display = 'none';" +
             "        });" +
             "    </script>" +
             "</body>" +
