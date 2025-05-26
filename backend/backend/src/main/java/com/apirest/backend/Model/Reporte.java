@@ -5,6 +5,8 @@ import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 @Document("Reporte")
@@ -21,4 +23,8 @@ public class Reporte {
     private Date fechaReporte;
     private String estado;
 
+    @JsonProperty("id")
+    public String getIdAsString() {
+        return id != null ? id.toHexString() : null;
+    }
 }
